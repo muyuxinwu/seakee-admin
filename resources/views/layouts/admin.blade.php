@@ -15,8 +15,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('dist/css/AdminLTE.min.css') }}">
-
     <link rel="stylesheet" href="{{ asset('dist/css/skins/skin-blue.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/sweetalert.css') }}">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -25,8 +25,6 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
     @yield('page_style')
-
-    @yield('page_js')
 </head>
 <!--
 BODY TAG OPTIONS:
@@ -55,7 +53,7 @@ desired effect
     <header class="main-header">
 
         <!-- Logo -->
-        <a href="./" class="logo">
+        <a href="{{ route('admin') }}" class="logo">
             <!-- mini logo for sidebar mini 50x50 pixels -->
             <span class="logo-mini"><b>S</b>C</span>
             <!-- logo for regular state and mobile devices -->
@@ -176,7 +174,7 @@ desired effect
                             <!-- The user image in the navbar-->
                             <img src="{{ asset('dist/img/user2-160x160.jpg') }}" class="user-image" alt="User Image">
                             <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                            <span class="hidden-xs">Alexander Pierce</span>
+                            <span class="hidden-xs">{{ $user['user_name'] }}</span>
                         </a>
                         <ul class="dropdown-menu">
                             <!-- The user image in the menu -->
@@ -209,7 +207,13 @@ desired effect
                                     <a href="#" class="btn btn-default btn-flat">账号设置</a>
                                 </div>
                                 <div class="pull-right">
-                                    <a href="{{ route('logout') }}" class="btn btn-default btn-flat">退出登录</a>
+                                    <a href="{{ route('logout') }}" class="btn btn-default btn-flat" onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                        退出登录
+                                    </a>
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                        {{ csrf_field() }}
+                                    </form>
                                 </div>
                             </li>
                         </ul>
@@ -234,9 +238,9 @@ desired effect
                     <img src="{{ asset('dist/img/user2-160x160.jpg') }}" class="img-circle" alt="User Image">
                 </div>
                 <div class="pull-left info">
-                    <p>Alexander Pierce</p>
+                    <p>{{ $user['user_name'] }}</p>
                     <!-- Status -->
-                    <a href="#"><i class="fa fa-circle text-success"></i> 在线</a>
+                    <a href="#"><i class="fa fa-circle text-success"></i></a>
                 </div>
             </div>
 
@@ -256,17 +260,32 @@ desired effect
             <ul class="sidebar-menu">
                 <li class="header">HEADER</li>
                 <!-- Optionally, you can add icons to the links -->
-                <li class="active"><a href="#"><i class="fa fa-link"></i> <span>Link</span></a></li>
-                <li><a href="#"><i class="fa fa-link"></i> <span>Another Link</span></a></li>
                 <li class="treeview">
-                    <a href="#"><i class="fa fa-link"></i> <span>Multilevel</span>
+                    <a href="#"><i class="fa fa-dashboard"></i> <span>管理中心</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="#">Link in level 2</a></li>
-                        <li><a href="#">Link in level 2</a></li>
+                        <li>
+                            <a href="#"><i class="fa fa-circle-o"></i>菜单管理</a>
+                            <ul class="treeview-menu">
+                                <li><a href="{{ route('menu.admin') }}"><i class="fa fa-circle-o"></i> 后台菜单</a></li>
+                                <li><a href="{{ route('menu.home') }}"><i class="fa fa-circle-o"></i> 前台菜单</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-users"></i> <span>用户管理</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="{{ route('user.index') }}"><i class="fa fa-circle-o"></i>用户管理</a></li>
+                        <li><a href="{{ route('role.index') }}"><i class="fa fa-circle-o"></i>角色管理</a></li>
+                        <li><a href="{{ route('permission.index') }}"><i class="fa fa-circle-o"></i>权限管理</a></li>
                     </ul>
                 </li>
             </ul>
@@ -398,11 +417,8 @@ desired effect
 <script src="//cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 <!-- AdminLTE App -->
 <script src="{{ asset('dist/js/app.min.js') }}"></script>
-
-<!-- Optionally, you can add Slimscroll and FastClick plugins.
-     Both of these plugins are recommended to enhance the
-     user experience. Slimscroll is required when using the
-     fixed layout. -->
+<script src="{{ asset('js/sweetalert.min.js') }}"></script>
+@yield('page_js')
 </body>
 </html>
 

@@ -28,7 +28,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/admin';
 
     /**
      * Create a new controller instance.
@@ -68,8 +68,6 @@ class LoginController extends Controller
         }
 
         if ($this->attemptLogin($request)) {
-            $ipAddress = $request->getClientIp();
-            $this->saveIP(Auth::id(), $ipAddress);
             return $this->sendLoginResponse($request);
         }
 
@@ -144,7 +142,10 @@ class LoginController extends Controller
      */
     protected function authenticated(Request $request, $user)
     {
-        //
+        $ipAddress = $request->getClientIp();
+        $this->saveIP(Auth::id(), $ipAddress);
+        $request->session()->push('user',$user);
+        view()->share('user', $user);
     }
 
     /**

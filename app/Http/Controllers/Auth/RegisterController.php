@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Models\User\User;
-use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -26,6 +25,19 @@ class RegisterController extends Controller
     use RedirectsUsers;
 
     /**
+     * registration rules
+     * @return array
+     */
+    protected function registrationRules()
+    {
+        return [
+            'user_name' => 'required|max:255|unique:users',
+            'email' => 'required|email|max:255|unique:users',
+            'password' => 'required|min:6|confirmed',
+        ];
+    }
+
+    /**
      * Show the application registration form.
      *
      * @return \Illuminate\Http\Response
@@ -43,7 +55,7 @@ class RegisterController extends Controller
      */
     public function register(Request $request)
     {
-        $this->validator($request->all())->validate();
+        $this->validator($request->all(), $this->registrationRules())->validate();
 
         event(new Registered($user = $this->create($request)));
 
@@ -88,41 +100,6 @@ class RegisterController extends Controller
     public function __construct()
     {
         $this->middleware('guest');
-    }
-
-    /**
-     * Get a validator for an incoming registration request.
-     *
-     * @param  array $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    protected function validator(array $data)
-    {
-        return Validator::make($data, [
-            'user_name' => 'required|max:255|unique:users',
-            'email' => 'required|email|max:255|unique:users',
-            'password' => 'required|min:6|confirmed',
-        ], $this->errorInfo());
-    }
-
-    /**
-     * Validation error info
-     * @return array
-     */
-    protected function errorInfo()
-    {
-        return [
-            'user_name.required' => '用户名不能为空',
-            'user_name.max' => '用户名不能超过255位',
-            'user_name.unique' => '用户名已存在',
-            'email.required' => 'email不能为空',
-            'email.max' => 'email不能超过255位',
-            'email.unique' => 'email已存在',
-            'email.email' => '请输入正确的email',
-            'password.required' => '密码不能为空',
-            'password.unique' => '密码不能少于6位',
-            'password.confirmed' => '确认密码和密码不相符',
-        ];
     }
 
     /**
