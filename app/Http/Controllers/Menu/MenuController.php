@@ -43,31 +43,9 @@ class MenuController extends Controller
      */
     public function admin()
     {
-        $menus = $this->menu->allMenus();
-        $menus = $this->getMenuTree($menus, -1);
+        $menus = $this->menu->menuTree();
 
         return view('menu.admin', ['menus' => $menus]);
-    }
-
-    /**
-     * return menu tree
-     * @param $menuList
-     * @param $father_id
-     * @return array|string
-     */
-    private function getMenuTree(&$menuList, $father_id)
-    {
-        if (!empty($menuList)) {
-            foreach ($menuList as $menu) {
-                $menu = (array)$menu;
-                if ($menu['father_id'] == $father_id) {
-                    $nodes = $this->getMenuTree($menuList, $menu['id']);
-                    $result[] = empty($nodes) ? $menu : array_merge($menu, ['nodes' => $nodes]);
-                }
-            }
-        }
-
-        return $result ?? '';
     }
 
     /**
@@ -76,8 +54,7 @@ class MenuController extends Controller
      */
     public function createAdminMenu()
     {
-        $menus = $this->menu->allMenus();
-        $menus = $this->getMenuTree($menus, -1);
+        $menus = $this->menu->menuTree();
 
         $route = $this->getRoute();
 
@@ -107,8 +84,7 @@ class MenuController extends Controller
         }
 
         $menu = $this->menu->findMenu($id);
-        $menus = $this->menu->allMenus();;
-        $menus = $this->getMenuTree($menus, -1);
+        $menus = $this->menu->menuTree();
 
         if (empty($menu)) {
             return response()->json(['status' => 500, 'message' => '菜单不存在']);

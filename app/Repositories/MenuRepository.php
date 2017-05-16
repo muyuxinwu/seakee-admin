@@ -60,4 +60,32 @@ class MenuRepository implements MenuInterface
     {
         return Menu::where($data)->count();
     }
+    
+    public function menuTree()
+    {
+        $menus = $this->allMenus();
+
+        return $this->getMenuTree($menus, -1);
+    }
+
+    /**
+     * return menu tree
+     * @param $menuList
+     * @param $father_id
+     * @return array|string
+     */
+    private function getMenuTree(&$menuList, $father_id)
+    {
+        if (!empty($menuList)) {
+            foreach ($menuList as $menu) {
+                $menu = (array)$menu;
+                if ($menu['father_id'] == $father_id) {
+                    $nodes = $this->getMenuTree($menuList, $menu['id']);
+                    $result[] = empty($nodes) ? $menu : array_merge($menu, ['nodes' => $nodes]);
+                }
+            }
+        }
+
+        return $result ?? '';
+    }
 }

@@ -21,6 +21,8 @@ Interface MenuInterface{
     public function updateMenu(array $data);
 
     public function menuCount(array $data);
+
+    public function menuTree();
 }
 
 
