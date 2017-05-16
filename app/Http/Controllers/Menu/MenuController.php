@@ -9,11 +9,18 @@
 namespace App\Http\Controllers\Menu;
 
 use App\Http\Controllers\Controller;
-use App\Models\Menu\Menu;
+use App\Interfaces\MenuInterface;
 use Illuminate\Http\Request;
 
 class MenuController extends Controller
 {
+    private $menu;
+
+    public function __construct(MenuInterface $menu)
+    {
+        $this->menu = $menu;
+    }
+
     /**
      * create Menu Rules
      * @return array
@@ -36,7 +43,7 @@ class MenuController extends Controller
      */
     public function admin()
     {
-        $menus = Menu::all()->toArray();
+        $menus = $this->menu->allMenus();
         $menus = $this->getMenuTree($menus, -1);
 
         return view('menu.admin', ['menus' => $menus]);
@@ -69,7 +76,7 @@ class MenuController extends Controller
      */
     public function createAdminMenu()
     {
-        $menus = Menu::all()->toArray();
+        $menus = $this->menu->allMenus();
         $menus = $this->getMenuTree($menus, -1);
 
         $route = $this->getRoute();
@@ -99,8 +106,8 @@ class MenuController extends Controller
             return response()->json(['status' => 500, 'message' => '请选择要删除的菜单']);
         }
 
-        $menu = Menu::find($id);
-        $menus = Menu::all()->toArray();
+        $menu = $this->menu->findMenu($id);
+        $menus = $this->menu->allMenus();;
         $menus = $this->getMenuTree($menus, -1);
 
         if (empty($menu)) {
@@ -146,8 +153,8 @@ class MenuController extends Controller
             return response()->json(['status' => 500, 'message' => '菜单不能和节点菜单相同']);
         }
 
-        $menu = Menu::find($menuData['id']);
-        $menuChildren = Menu::where('father_id', $menuData['id'])->count();
+        $menu = $this->menu->findMenu($menuData['id']);
+        $menuChildren = $this->menu->menuCount(['father_id' => $menuData['id']]);
 
         if (empty($menu)) {
             return response()->json(['status' => 500, 'message' => '菜单不存在']);
@@ -157,12 +164,7 @@ class MenuController extends Controller
             }
         }
 
-        $menu->menu_name = $menuData['menuName'];
-        $menu->menu_url = $menuData['menuURL'];
-        $menu->father_id = $menuData['fatherMenu'];
-        $menu->sort = $menuData['menuSort'];
-
-        if (!$menu->save()) {
+        if (!$this->menu->updateMenu($menuData)) {
             return response()->json(['status' => 500, 'message' => '编辑失败']);
         }
 
@@ -185,16 +187,7 @@ class MenuController extends Controller
 
         $menuData = $request->all();
 
-        $menu = new Menu();
-
-        $menu->menu_name = $menuData['menuName'];
-        $menu->menu_url = $menuData['menuURL'];
-        $menu->father_id = $menuData['fatherMenu'];
-        $menu->sort = $menuData['menuSort'];
-        $menu->display = $menuData['menuDisplay'];
-        $menu->state = $menuData['menuState'];
-
-        if (!$menu->save()) {
+        if (!$this->menu->createMenu($menuData)) {
             return response()->json(['status' => 500, 'message' => '创建失败']);
         }
 
@@ -214,8 +207,8 @@ class MenuController extends Controller
             return response()->json(['status' => 500, 'message' => '请选择要删除的菜单']);
         }
 
-        $menu = Menu::find($id);
-        $menuChildren = Menu::where('father_id', $id)->count();
+        $menu = $this->menu->findMenu($id);
+        $menuChildren = $this->menu->menuCount(['father_id' => $id]);
 
         if (empty($menu)) {
             return response()->json(['status' => 500, 'message' => '菜单不存在']);
@@ -225,9 +218,7 @@ class MenuController extends Controller
             }
         }
 
-        $rs = $menu->delete();
-
-        if (!$rs) {
+        if (!$this->menu->deleteMenu($id)) {
             return response()->json(['status' => 500, 'message' => '删除失败']);
         }
 
@@ -244,7 +235,7 @@ class MenuController extends Controller
         $id = $request->input('id');
         $display = $request->input('display');
 
-        $menu = Menu::find($id);
+        $menu = $this->menu->findMenu($id);
         if (empty($menu)) {
             return response()->json(['status' => 500, 'message' => '菜单不存在']);
         }
