@@ -257,38 +257,7 @@ desired effect
             <!-- /.search form -->
 
             <!-- Sidebar Menu -->
-            <ul class="sidebar-menu">
-                <li class="header">HEADER</li>
-                <!-- Optionally, you can add icons to the links -->
-                <li class="treeview">
-                    <a href="#"><i class="fa fa-dashboard"></i> <span>管理中心</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li>
-                            <a href="#"><i class="fa fa-circle-o"></i>菜单管理</a>
-                            <ul class="treeview-menu">
-                                <li><a href="{{ route('menu.admin') }}"><i class="fa fa-circle-o"></i> 后台菜单</a></li>
-                                <li><a href="{{ route('menu.home') }}"><i class="fa fa-circle-o"></i> 前台菜单</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </li>
-                <li class="treeview">
-                    <a href="#"><i class="fa fa-users"></i> <span>用户管理</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li><a href="{{ route('user.index') }}"><i class="fa fa-circle-o"></i>用户管理</a></li>
-                        <li><a href="{{ route('role.index') }}"><i class="fa fa-circle-o"></i>角色管理</a></li>
-                        <li><a href="{{ route('permission.index') }}"><i class="fa fa-circle-o"></i>权限管理</a></li>
-                    </ul>
-                </li>
-            </ul>
+            @include('layouts.sidebar')
             <!-- /.sidebar-menu -->
         </section>
         <!-- /.sidebar -->

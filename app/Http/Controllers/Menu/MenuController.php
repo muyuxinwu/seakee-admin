@@ -14,8 +14,15 @@ use Illuminate\Http\Request;
 
 class MenuController extends Controller
 {
+    /**
+     * @var MenuInterface
+     */
     private $menu;
 
+    /**
+     * MenuController constructor.
+     * @param MenuInterface $menu
+     */
     public function __construct(MenuInterface $menu)
     {
         $this->menu = $menu;
