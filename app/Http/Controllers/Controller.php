@@ -66,6 +66,9 @@ class Controller extends BaseController
             'password.required' => '密码不能为空',
             'password.min' => '密码不能少于6位',
             'password.confirmed' => '确认密码和密码不相符',
+            'nick_name.unique' => '昵称已存在',
+            'nick_name.max' => '昵称不能超过255位',
+            'phone.regex' => '手机号错误',
 
             /**
              * create menu

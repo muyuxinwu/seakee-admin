@@ -24,8 +24,8 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'checkPermission']], function() {
     
     Route::get('/', 'AdminController@index')->name('admin');
-    
-    Route::group(['prefix' => 'menu', 'namespace' => 'menu'], function (){
+
+    Route::group(['prefix' => 'menu', 'namespace' => 'Menu'], function (){
         Route::get('/admin', 'MenuController@admin')->name('menu.admin');
         Route::get('/home', 'MenuController@home')->name('menu.home');
         Route::get('/createAdminMenu', 'MenuController@createAdminMenu')->name('menu.admin.create');
@@ -38,8 +38,17 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'checkPermission']],
         Route::post('/edit', 'MenuController@editMenu')->name('menu.edit');
     });
 
-    Route::group(['prefix' => 'user', 'namespace' => 'user'], function (){
-        Route::get('/user/index', 'UserController@index')->name('user.index');
+    Route::group(['prefix' => 'userCenter', 'namespace' => 'User'], function (){
+        Route::group(['prefix' => 'user'], function (){
+            Route::get('/index', 'UserController@index')->name('user.index');
+            Route::get('/adminCreateUser', 'UserController@adminCreateUser')->name('user.admin.create');
+            Route::get('/adminEditUser', 'UserController@adminEditUser')->name('user.admin.edit');
+            Route::get('/delete', 'UserController@deleteUser')->name('user.delete');
+            Route::get('/changeStatus', 'UserController@changeStatus')->name('user.changeStatus');
+            Route::post('/create', 'UserController@createUser')->name('user.create');
+            Route::post('/edit', 'UserController@editUser')->name('user.edit');
+        });
+
         Route::get('/role/index', 'RoleController@index')->name('role.index');
         Route::get('/permission/index', 'PermissionController@index')->name('permission.index');
     });

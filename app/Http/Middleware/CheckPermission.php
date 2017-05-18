@@ -18,7 +18,7 @@ class CheckPermission
     {
         $user = Auth::check() ? Auth::user() : '';
         
-        view()->share('user', $user);
+        view()->share('sidebarUser', $user);
         return $next($request);
     }
 }

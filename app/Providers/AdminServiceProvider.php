@@ -27,5 +27,6 @@ class AdminServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind('App\Interfaces\MenuInterface', 'App\Repositories\MenuRepository');
+        $this->app->bind('App\Interfaces\UserInterface', 'App\Repositories\UserRepository');
     }
 }
