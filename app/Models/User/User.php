@@ -9,7 +9,10 @@ use Zizaco\Entrust\Traits\EntrustUserTrait;
 
 class User extends Authenticatable
 {
-    use Notifiable, EntrustUserTrait;
+    use Notifiable;
+    use SoftDeletes, EntrustUserTrait {
+        EntrustUserTrait::restore insteadof SoftDeletes;
+    }
 
     /**
      * The attributes that are mass assignable.
