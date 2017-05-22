@@ -57,6 +57,13 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'checkPermission']],
             Route::post('/edit', 'RoleController@editRole')->name('role.edit');
         });
 
-        Route::get('/permission/index', 'PermissionController@index')->name('permission.index');
+        Route::group(['prefix' => 'permission'], function (){
+            Route::get('/index', 'PermissionController@index')->name('permission.index');
+            Route::get('/delete', 'PermissionController@deletePermission')->name('permission.delete');
+            Route::get('/showEdit', 'PermissionController@showEditInfo')->name('permission.showEdit');
+            Route::post('/create', 'PermissionController@createPermission')->name('permission.create');
+            Route::post('/edit', 'PermissionController@editPermission')->name('permission.edit');
+        });
+
     });
 });
