@@ -28,5 +28,6 @@ class AdminServiceProvider extends ServiceProvider
     {
         $this->app->bind('App\Interfaces\MenuInterface', 'App\Repositories\MenuRepository');
         $this->app->bind('App\Interfaces\UserInterface', 'App\Repositories\UserRepository');
+        $this->app->bind('App\Interfaces\RoleInterface', 'App\Repositories\RoleRepository');
     }
 }

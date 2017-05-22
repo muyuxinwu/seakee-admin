@@ -6,7 +6,7 @@
  * Description:
  */
 
-namespace app\Repositories;
+namespace App\Repositories;
 
 
 use App\Interfaces\UserInterface;

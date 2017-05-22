@@ -6,7 +6,7 @@
  * Description:
  */
 
-namespace app\Http\Controllers\User;
+namespace App\Http\Controllers\User;
 
 
 use App\Http\Controllers\Controller;
