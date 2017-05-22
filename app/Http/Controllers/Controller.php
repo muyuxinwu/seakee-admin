@@ -45,42 +45,6 @@ class Controller extends BaseController
 
         return NULL;
     }
-
-    /**
-     * Validation error info
-     * @return array
-     */
-    protected function errorInfo()
-    {
-        return [
-            /**
-             * registration
-             */
-            'user_name.required' => '用户名不能为空',
-            'user_name.max' => '用户名不能超过255位',
-            'user_name.unique' => '用户名已存在',
-            'email.required' => 'email不能为空',
-            'email.max' => 'email不能超过255位',
-            'email.unique' => 'email已存在',
-            'email.email' => '请输入正确的email',
-            'password.required' => '密码不能为空',
-            'password.min' => '密码不能少于6位',
-            'password.confirmed' => '确认密码和密码不相符',
-            'nick_name.unique' => '昵称已存在',
-            'nick_name.max' => '昵称不能超过255位',
-            'phone.regex' => '手机号错误',
-
-            /**
-             * create menu
-             */
-            'menuState.required' => '菜单位置不能为空',
-            'fatherMenu.required' => '上一级菜单不能为空',
-            'menuDisplay.required' => '菜单显示状态不能为空',
-            'menuURL.required' => '菜单URL不能为空',
-            'menuName.required' => '菜单名称不能为空',
-            'menuSort.numeric' => '排序必须为数值',
-        ];
-    }
     
     /**
      * return logged user

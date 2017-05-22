@@ -45,6 +45,25 @@ class MenuController extends Controller
     }
 
     /**
+     * Validation error info
+     * @return array
+     */
+    protected function errorInfo()
+    {
+        return [
+            /**
+             * create menu
+             */
+            'menuState.required' => '菜单位置不能为空',
+            'fatherMenu.required' => '上一级菜单不能为空',
+            'menuDisplay.required' => '菜单显示状态不能为空',
+            'menuURL.required' => '菜单URL不能为空',
+            'menuName.required' => '菜单名称不能为空',
+            'menuSort.numeric' => '排序必须为数值',
+        ];
+    }
+
+    /**
      * return admin menu manage page
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
