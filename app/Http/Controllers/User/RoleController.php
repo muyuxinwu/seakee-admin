@@ -11,6 +11,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Interfaces\RoleInterface;
+use App\Services\ValidatorService;
 use Illuminate\Http\Request;
 
 class RoleController extends Controller
@@ -21,12 +22,18 @@ class RoleController extends Controller
     protected $role;
 
     /**
+     * @var ValidatorService
+     */
+    protected $validator;
+    /**
      * RoleController constructor.
      * @param RoleInterface $role
+     * @param ValidatorService $validator
      */
-    public function __construct(RoleInterface $role)
+    public function __construct(RoleInterface $role, ValidatorService $validator)
     {
         $this->role = $role;
+        $this->validator = $validator;
     }
 
     /**
@@ -86,8 +93,7 @@ class RoleController extends Controller
      */
     public function createRole(Request $request)
     {
-        $validator = $this->validator($request->all(), $this->createRoleRules());
-        $validator = $this->getValidatorMsg($validator);
+        $validator = $this->validator->validate($request->all(), $this->createRoleRules(), $this->errorInfo());
 
         if (!empty($validator)) {
             return response()->json($validator);
@@ -108,8 +114,7 @@ class RoleController extends Controller
      */
     public function editRole(Request $request)
     {
-        $validator = $this->validator($request->all(), $this->editRoleRules($request->input('id')));
-        $validator = $this->getValidatorMsg($validator);
+        $validator = $this->validator->validate($request->all(), $this->editRoleRules($request->input('id')), $this->errorInfo());
 
         if (!empty($validator)) {
             return response()->json($validator);

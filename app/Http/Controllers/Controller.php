@@ -7,57 +7,11 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use App\Models\Ip\Ip;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use Validator;
 
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
-
-    /**
-     * Get a validator for an incoming request.
-     *
-     * @param  array $data
-     * @param  array $rules
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    protected function validator(array $data, array $rules)
-    {
-        return Validator::make($data, $rules, $this->errorInfo());
-    }
-
-    /**
-     * get Validator Message
-     * @param $validator
-     * @return array|null
-     */
-    protected function getValidatorMsg($validator)
-    {
-        if ($validator->fails()) {
-            $messages = $validator->messages()->setFormat('');
-
-            foreach ($messages->getMessages() as $k => $v) {
-                $error = [$v[0]];
-                return ['status' => 500, 'message' => $error];
-            }
-        }
-
-        return NULL;
-    }
-    
-    /**
-     * return logged user
-     * @return \Illuminate\Contracts\Auth\Authenticatable|null
-     */
-    public function getUser()
-    {
-        if (Auth::check()) {
-            $user = Auth::user();
-        }
-
-        return $user ?? '';
-    }
 
     /**
      * save IP

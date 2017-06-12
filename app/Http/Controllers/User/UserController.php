@@ -11,6 +11,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Interfaces\UserInterface;
+use App\Services\ValidatorService;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -18,15 +19,22 @@ class UserController extends Controller
     /**
      * @var UserInterface
      */
-    private $user;
+    protected $user;
+
+    /**
+     * @var ValidatorService
+     */
+    protected $validator;
 
     /**
      * UserController constructor.
      * @param UserInterface $user
+     * @param ValidatorService $validator
      */
-    public function __construct(UserInterface $user)
+    public function __construct(UserInterface $user, ValidatorService $validator)
     {
         $this->user = $user;
+        $this->validator = $validator;
     }
 
     /**
@@ -110,8 +118,7 @@ class UserController extends Controller
      */
     public function createUser(Request $request)
     {
-        $validator = $this->validator($request->all(), $this->registrationRules());
-        $validator = $this->getValidatorMsg($validator);
+        $validator = $this->validator->validate($request->all(), $this->registrationRules(), $this->errorInfo());
 
         if (!empty($validator)) {
             return response()->json($validator);
@@ -179,8 +186,7 @@ class UserController extends Controller
      */
     public function editUser(Request $request)
     {
-        $validator = $this->validator($request->all(), $this->editRules($request->input('id')));
-        $validator = $this->getValidatorMsg($validator);
+        $validator = $this->validator->validate($request->all(), $this->editRules($request->input('id')), $this->errorInfo());
 
         if (!empty($validator)) {
             return response()->json($validator);

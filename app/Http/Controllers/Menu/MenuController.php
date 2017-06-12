@@ -10,6 +10,7 @@ namespace App\Http\Controllers\Menu;
 
 use App\Http\Controllers\Controller;
 use App\Interfaces\MenuInterface;
+use App\Services\ValidatorService;
 use Illuminate\Http\Request;
 
 class MenuController extends Controller
@@ -18,14 +19,18 @@ class MenuController extends Controller
      * @var MenuInterface
      */
     private $menu;
+    
+    private $validator;
 
     /**
      * MenuController constructor.
      * @param MenuInterface $menu
+     * @param ValidatorService $validator
      */
-    public function __construct(MenuInterface $menu)
+    public function __construct(MenuInterface $menu, ValidatorService $validator)
     {
         $this->menu = $menu;
+        $this->validator = $validator;
     }
 
     /**
@@ -138,8 +143,7 @@ class MenuController extends Controller
      */
     public function editMenu(Request $request)
     {
-        $validator = $this->validator($request->all(), $this->createMenuRules());
-        $validator = $this->getValidatorMsg($validator);
+        $validator = $this->validator->validate($request->all(), $this->createMenuRules(), $this->errorInfo());
 
         if (!empty($validator)) {
             return response()->json($validator);
@@ -180,8 +184,7 @@ class MenuController extends Controller
      */
     public function createMenu(Request $request)
     {
-        $validator = $this->validator($request->all(), $this->createMenuRules());
-        $validator = $this->getValidatorMsg($validator);
+        $validator = $this->validator->validate($request->all(), $this->createMenuRules(), $this->errorInfo());
 
         if (!empty($validator)) {
             return response()->json($validator);

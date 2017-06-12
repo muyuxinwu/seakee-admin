@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\RedirectsUsers;
+use Validator;
 
 class RegisterController extends Controller
 {
@@ -55,7 +56,7 @@ class RegisterController extends Controller
      */
     public function register(Request $request)
     {
-        $this->validator($request->all(), $this->registrationRules())->validate();
+        Validator::make($request->all(), $this->registrationRules())->validate();
 
         event(new Registered($user = $this->create($request)));
 

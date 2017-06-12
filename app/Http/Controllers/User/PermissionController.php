@@ -11,6 +11,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Interfaces\PermissionInterface;
+use App\Services\ValidatorService;
 use Illuminate\Http\Request;
 
 class PermissionController extends Controller
@@ -21,12 +22,19 @@ class PermissionController extends Controller
     protected $permission;
 
     /**
+     * @var ValidatorService
+     */
+    protected $validator;
+
+    /**
      * PermissionController constructor.
      * @param PermissionInterface $permission
+     * @param ValidatorService $validator
      */
-    public function __construct(PermissionInterface $permission)
+    public function __construct(PermissionInterface $permission, ValidatorService $validator)
     {
         $this->permission = $permission;
+        $this->validator = $validator;
     }
 
     /**
@@ -86,8 +94,7 @@ class PermissionController extends Controller
      */
     public function createPermission(Request $request)
     {
-        $validator = $this->validator($request->all(), $this->createPermissionRules());
-        $validator = $this->getValidatorMsg($validator);
+        $validator = $this->validator->validate($request->all(), $this->createPermissionRules(), $this->errorInfo());
 
         if (!empty($validator)) {
             return response()->json($validator);
@@ -108,8 +115,7 @@ class PermissionController extends Controller
      */
     public function editPermission(Request $request)
     {
-        $validator = $this->validator($request->all(), $this->editPermissionRules($request->input('id')));
-        $validator = $this->getValidatorMsg($validator);
+        $validator = $this->validator->validate($request->all(), $this->editPermissionRules($request->input('id')), $this->errorInfo());
 
         if (!empty($validator)) {
             return response()->json($validator);
