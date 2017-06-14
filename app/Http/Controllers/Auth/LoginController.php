@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Interfaces\IpInterface;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\RedirectsUsers;
@@ -31,11 +32,18 @@ class LoginController extends Controller
     protected $redirectTo = '/admin';
 
     /**
-     * Create a new controller instance.
+     * @var IpInterface
      */
-    public function __construct()
+    protected $ip;
+
+    /**
+     * LoginController constructor.
+     * @param IpInterface $ip
+     */
+    public function __construct(IpInterface $ip)
     {
         $this->middleware('guest', ['except' => 'logout']);
+        $this->ip = $ip;
     }
 
     /**
@@ -144,7 +152,6 @@ class LoginController extends Controller
     {
         $ipAddress = $request->getClientIp();
         $this->saveIP(Auth::id(), $ipAddress);
-        $request->session()->push('user',$user);
         view()->share('user', $user);
     }
 
