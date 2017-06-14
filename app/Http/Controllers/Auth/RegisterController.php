@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Interfaces\IpInterface;
+use App\Interfaces\UserInterface;
 use App\Models\User\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -96,11 +98,25 @@ class RegisterController extends Controller
     protected $redirectTo = '/home';
 
     /**
-     * Create a new controller instance.
+     * @var IpInterface
      */
-    public function __construct()
+    protected $ip;
+
+    /**
+     * @var UserInterface
+     */
+    protected $user;
+
+    /**
+     * RegisterController constructor.
+     * @param IpInterface $ip
+     * @param UserInterface $user
+     */
+    public function __construct(IpInterface $ip, UserInterface $user)
     {
         $this->middleware('guest');
+        $this->ip = $ip;
+        $this->user = $user;
     }
 
     /**
@@ -110,17 +126,10 @@ class RegisterController extends Controller
      */
     protected function create($request)
     {
-        $data = $request->all();
-        $user = new User();
-
-        $user->user_name = $data['user_name'];
-        $user->email = $data['email'];
-        $user->password = bcrypt($data['password']);
-
-        $user->save();
+        $user = $this->user->createUser($request->all());
 
         $ipAddress = $request->getClientIp();
-        $this->saveIP($user->id, $ipAddress, 1);
+        $this->ip->storageIP($user->id, $ipAddress, 1);
 
         return $user;
     }

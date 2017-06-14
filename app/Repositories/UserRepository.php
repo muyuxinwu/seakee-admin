@@ -29,13 +29,25 @@ class UserRepository implements UserInterface
         return User::destroy($id);
     }
 
-    public function createUser($data)
+    public function createUser(array $data)
     {
-        $user = new User();
+        return User::create([
+            'user_name' => $data['user_name'],
+            'email' => $data['email'],
+            'password' => bcrypt($data['password']),
+        ]);
+    }
+
+    public function updateUser(array $data)
+    {
+        $user = User::find($data['id']);
 
         $user->user_name = $data['user_name'];
         $user->email = $data['email'];
-        $user->password = bcrypt($data['password']);
+
+        if (isset($data['password']) && !empty($data['password'])){
+            $user->password = bcrypt($data['password']);
+        }
 
         if (isset($data['nick_name'])) {
             $user->nick_name = $data['nick_name'];
@@ -51,17 +63,14 @@ class UserRepository implements UserInterface
 
         return $user->save();
     }
-
-    public function updateUser($data)
+    
+    public function storageUser(array $data)
     {
-        $user = User::find($data['id']);
+        $user = new User();
 
         $user->user_name = $data['user_name'];
         $user->email = $data['email'];
-
-        if (isset($data['password']) && !empty($data['password'])){
-            $user->password = bcrypt($data['password']);
-        }
+        $user->password = bcrypt($data['password']);
 
         if (isset($data['nick_name'])) {
             $user->nick_name = $data['nick_name'];

@@ -16,7 +16,17 @@ Interface UserInterface
 
     public function deleteUser($id);
 
-    public function createUser($data);
+    public function updateUser(array $data);
 
-    public function updateUser($data);
+    /**
+     * @param array $data
+     * @return Object User
+     */
+    public function createUser(array $data);
+
+    /**
+     * @param array $data
+     * @return bool
+     */
+    public function storageUser(array $data);
 }

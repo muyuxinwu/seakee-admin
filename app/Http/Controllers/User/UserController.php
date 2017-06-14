@@ -126,7 +126,7 @@ class UserController extends Controller
 
         $userData = $request->all();
 
-        if (!$this->user->createUser($userData)) {
+        if (!$this->user->storageUser($userData)) {
             return response()->json(['status' => 500, 'message' => '新增失败']);
         }
 
