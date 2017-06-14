@@ -151,7 +151,7 @@ class LoginController extends Controller
     protected function authenticated(Request $request, $user)
     {
         $ipAddress = $request->getClientIp();
-        $this->saveIP(Auth::id(), $ipAddress);
+        $this->ip->storageIP(Auth::id(), $ipAddress, 2);
         view()->share('user', $user);
     }
 
