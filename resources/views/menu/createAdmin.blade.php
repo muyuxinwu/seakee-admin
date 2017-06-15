@@ -60,8 +60,8 @@
                                 <div class="col-xs-8">
                                     <select class="form-control" verify-key="notNull" name="menuURL">
                                         <option value="#" selected>选择URL</option>
-                                        @foreach($routes as $key => $url)
-                                            <option value="{{ $url }}">{{ $url }}</option>
+                                        @foreach($routes as $routeName => $url)
+                                            <option value="{{ $routeName }}">{{ $url }}</option>
                                         @endforeach
                                     </select>
                                 </div>

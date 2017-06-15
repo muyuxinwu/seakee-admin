@@ -31,5 +31,6 @@ class AdminServiceProvider extends ServiceProvider
         $this->app->bind('App\Interfaces\RoleInterface', 'App\Repositories\RoleRepository');
         $this->app->bind('App\Interfaces\PermissionInterface', 'App\Repositories\PermissionRepository');
         $this->app->bind('App\Interfaces\IpInterface', 'App\Repositories\IpRepository');
+        $this->app->bind('App\Interfaces\RouteInfoInterface', 'App\Repositories\RouteInfoRepository');
     }
 }

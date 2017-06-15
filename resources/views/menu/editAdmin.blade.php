@@ -47,8 +47,8 @@
                                 <div class="col-xs-8">
                                     <select class="form-control" verify-key="notNull" name="menuURL">
                                         <option value="#" @if($menu['menu_url'] == '#') selected @endif>#</option>
-                                        @foreach($routes as $key => $url)
-                                            <option value="{{ $url }}" @if($menu['menu_url'] == $url) selected @endif>{{ $url }}</option>
+                                        @foreach($routes as $routeName => $url)
+                                            <option value="{{ $routeName }}">{{ $url }}</option>
                                         @endforeach
                                     </select>
                                 </div>

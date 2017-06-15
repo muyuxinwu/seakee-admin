@@ -11,14 +11,4 @@ use Illuminate\Support\Facades\Route;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
-    
-    /**
-     * get all of routes
-     * @return mixed
-     */
-    protected function getRoute()
-    {
-        $route = Route::getRoutes()->getRoutesByMethod();
-        return $route;
-    }
 }

@@ -10,6 +10,7 @@ namespace App\Http\Controllers\Menu;
 
 use App\Http\Controllers\Controller;
 use App\Interfaces\MenuInterface;
+use App\Interfaces\RouteInfoInterface;
 use App\Services\ValidatorService;
 use Illuminate\Http\Request;
 
@@ -18,19 +19,29 @@ class MenuController extends Controller
     /**
      * @var MenuInterface
      */
-    private $menu;
-    
-    private $validator;
+    protected $menu;
+
+    /**
+     * @var ValidatorService
+     */
+    protected $validator;
+
+    /**
+     * @var RouteInfoInterface
+     */
+    protected $routeInfo;
 
     /**
      * MenuController constructor.
      * @param MenuInterface $menu
      * @param ValidatorService $validator
+     * @param RouteInfoInterface $routeInfo
      */
-    public function __construct(MenuInterface $menu, ValidatorService $validator)
+    public function __construct(MenuInterface $menu, ValidatorService $validator, RouteInfoInterface $routeInfo)
     {
         $this->menu = $menu;
         $this->validator = $validator;
+        $this->routeInfo = $routeInfo;
     }
 
     /**
@@ -87,16 +98,10 @@ class MenuController extends Controller
     {
         $menus = $this->menu->menuTree();
 
-        $route = $this->getRoute();
-
-        foreach ($route['GET'] as $key => $value) {
-            if (stripos($key, 'admin/') !== false) {
-                $routes[] = $key;
-            }
-        }
+        $routes = $this->routeInfo->allAdminRouteListByGet();
 
         return view('menu.createAdmin', [
-            'routes' => $routes ?? '',
+            'routes' => $routes,
             'menus' => $menus,
         ]);
     }
@@ -121,16 +126,10 @@ class MenuController extends Controller
             return response()->json(['status' => 500, 'message' => '菜单不存在']);
         }
 
-        $route = $this->getRoute();
-
-        foreach ($route['GET'] as $key => $value) {
-            if (stripos($key, 'admin/') !== false) {
-                $routes[] = $key;
-            }
-        }
+        $routes = $this->routeInfo->allAdminRouteListByGet();
 
         return view('menu.editAdmin', [
-            'routes' => $routes ?? '',
+            'routes' => $routes,
             'menu' => $menu,
             'menus' => $menus,
         ]);
