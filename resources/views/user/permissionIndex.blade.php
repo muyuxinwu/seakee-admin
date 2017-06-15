@@ -239,8 +239,8 @@
             }, function () {
                 $.ajax({
                     url: '{{ route('permission.delete') }}',
-                    type: 'GET',
-                    data: {id: id},
+                    type: 'POST',
+                    data: {id: id, _token: '{{ csrf_token() }}'},
                     dataType: 'JSON',
                     success: function (res) {
                         if (res.status == 200) {

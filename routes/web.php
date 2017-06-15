@@ -32,8 +32,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'checkPermission']],
         Route::get('/editAdminMenu', 'MenuController@editAdminMenu')->name('menu.admin.edit');
         Route::get('/editHomeMenu', 'MenuController@editHomeMenu')->name('menu.home.edit');
         Route::get('/createHomeMenu', 'MenuController@createHomeMenu')->name('menu.home.create');
-        Route::get('/delete', 'MenuController@deleteMenu')->name('menu.delete');
-        Route::get('/changeDisplay', 'MenuController@changeDisplay')->name('menu.changeDisplay');
+        Route::post('/delete', 'MenuController@deleteMenu')->name('menu.delete');
+        Route::post('/changeDisplay', 'MenuController@changeDisplay')->name('menu.changeDisplay');
         Route::post('/create', 'MenuController@createMenu')->name('menu.create');
         Route::post('/edit', 'MenuController@editMenu')->name('menu.edit');
     });
@@ -43,25 +43,25 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'checkPermission']],
             Route::get('/index', 'UserController@index')->name('user.index');
             Route::get('/adminCreateUser', 'UserController@adminCreateUser')->name('user.admin.create');
             Route::get('/adminEditUser', 'UserController@adminEditUser')->name('user.admin.edit');
-            Route::get('/delete', 'UserController@deleteUser')->name('user.delete');
-            Route::get('/changeStatus', 'UserController@changeStatus')->name('user.changeStatus');
+            Route::post('/delete', 'UserController@deleteUser')->name('user.delete');
+            Route::post('/changeStatus', 'UserController@changeStatus')->name('user.changeStatus');
             Route::post('/create', 'UserController@createUser')->name('user.create');
             Route::post('/edit', 'UserController@editUser')->name('user.edit');
         });
 
         Route::group(['prefix' => 'role'], function (){
             Route::get('/index', 'RoleController@index')->name('role.index');
-            Route::get('/delete', 'RoleController@deleteRole')->name('role.delete');
             Route::get('/showEdit', 'RoleController@showEditInfo')->name('role.showEdit');
+            Route::post('/delete', 'RoleController@deleteRole')->name('role.delete');
             Route::post('/create', 'RoleController@createRole')->name('role.create');
             Route::post('/edit', 'RoleController@editRole')->name('role.edit');
         });
 
         Route::group(['prefix' => 'permission'], function (){
             Route::get('/index', 'PermissionController@index')->name('permission.index');
-            Route::get('/delete', 'PermissionController@deletePermission')->name('permission.delete');
             Route::get('/showEdit', 'PermissionController@showEditInfo')->name('permission.showEdit');
             Route::post('/create', 'PermissionController@createPermission')->name('permission.create');
+            Route::post('/delete', 'PermissionController@deletePermission')->name('permission.delete');
             Route::post('/edit', 'PermissionController@editPermission')->name('permission.edit');
         });
 

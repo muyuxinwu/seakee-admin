@@ -89,8 +89,8 @@
             }, function () {
                 $.ajax({
                     url: '{{ route('user.delete') }}',
-                    type: 'GET',
-                    data: {id: id},
+                    type: 'POST',
+                    data: {id: id, _token: '{{ csrf_token() }}'},
                     dataType: 'JSON',
                     success: function (res) {
                         if (res.status == 200) {
@@ -119,7 +119,7 @@
 
             $.ajax({
                 url: '{{ route('user.changeStatus') }}',
-                type: 'GET',
+                type: 'POST',
                 data: {id: id,
                     status: status},
                 dataType: 'JSON',
