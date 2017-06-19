@@ -28,7 +28,7 @@
                 <tbody>
                 @foreach($menus as $key => $menu)
                     <tr class="info">
-                        <td>{{ $menu['menu_name'] }}</td>
+                        <td><i class="fa {{ $menu['icon'] }}"></i>&nbsp;&nbsp;{{ $menu['menu_name'] }}</td>
                         <td>{{ $menu['menu_url'] }}</td>
                         <td class="text-center">{{ $menu['sort'] }}</td>
                         <td style="padding: 4px 8px;" class="text-center">
@@ -45,7 +45,7 @@
                     @if(isset($menu['nodes']))
                         @foreach($menu['nodes'] as $key => $menu)
                             <tr>
-                                <td>&nbsp;&nbsp;&nbsp;&nbsp;⊢ {{ $menu['menu_name'] }}</td>
+                                <td>&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa {{ $menu['icon'] }}"></i>&nbsp;&nbsp;{{ $menu['menu_name'] }}</td>
                                 <td>{{ $menu['menu_url'] }}</td>
                                 <td class="text-center">{{ $menu['sort'] }}</td>
                                 <td style="padding: 4px 8px;" class="text-center">
@@ -64,7 +64,7 @@
                                 @foreach($menu['nodes'] as $key => $menu)
                                     <tr>
                                         <td>
-                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;⊢ {{ $menu['menu_name'] }}</td>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa {{ $menu['icon'] }}"></i>&nbsp;&nbsp;{{ $menu['menu_name'] }}</td>
                                         <td>{{ $menu['menu_url'] }}</td>
                                         <td class="text-center">{{ $menu['sort'] }}</td>
                                         <td style="padding: 4px 8px;" class="text-center">
