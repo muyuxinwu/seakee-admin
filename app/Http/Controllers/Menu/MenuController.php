@@ -54,9 +54,10 @@ class MenuController extends Controller
             'menuState' => 'required',
             'fatherMenu' => 'required',
             'menuDisplay' => 'required',
-            'menuURL' => 'required',
+            'routeName' => 'required',
             'menuName' => 'required',
             'menuSort' => 'numeric',
+            'icon' => 'required',
         ];
     }
 
@@ -73,9 +74,10 @@ class MenuController extends Controller
             'menuState.required' => '菜单位置不能为空',
             'fatherMenu.required' => '上一级菜单不能为空',
             'menuDisplay.required' => '菜单显示状态不能为空',
-            'menuURL.required' => '菜单URL不能为空',
+            'routeName.required' => '菜单URL不能为空',
             'menuName.required' => '菜单名称不能为空',
             'menuSort.numeric' => '排序必须为数值',
+            'icon.required' => '图标不能为空',
         ];
     }
 
@@ -116,7 +118,7 @@ class MenuController extends Controller
         $id = $request->input('id');
 
         if (empty($id)) {
-            return response()->json(['status' => 500, 'message' => '请选择要删除的菜单']);
+            return response()->json(['status' => 500, 'message' => '请选择要编辑的菜单']);
         }
 
         $menu = $this->menu->findMenu($id);

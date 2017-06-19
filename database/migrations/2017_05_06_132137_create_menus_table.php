@@ -15,12 +15,14 @@ class CreateMenusTable extends Migration
     {
         Schema::create('menus', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('icon', 50)->default('fa-circle-o');
             $table->string('menu_name', 100);
-            $table->string('menu_url');
+            $table->string('route_name');
             $table->integer('father_id')->comment('-1：根目录');
             $table->integer('sort')->default(0);
             $table->tinyInteger('display')->default(1)->comment('0：隐藏,1：显示');
             $table->tinyInteger('state')->default(1)->comment('1：后台,2：前台');
+            $table->tinyInteger('is_ custom')->default(0)->comment('0：非自定义1：自定义');
             $table->softDeletes();
             $table->timestamps();
         });

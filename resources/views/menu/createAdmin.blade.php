@@ -20,7 +20,7 @@
                             <div class="col-xs-6">
                                 <label class="col-xs-4 control-label">上级菜单</label>
                                 <div class="col-xs-8">
-                                    <select class="form-control" verify-key="notNull" name="fatherMenu">
+                                    <select class="form-control" name="fatherMenu">
                                         <option value="">选择上级菜单</option>
                                         <option value="-1">根目录</option>
                                         @foreach($menus as $key => $menu)
@@ -44,26 +44,45 @@
                             <div class="col-xs-12" style="padding-left: 9px;">
                                 <label class="col-xs-2 control-label">显示状态</label>
                                 <div class="col-xs-6">
-                                    <div class="switch">
+                                    <div class="switch" style="display: table">
                                         <input onchange="displayValue()" data-on-text="显示" data-off-text="隐藏" type="checkbox" checked/>
-                                        <label class="control-label" style="padding-left: 77px;">是否节点&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                                        <input onchange="menuUrl()" data-on-text="是" data-off-text="否" type="checkbox" checked/>
+                                        <label class="control-label" style="padding-left: 80px;">菜单排序&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                                        <input type="text" name="menuSort" class="form-control" style="width: 80px;display: initial">
                                     </div>
                                     <input id="display" type="hidden" name="menuDisplay" value="1">
-                                    <input id="node" type="hidden" value="1">
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group" style="display: none;" id="menuURL">
+                        <div class="form-group">
+                            <div class="col-xs-6">
+                                <label class="col-xs-4 control-label">菜单图标</label>
+                                <div style="display: table" class="col-xs-8">
+                                    <input  data-placement="bottomRight" class="form-control icp icp-auto" value="fa-circle-o" type="text" name="icon"/>
+                                    <span class="input-group-addon" ></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group" id="menuURL">
                             <div class="col-xs-6">
                                 <label class="col-xs-4 control-label">菜单URL</label>
                                 <div class="col-xs-8">
-                                    <select class="form-control" verify-key="notNull" name="menuURL">
+                                    <select onchange="customUrl();" class="form-control" id="selectRouteName" >
                                         <option value="#" selected>选择URL</option>
+                                        <option value="0" >自定义URL</option>
                                         @foreach($routes as $routeName => $url)
                                             <option value="{{ $routeName }}">{{ $url }}</option>
                                         @endforeach
                                     </select>
+                                    <input type="hidden" name="routeName" id="routeName">
+                                    <input type="hidden" name="isCustom" id="isCustom">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group" style="display: none" id="customUrl">
+                            <div class="col-xs-6">
+                                <label class="col-xs-4 control-label"></label>
+                                <div class="col-xs-8">
+                                    <input id="customUrlValue" type="text" class="form-control">
                                 </div>
                             </div>
                         </div>
@@ -71,15 +90,7 @@
                             <div class="col-xs-6">
                                 <label class="col-xs-4 control-label">菜单名称</label>
                                 <div class="col-xs-8">
-                                    <input type="text" name="menuName" class="form-control" verify-key="notNull">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-xs-6">
-                                <label class="col-xs-4 control-label">菜单排序</label>
-                                <div class="col-xs-8">
-                                    <input type="text" name="menuSort" class="form-control" verify-key="notNull">
+                                    <input type="text" name="menuName" class="form-control">
                                 </div>
                             </div>
                         </div>
@@ -110,22 +121,22 @@
     <link rel="stylesheet" href="{{ asset('css/highlight.css') }}">
     <link rel="stylesheet" href="{{ asset('css/bootstrap-switch.css') }}">
     <link rel="stylesheet" href="{{ asset('css/main.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/fontawesome-iconpicker.min.css') }}">
 @endsection
 
 @section('page_js')
     <script src="{{ asset('js/highlight.js') }}"></script>
     <script src="{{ asset('js/main.js') }}"></script>
     <script src="{{ asset('js/bootstrap-switch.js') }}"></script>
+    <script src="{{ asset('js/fontawesome-iconpicker.js') }}"></script>
     <script>
-
-        function menuUrl() {
-            var node = $('#node').val();
-            if (node == 1) {
-                $('#menuURL').show();
-                $('#node').val(0);
+        $('.icp-auto').iconpicker();
+        function customUrl() {
+            var routeName = $('#selectRouteName').val();
+            if (routeName == 0){
+                $('#customUrl').show();
             } else {
-                $('#menuURL').hide();
-                $('#node').val(1);
+                $('#customUrl').hide();
             }
         }
 
@@ -139,6 +150,17 @@
         }
 
         $('#createMenu').click(function () {
+
+            var routeName = $('#selectRouteName').val();
+            var customUrlValue = $('#customUrlValue').val();
+            if (routeName == 0){
+                $('#routeName').val(customUrlValue);
+                $('#isCustom').val(1);
+            } else {
+                $('#routeName').val(routeName);
+                $('#isCustom').val(0);
+            }
+
             $form = $('#menuForm');
             $form.find('#createMenu, #draftSave').prop('disabled', true);
             var formData = new FormData($form[0]);
