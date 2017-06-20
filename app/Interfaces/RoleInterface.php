@@ -19,4 +19,6 @@ interface RoleInterface
     public function findRole($id);
 
     public function deleteRole($id);
+
+    public function allRole();
 }

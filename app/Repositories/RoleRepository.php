@@ -50,4 +50,9 @@ class RoleRepository implements RoleInterface
     {
         return Role::find($id);
     }
+
+    public function allRole()
+    {
+        return Role::all();
+    }
 }

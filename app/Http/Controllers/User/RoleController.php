@@ -11,6 +11,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Interfaces\RoleInterface;
+use App\Interfaces\UserInterface;
 use App\Services\ValidatorService;
 use Illuminate\Http\Request;
 
@@ -25,15 +26,20 @@ class RoleController extends Controller
      * @var ValidatorService
      */
     protected $validator;
+
+    protected $user;
+
     /**
      * RoleController constructor.
      * @param RoleInterface $role
      * @param ValidatorService $validator
+     * @param UserInterface $user
      */
-    public function __construct(RoleInterface $role, ValidatorService $validator)
+    public function __construct(RoleInterface $role, ValidatorService $validator, UserInterface $user)
     {
         $this->role = $role;
         $this->validator = $validator;
+        $this->user = $user;
     }
 
     /**
@@ -183,5 +189,52 @@ class RoleController extends Controller
         }
 
         return response()->json(['status' => 200, 'message' => '删除成功']);
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getUserRoleList(Request $request)
+    {
+        $userID = $request->input('userID');
+        $user = $this->user->findUser($userID);
+
+        if (empty($user)) {
+            return response()->json(['status' => 500, 'message' => '用户不存在']);
+        }
+
+        $userRole = $user->roles()->getResults()->toArray();
+        $data['roles'] = $this->role->allRole()->toArray();
+        $data['userRoleID'] = array_column($userRole, 'id');
+        $data['user'] = $user->toArray();
+
+        return view('user.assignRole', $data);
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function assignRole(Request $request)
+    {
+        $userID = $request->input('userID');
+        $rolesID = $request->input('rolesID');
+
+        $user = $this->user->findUser($userID);
+
+        if (empty($user)) {
+            return response()->json(['status' => 500, 'message' => '用户不存在']);
+        }
+
+        $roles = explode(",", $rolesID);
+
+        if (empty($roles[0])){
+            return response()->json(['status' => 500, 'message' => '请指定角色']);
+        }
+
+        $user->roles()->sync($roles, true);
+
+        return response()->json(['status' => 200, 'message' => 'success']);
     }
 }

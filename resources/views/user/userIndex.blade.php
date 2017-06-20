@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title','用户管理')
+@section('title','用户中心')
 @section('page_title','用户管理')
 @section('Optional_description','')
 
@@ -22,7 +22,7 @@
                     <th>E-mail</th>
                     <th>手机号</th>
                     <th class="text-center">状态</th>
-                    <th class="text-center" style="width: 125px;">操作</th>
+                    <th class="text-center" style="width: 185px;">操作</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -37,6 +37,7 @@
                             </td>
                             <td style="padding: 4px 8px;">
                                 <a href="{{ route('user.admin.edit') }}?id={{ $user['id'] }}" class="btn btn-primary btn-sm mr10">编辑</a>
+                                <a href="{{ route('role.userRoleList') }}?userID={{ $user['id'] }}" class="btn btn-info btn-sm mr10">角色</a>
                                 <button onclick="deleteUser({{ $user['id'] }})" class="btn btn-danger btn-sm">删除</button>
                             </td>
                         </tr>
