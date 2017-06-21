@@ -11,4 +11,8 @@ namespace App\Interfaces;
 Interface RouteInfoInterface
 {
     public function allAdminRouteListByGet();
+
+    public function getAllRouteNameList();
+    
+    public function getRouteList();
 }

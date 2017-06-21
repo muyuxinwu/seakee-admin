@@ -11,6 +11,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Interfaces\PermissionInterface;
+use App\Interfaces\RouteInfoInterface;
 use App\Services\ValidatorService;
 use Illuminate\Http\Request;
 
@@ -27,14 +28,21 @@ class PermissionController extends Controller
     protected $validator;
 
     /**
+     * @var RouteInfoInterface
+     */
+    protected $routeInfo;
+
+    /**
      * PermissionController constructor.
      * @param PermissionInterface $permission
      * @param ValidatorService $validator
+     * @param RouteInfoInterface $routeInfo
      */
-    public function __construct(PermissionInterface $permission, ValidatorService $validator)
+    public function __construct(PermissionInterface $permission, ValidatorService $validator, RouteInfoInterface $routeInfo)
     {
         $this->permission = $permission;
         $this->validator = $validator;
+        $this->routeInfo = $routeInfo;
     }
 
     /**
@@ -84,8 +92,9 @@ class PermissionController extends Controller
      */
     public function index()
     {
-        $permissions = $this->permission->allPermissionWithPaginate(10);
-        return view('user.permissionIndex', ['permissions' => $permissions]);
+        $data['permissions'] = $this->permission->allPermissionWithPaginate(10);
+        $data['routeList'] = $this->routeInfo->getRouteList();
+        return view('user.permissionIndex', $data);
     }
 
     /**
@@ -101,6 +110,10 @@ class PermissionController extends Controller
         }
 
         $permissionData = $request->all();
+
+        if (!in_array($permissionData['name'],$this->routeInfo->getAllRouteNameList())){
+            return response()->json(['status' => 500, 'message' => '路由不存在']);
+        }
 
         if (!$this->permission->createPermission($permissionData)) {
             return response()->json(['status' => 500, 'message' => '新增失败']);
@@ -122,6 +135,10 @@ class PermissionController extends Controller
         }
 
         $permissionData = $request->all();
+
+        if (!in_array($permissionData['name'],$this->routeInfo->getAllRouteNameList())){
+            return response()->json(['status' => 500, 'message' => '路由不存在']);
+        }
 
         if (empty($permissionData['id'])) {
             return response()->json(['status' => 500, 'message' => '请选择要编辑的权限']);
