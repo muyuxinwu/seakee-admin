@@ -43,7 +43,9 @@ class RoleRepository implements RoleInterface
 
     public function deleteRole($id)
     {
-        return Role::destroy($id);
+        $role = Role::whereId($id);
+
+        return $role->delete();
     }
 
     public function findRole($id)
