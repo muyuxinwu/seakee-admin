@@ -49,4 +49,9 @@ class PermissionRepository implements PermissionInterface
     {
         return Permission::find($id);
     }
+
+    public function allPermission()
+    {
+        return Permission::all();
+    }
 }

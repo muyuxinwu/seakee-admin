@@ -11,6 +11,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Interfaces\PermissionInterface;
+use App\Interfaces\RoleInterface;
 use App\Interfaces\RouteInfoInterface;
 use App\Services\ValidatorService;
 use Illuminate\Http\Request;
@@ -33,16 +34,26 @@ class PermissionController extends Controller
     protected $routeInfo;
 
     /**
+     * @var RoleInterface
+     */
+    protected $role;
+
+    /**
      * PermissionController constructor.
      * @param PermissionInterface $permission
      * @param ValidatorService $validator
      * @param RouteInfoInterface $routeInfo
+     * @param RoleInterface $role
      */
-    public function __construct(PermissionInterface $permission, ValidatorService $validator, RouteInfoInterface $routeInfo)
+    public function __construct(PermissionInterface $permission,
+                                ValidatorService $validator,
+                                RouteInfoInterface $routeInfo,
+                                RoleInterface $role)
     {
         $this->permission = $permission;
         $this->validator = $validator;
         $this->routeInfo = $routeInfo;
+        $this->role = $role;
     }
 
     /**
@@ -111,7 +122,7 @@ class PermissionController extends Controller
 
         $permissionData = $request->all();
 
-        if (!in_array($permissionData['name'],$this->routeInfo->getAllRouteNameList())){
+        if (!in_array($permissionData['name'], $this->routeInfo->getAllRouteNameList())) {
             return response()->json(['status' => 500, 'message' => '路由不存在']);
         }
 
@@ -136,7 +147,7 @@ class PermissionController extends Controller
 
         $permissionData = $request->all();
 
-        if (!in_array($permissionData['name'],$this->routeInfo->getAllRouteNameList())){
+        if (!in_array($permissionData['name'], $this->routeInfo->getAllRouteNameList())) {
             return response()->json(['status' => 500, 'message' => '路由不存在']);
         }
 
@@ -201,5 +212,52 @@ class PermissionController extends Controller
         }
 
         return response()->json(['status' => 200, 'message' => '删除成功']);
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
+     */
+    public function getRolePermissionList(Request $request)
+    {
+        $roleID = $request->input('roleID');
+        $role = $this->role->findRole($roleID);
+
+        if (empty($role)) {
+            return response()->json(['status' => 500, 'message' => '角色不存在']);
+        }
+
+        $rolePermission = $role->perms()->get()->toArray();
+        $data['permissions'] = $this->permission->allPermission()->toArray();
+        $data['rolePermissionID'] = array_column($rolePermission, 'id');
+        $data['role'] = $role->toArray();
+
+        return view('user.authorization', $data);
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function authorization(Request $request)
+    {
+        $permissionID = $request->input('permissionID');
+        $roleID = $request->input('roleID');
+
+        $role = $this->role->findRole($roleID);
+
+        if (empty($role)) {
+            return response()->json(['status' => 500, 'message' => '角色不存在']);
+        }
+
+        $permission = explode(",", $permissionID);
+
+        if (empty($permission[0])) {
+            return response()->json(['status' => 500, 'message' => '请指定权限']);
+        }
+
+        $role->perms()->sync($permission, true);
+
+        return response()->json(['status' => 200, 'message' => 'success']);
     }
 }

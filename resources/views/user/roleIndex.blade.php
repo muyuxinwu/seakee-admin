@@ -35,7 +35,7 @@
                         <td>{{ $role['updated_at'] }}</td>
                         <td style="padding: 4px 8px;">
                             <button onclick="getEdit({{ $role['id'] }})" class="btn btn-primary btn-sm mr10">编辑</button>
-                            <button class="btn btn-info btn-sm mr10">授权</button>
+                            <a href="{{ route('permission.rolePermissionList') }}?roleID={{ $role['id'] }}" class="btn btn-info btn-sm mr10">授权</a>
                             <button onclick="deleteRole({{ $role['id'] }})" class="btn btn-danger btn-sm">删除</button>
                         </td>
                     </tr>

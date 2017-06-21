@@ -20,4 +20,6 @@ interface PermissionInterface
     public function findPermission($id);
 
     public function deletePermission($id);
+
+    public function allPermission();
 }
