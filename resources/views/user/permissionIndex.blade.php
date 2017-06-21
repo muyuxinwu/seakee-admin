@@ -10,6 +10,7 @@
             <h3 class="box-title">权限列表</h3>
             共找到{{ $permissions->total() }}条结果
             <div class="box-tools pull-right">
+                <button  data-toggle="modal" data-target="#routeList" class="btn btn-default">路由列表</button>
                 <button  data-toggle="modal" data-target="#createRole" class="btn btn-primary">新增权限</button>
             </div>
         </div>
@@ -71,7 +72,7 @@
                         <div class="form-group">
                             <label class="col-sm-3 control-label">权限标识</label>
                             <div class="col-sm-8">
-                                <input type="text" name="name" class="form-control" placeholder="请输入权限标识">
+                                <input type="text" name="name" class="form-control" placeholder="请输入路由名称">
                             </div>
                         </div>
                         <div class="form-group">
@@ -135,6 +136,44 @@
             </div>
         </div>
     </div>
+    <!-- route list Modal -->
+    <div class="modal fade" id="routeList" tabindex="1" role="dialog" aria-labelledby="routeList">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">路由列表</h4>
+                </div>
+                <div class="modal-body">
+                    <table id="routeListTable" class="table table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th>Method</th>
+                            <th>Name</th>
+                            <th>Uri</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach($routeList as $key => $route)
+                            <tr>
+                                <td>{{ $route['method'] }}</td>
+                                <td>{{ $route['name'] }}</td>
+                                <td>{{ $route['uri'] }}</td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <th>Method</th>
+                            <th>Name</th>
+                            <th>Uri</th>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('page_style')
@@ -143,10 +182,16 @@
             margin-right: 10px;
         }
     </style>
+    <link rel="stylesheet" href="{{ asset('plugins/datatables/dataTables.bootstrap.css') }}">
 @endsection
 
 @section('page_js')
+    <script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatables/dataTables.bootstrap.min.js') }}"></script>
     <script>
+        $(function () {
+            $("#routeListTable").DataTable(); 
+        });
         function getEdit(id) {
             $.ajax({
                 url: '{{ route('permission.showEdit') }}',
