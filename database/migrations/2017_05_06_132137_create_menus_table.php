@@ -22,7 +22,7 @@ class CreateMenusTable extends Migration
             $table->integer('sort')->default(0);
             $table->tinyInteger('display')->default(1)->comment('0：隐藏,1：显示');
             $table->tinyInteger('state')->default(1)->comment('1：后台,2：前台');
-            $table->tinyInteger('is_ custom')->default(0)->comment('0：非自定义1：自定义');
+            $table->tinyInteger('is_custom')->default(0)->comment('0：非自定义1：自定义');
             $table->softDeletes();
             $table->timestamps();
         });
