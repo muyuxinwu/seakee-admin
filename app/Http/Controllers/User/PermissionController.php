@@ -260,4 +260,38 @@ class PermissionController extends Controller
 
         return response()->json(['status' => 200, 'message' => 'success']);
     }
+
+    /**
+     * 批量创建权限
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function batchCreate(){
+        $allRouteName = $this->routeInfo->getAllRouteNameList();
+        $allPermissionName = $this->permission->allPermissionName();
+
+        $blankPermissions = array();
+        foreach ($allRouteName as $name) {
+            if (!in_array($name, $allPermissionName)){
+                $blankPermissions[] = $name;
+            }
+        }
+
+        if (empty($blankPermissions)){
+            return response()->json(['status' => 500, 'message' => '没有需要添加的权限']);
+        }
+
+        $length = count($blankPermissions);
+        $failure = 0;
+        foreach ($blankPermissions as $key => $permission){
+            $permissionData['name'] = $permission;
+            $permissionData['display_name'] = $permission;
+            $permissionData['description'] = $permission;
+            if (!$this->permission->createPermission($permissionData)) {
+                $failure +=1;
+            }
+        }
+
+        return response()->json(['status' => 200, 'message' => '共新增' . $length . '条权限，其中成功' . ($length - $failure) . '条失败' . $failure . '条']);
+    }
 }

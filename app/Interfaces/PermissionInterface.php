@@ -22,4 +22,6 @@ interface PermissionInterface
     public function deletePermission($id);
 
     public function allPermission();
+
+    public function allPermissionName();
 }

@@ -63,6 +63,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'checkPermission']],
             Route::get('/index', 'PermissionController@index')->name('permission.index');
             Route::get('/getRolePermissionList', 'PermissionController@getRolePermissionList')->name('permission.rolePermissionList');
             Route::get('/showEdit', 'PermissionController@showEditInfo')->name('permission.showEdit');
+            Route::get('/batchCreate', 'PermissionController@batchCreate')->name('permission.batchCreate');
             Route::post('/create', 'PermissionController@createPermission')->name('permission.create');
             Route::post('/delete', 'PermissionController@deletePermission')->name('permission.delete');
             Route::post('/edit', 'PermissionController@editPermission')->name('permission.edit');

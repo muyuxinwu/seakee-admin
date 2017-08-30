@@ -54,4 +54,9 @@ class PermissionRepository implements PermissionInterface
     {
         return Permission::all();
     }
+
+    public function allPermissionName()
+    {
+        return array_column($this->allPermission()->toArray(), 'name');
+    }
 }
