@@ -306,27 +306,38 @@
         }
 
         $('#batchCreate').click(function () {
-            $.ajax({
-                url: '{{ route('permission.batchCreate') }}',
-                type: 'GET',
-                processData: false,  // 告诉jQuery不要去处理发送的数据
-                contentType: false,   // 告诉jQuery不要去设置Content-Type请求头
-                dataType: 'JSON',
-                success: function (res) {
-                    if(res.status == 200){
-                        swal({
-                            title: '新增成功',
-                            text: res.message,
-                            type: 'success'
-                        }, function () {
-                            window.location.href = '{{ route('permission.index') }}';
-                        });
-                    } else {
-                        swal('新增失败', res.message || '出错', 'error');
-                        $form.find('#toCreate, #draftSave').prop('disabled', false);
+            swal({
+                title: '确认新增吗?',
+                text: '此操作只能增加前缀为admin的路由',
+                type: 'warning',
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                showCancelButton: true,
+                closeOnConfirm: false,
+                showLoaderOnConfirm: true
+            }, function () {
+                $.ajax({
+                    url: '{{ route('permission.batchCreate') }}',
+                    type: 'GET',
+                    processData: false,  // 告诉jQuery不要去处理发送的数据
+                    contentType: false,   // 告诉jQuery不要去设置Content-Type请求头
+                    dataType: 'JSON',
+                    success: function (res) {
+                        if(res.status == 200){
+                            swal({
+                                title: '新增成功',
+                                text: res.message,
+                                type: 'success'
+                            }, function () {
+                                window.location.href = '{{ route('permission.index') }}';
+                            });
+                        } else {
+                            swal('新增失败', res.message || '出错', 'error');
+                            $form.find('#toCreate, #draftSave').prop('disabled', false);
+                        }
                     }
-                }
-            });
+                });
+            })
         });
     </script>
 @endsection

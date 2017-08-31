@@ -106,4 +106,20 @@ class RouteInfoRepository implements RouteInfoInterface
             'action' => $route->getActionName(),
         ];
     }
+    
+    public function getAllAdminRouteNameList()
+    {
+        $routesByGet = $this->allRoutesByMethod('GET|HEAD');
+        $routesByPost = $this->allRoutesByMethod('POST');
+
+        $routes = array_merge($routesByGet, $routesByPost);
+
+        foreach ($routes as $key => $uri) {
+            if (stripos($uri, 'admin/') !== false) {
+                $list[] = $key;
+            }
+        }
+
+        return $list ?? [];
+    }
 }

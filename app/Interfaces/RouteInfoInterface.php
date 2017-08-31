@@ -15,4 +15,6 @@ Interface RouteInfoInterface
     public function getAllRouteNameList();
     
     public function getRouteList();
+
+    public function getAllAdminRouteNameList();
 }

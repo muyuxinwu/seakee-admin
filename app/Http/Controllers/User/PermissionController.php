@@ -267,7 +267,7 @@ class PermissionController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function batchCreate(){
-        $allRouteName = $this->routeInfo->getAllRouteNameList();
+        $allRouteName = $this->routeInfo->getAllAdminRouteNameList();
         $allPermissionName = $this->permission->allPermissionName();
 
         $blankPermissions = array();
