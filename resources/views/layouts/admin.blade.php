@@ -6,13 +6,12 @@
     <title>@yield('title') | {{ config('app.name', 'SKCMS') }}</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <!-- Bootstrap 3.3.6 -->
-    {{--<link rel="stylesheet" href="{{ asset('bootstrap/css/bootstrap.min.css') }}">--}}
-    <link href="//cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- Bootstrap 3.3.7 -->
+    <link rel="stylesheet" href="{{ asset('bootstrap/css/bootstrap.min.css') }}">
+<!-- Font Awesome -->
+    <link rel="stylesheet" href="{{ asset('css/font-awesome/4.7.0/font-awesome.min.css') }}">
     <!-- Ionicons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="{{ asset('css/ionicons/2.0.1/ionicons.min.css') }}">
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('dist/css/AdminLTE.min.css') }}">
     <link rel="stylesheet" href="{{ asset('dist/css/skins/skin-blue.min.css') }}">
@@ -21,8 +20,8 @@
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <script src="{{ asset('js/html5shiv/3.7.3/html5shiv.min.js') }}"></script>
+    <script src="{{ asset('js/respond/1.4.2/respond.min.js') }}"></script>
     <![endif]-->
     @yield('page_style')
 </head>
@@ -377,11 +376,9 @@ desired effect
 <!-- REQUIRED JS SCRIPTS -->
 
 <!-- jQuery 2.2.3 -->
-{{--<script src="{{ asset('plugins/jQuery/jquery-2.2.3.min.js') }}"></script>--}}
-<script src="//cdn.bootcss.com/jquery/2.2.3/jquery.min.js"></script>
-<!-- Bootstrap 3.3.6 -->
-{{--<script src="{{ asset('bootstrap/js/bootstrap.min.js') }}"></script>--}}
-<script src="//cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script src="{{ asset('plugins/jQuery/jquery-2.2.3.min.js') }}"></script>
+<!-- Bootstrap 3.3.7 -->
+<script src="{{ asset('bootstrap/js/bootstrap.min.js') }}"></script>
 <!-- AdminLTE App -->
 <script src="{{ asset('dist/js/app.min.js') }}"></script>
 <script src="{{ asset('js/sweetalert.min.js') }}"></script>
