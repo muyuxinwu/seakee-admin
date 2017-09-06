@@ -21,7 +21,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 
 
-Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'checkPermission']], function() {
+Route::group(['prefix' => 'admin', 'middleware' => ['checkPermission']], function() {
     
     Route::get('/', 'AdminController@index')->name('admin');
 

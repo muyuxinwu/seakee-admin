@@ -29,7 +29,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/admin';
+    protected $redirectTo = '/home';
 
     /**
      * @var IpInterface
@@ -133,12 +133,14 @@ class LoginController extends Controller
      */
     protected function sendLoginResponse(Request $request)
     {
-        $request->session()->regenerate();
+        $request->session()->regenerate();dd($request->get('redirect_url'));
+
+        $redirectPath = $request->get('redirect_url') ?: $this->redirectPath();
 
         $this->clearLoginAttempts($request);
 
         return $this->authenticated($request, $this->guard()->user())
-            ?: redirect()->intended($this->redirectPath());
+            ?: redirect()->intended($redirectPath);
     }
 
     /**
@@ -151,7 +153,8 @@ class LoginController extends Controller
     protected function authenticated(Request $request, $user)
     {
         $ipAddress = $request->getClientIp();
-        $this->ip->storageIP(Auth::id(), $ipAddress, 2);
+        $request->session()->put('user', $user);
+        $this->ip->storageIP($user->id, $ipAddress, 2);
         view()->share('user', $user);
     }
 
