@@ -3,7 +3,6 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Illuminate\Support\Facades\Auth;
 use Redirect;
 use Route;
 use Entrust;
@@ -21,13 +20,13 @@ class CheckPermission
      */
     public function handle($request, Closure $next)
     {
-        $requestPath = $request->path();
+
 
         //从session中获取登录用户信息
         $user = session('user');
         //没有用户信息跳转登录页面
         if (empty($user)){
-            return Redirect::intended('/login?redirect_url=' . $requestPath);
+            return Redirect::intended('/login');
         }
 
         view()->share('sidebarUser', $user);

@@ -49,11 +49,15 @@ class LoginController extends Controller
     /**
      * Show the application's login form.
      *
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function showLoginForm()
+    public function showLoginForm(Request $request)
     {
-        return view('auth.login');
+        //登录前请求URL
+        $data['previousUrl'] = $request->session()->previousUrl();
+
+        return view('auth.login', $data);
     }
 
     /**
@@ -133,14 +137,15 @@ class LoginController extends Controller
      */
     protected function sendLoginResponse(Request $request)
     {
-        $request->session()->regenerate();dd($request->get('redirect_url'));
+        $request->session()->regenerate();
 
-        $redirectPath = $request->get('redirect_url') ?: $this->redirectPath();
+        //登录前请求URL
+        $previousUrl = $request->get('previousUrl') ?: $this->redirectTo;
 
         $this->clearLoginAttempts($request);
 
         return $this->authenticated($request, $this->guard()->user())
-            ?: redirect()->intended($redirectPath);
+            ?: redirect()->intended($previousUrl);
     }
 
     /**
