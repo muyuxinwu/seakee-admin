@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\RedirectsUsers;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
+use Cache;
 
 class LoginController extends Controller
 {
@@ -205,6 +206,8 @@ class LoginController extends Controller
         $request->session()->flush();
 
         $request->session()->regenerate();
+
+        Cache::tags(['user', $request->user()->id])->flush();
 
         return redirect('/');
     }

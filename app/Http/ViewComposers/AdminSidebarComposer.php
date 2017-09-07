@@ -51,7 +51,7 @@ class AdminSidebarComposer
      */
     public function compose(View $view)
     {
-        $currentUserPermission = $this->getCurrentUserPermission();
+        //$currentUserPermission = $this->getCurrentUserPermission();
         $view->with('sidebarMenu', $this->menu->menuTree());
     }
 
