@@ -57,4 +57,9 @@ class RoleRepository implements RoleInterface
     {
         return Role::all();
     }
+
+    public function currentUserRole($userId)
+    {
+        return array_column(Role::getRoleIdList($userId), 'role_id');
+    }
 }

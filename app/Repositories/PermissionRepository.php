@@ -57,6 +57,19 @@ class PermissionRepository implements PermissionInterface
 
     public function allPermissionName()
     {
-        return array_column($this->allPermission()->toArray(), 'name');
+        return array_column($this->allPermission()->toArray(), 'name', 'id');
+    }
+
+    public function currentUserPermission($roleId)
+    {
+        $permissionIdList = array_column(Permission::getPermissionIdList($roleId), 'permission_id');
+        $allPermissionName = $this->allPermissionName();
+
+        $currentUserPermission = [];
+        foreach ($permissionIdList as $item) {
+            $currentUserPermission[] = $allPermissionName[$item];
+        }
+
+        return $currentUserPermission;
     }
 }

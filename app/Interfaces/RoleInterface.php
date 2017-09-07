@@ -21,4 +21,6 @@ interface RoleInterface
     public function deleteRole($id);
 
     public function allRole();
+    
+    public function currentUserRole($userId);
 }

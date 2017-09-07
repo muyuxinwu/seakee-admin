@@ -14,18 +14,16 @@ class CheckPermission
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param  \Illuminate\Http\Request $request
+     * @param  \Closure $next
      * @return mixed
      */
     public function handle($request, Closure $next)
     {
-
-
         //从session中获取登录用户信息
         $user = session('user');
         //没有用户信息跳转登录页面
-        if (empty($user)){
+        if (empty($user)) {
             return Redirect::intended('/login');
         }
 
@@ -40,11 +38,11 @@ class CheckPermission
         }
 
         //超级管理员直接放行
-        if (!$user->hasRole('Super_Admin')){
+        if (!$user->hasRole('Super_Admin')) {
             //检查是否有权限
             if (!Entrust::can(Entrust::can($routeName))) {
                 //ajax请求直接返回json
-                if(Request::ajax()){
+                if (Request::ajax()) {
                     return response()->json(['status' => 500, 'message' => '权限不足，请联系管理员']);
                 }
                 //返回session('error');到原页面
