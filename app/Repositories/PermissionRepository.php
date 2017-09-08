@@ -10,6 +10,7 @@ namespace App\Repositories;
 
 use App\Interfaces\PermissionInterface;
 use App\Models\User\Permission;
+use Cache;
 
 class PermissionRepository implements PermissionInterface
 {
@@ -57,17 +58,30 @@ class PermissionRepository implements PermissionInterface
 
     public function allPermissionName()
     {
-        return array_column($this->allPermission()->toArray(), 'name', 'id');
+        return Cache::get('allPermission') ?: $this->putAllPermissionCache();
     }
 
-    public function currentUserPermission($roleId, $allPermissionName)
+    public function currentUserPermission($roleId, $userId, $allPermissionName)
+    {
+        return Cache::tags(['user', $userId])->get('currentUserPermission') ?: $this->putCurrentUserPermissionCache($roleId, $userId, $allPermissionName);
+    }
+
+    private function putAllPermissionCache()
+    {
+        $allPermission = array_column($this->allPermission()->toArray(), 'name', 'id');
+        Cache::put('allPermission', $allPermission, 10);
+
+        return $allPermission;
+    }
+    
+    private function putCurrentUserPermissionCache($roleId, $userId, $allPermissionName)
     {
         $permissionIdList = array_column(Permission::getPermissionIdList($roleId), 'permission_id');
-
         $currentUserPermission = [];
         foreach ($permissionIdList as $item) {
             $currentUserPermission[] = $allPermissionName[$item];
         }
+        Cache::tags(['user', $userId])->put('currentUserPermission', $currentUserPermission, 10);
 
         return $currentUserPermission;
     }

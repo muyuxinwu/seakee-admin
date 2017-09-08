@@ -25,5 +25,5 @@ interface PermissionInterface
 
     public function allPermissionName();
 
-    public function currentUserPermission($roleId, $allPermissionName);
+    public function currentUserPermission($roleId, $userId, $allPermissionName);
 }

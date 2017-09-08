@@ -11,6 +11,7 @@ namespace App\Repositories;
 
 use App\Interfaces\RoleInterface;
 use App\Models\User\Role;
+use Cache;
 
 class RoleRepository implements RoleInterface
 {
@@ -60,6 +61,12 @@ class RoleRepository implements RoleInterface
 
     public function currentUserRole($userId)
     {
-        return array_column(Role::getRoleIdList($userId), 'role_id');
+        return Cache::tags(['user', $userId])->get('currentUserRole') ?: $this->putCurrentUserRoleCache($userId);
+    }
+    
+    private function putCurrentUserRoleCache($userId){
+        $currentUserRole = array_column(Role::getRoleIdList($userId), 'role_id');
+        Cache::tags(['user', $userId])->put('currentUserRole', $currentUserRole, 10);
+        return $currentUserRole;
     }
 }

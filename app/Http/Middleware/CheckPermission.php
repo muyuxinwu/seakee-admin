@@ -50,9 +50,9 @@ class CheckPermission
             return Redirect::intended('/login');
         }
 
-        $allPermission = $this->getAllPermission();
-        $currentUserRole = $this->getCurrentUserRole($user->id);
-        $currentUserPermission = $this->getCurrentUserPermission($user->id, $allPermission);
+        $allPermission = $this->permission->allPermissionName();
+        $currentUserRole = $this->role->currentUserRole($user->id);
+        $currentUserPermission = $this->permission->currentUserPermission($currentUserRole, $user->id, $allPermission);
 
         view()->share('sidebarUser', $user);
 
@@ -79,62 +79,5 @@ class CheckPermission
         }
 
         return $next($request);
-    }
-
-
-    /**
-     * 获取当前用户权限
-     *
-     * @param $userId
-     * @param $allPermission
-     * @return mixed
-     */
-    private function getCurrentUserPermission($userId, $allPermission)
-    {
-        $currentUserPermission = Cache::tags(['user', $userId])->get('currentUserPermission');
-        if (empty($currentUserPermission)) {
-
-            $currentUserRole = $this->getCurrentUserRole($userId);
-            $currentUserPermission = $this->permission->currentUserPermission($currentUserRole, $allPermission);
-
-            Cache::tags(['user', $userId])->put('currentUserPermission', $currentUserPermission, 10);
-        }
-
-        return $currentUserPermission;
-    }
-
-    /**
-     * 获取所有权限
-     *
-     * @return mixed
-     */
-    private function getAllPermission()
-    {
-        $allPermission = Cache::get('allPermission');
-        if (empty($allPermission)) {
-
-            $allPermission = $this->permission->allPermissionName();
-            Cache::put('allPermission', $allPermission, 10);
-        }
-
-        return $allPermission;
-    }
-
-    /**
-     * 获取当前用户角色
-     *
-     * @param $userId
-     * @return mixed
-     */
-    private function getCurrentUserRole($userId)
-    {
-        $currentUserRole = Cache::tags(['user', $userId])->get('currentUserRole');
-        if (empty($currentUserRole)) {
-
-            $currentUserRole = $this->role->currentUserRole($userId);;
-            Cache::tags(['user', $userId])->put('currentUserRole', $currentUserRole, 10);
-        }
-
-        return $currentUserRole;
     }
 }

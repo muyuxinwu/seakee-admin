@@ -201,13 +201,13 @@ class LoginController extends Controller
      */
     public function logout(Request $request)
     {
+        Cache::tags(['user', $request->user()->id])->flush();
+
         $this->guard()->logout();
 
         $request->session()->flush();
 
         $request->session()->regenerate();
-
-        Cache::tags(['user', $request->user()->id])->flush();
 
         return redirect('/');
     }
