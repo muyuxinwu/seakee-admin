@@ -71,6 +71,21 @@
                     <div class="modal-body">
                         {!! csrf_field() !!}
                         <div class="form-group">
+                            <label class="col-sm-3 control-label">自定义权限</label>
+                            <div class="col-sm-8">
+                                <div class="radio col-sm-3">
+                                    <label>
+                                        <input type="radio" name="isCustom" value="0" checked>否
+                                    </label>
+                                </div>
+                                <div class="radio col-sm-3">
+                                    <label>
+                                        <input type="radio" name="isCustom" value="1">是
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label class="col-sm-3 control-label">权限标识</label>
                             <div class="col-sm-8">
                                 <input type="text" name="name" class="form-control" placeholder="请输入路由名称">

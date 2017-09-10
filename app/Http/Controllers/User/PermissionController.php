@@ -122,7 +122,7 @@ class PermissionController extends Controller
 
         $permissionData = $request->all();
 
-        if (!in_array($permissionData['name'], $this->routeInfo->getAllRouteNameList())) {
+        if ($permissionData['isCustom'] == 0 && !in_array($permissionData['name'], $this->routeInfo->getAllRouteNameList())) {
             return response()->json(['status' => 500, 'message' => '路由不存在']);
         }
 
