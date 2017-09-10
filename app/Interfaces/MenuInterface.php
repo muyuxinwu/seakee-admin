@@ -22,7 +22,9 @@ Interface MenuInterface{
 
     public function menuCount(array $data);
 
-    public function menuTree();
+    public function menuTree($menu);
+
+    public function currentUserMenu($allMenu, $currentUserPermission, $userId);
 }
 
 

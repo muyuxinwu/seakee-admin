@@ -87,7 +87,8 @@ class MenuController extends Controller
      */
     public function admin()
     {
-        $menus = $this->menu->menuTree();
+        $allMenu = $this->menu->allMenus();
+        $menus = $this->menu->menuTree($allMenu);
 
         return view('menu.admin', ['menus' => $menus]);
     }
@@ -98,7 +99,8 @@ class MenuController extends Controller
      */
     public function createAdminMenu()
     {
-        $menus = $this->menu->menuTree();
+        $allMenu = $this->menu->allMenus();
+        $menus = $this->menu->menuTree($allMenu);
 
         $routes = $this->routeInfo->allAdminRouteListByGet();
 
@@ -122,7 +124,8 @@ class MenuController extends Controller
         }
 
         $menu = $this->menu->findMenu($id);
-        $menus = $this->menu->menuTree();
+        $allMenu = $this->menu->allMenus();
+        $menus = $this->menu->menuTree($allMenu);
 
         if (empty($menu)) {
             return response()->json(['status' => 500, 'message' => '菜单不存在']);

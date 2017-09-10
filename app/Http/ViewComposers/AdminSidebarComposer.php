@@ -12,7 +12,6 @@ namespace App\Http\ViewComposers;
 use App\Interfaces\MenuInterface;
 use App\Interfaces\PermissionInterface;
 use App\Interfaces\RoleInterface;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\View\View;
 
 class AdminSidebarComposer
@@ -51,26 +50,19 @@ class AdminSidebarComposer
      */
     public function compose(View $view)
     {
-        //$currentUserPermission = $this->getCurrentUserPermission();
-        $view->with('sidebarMenu', $this->menu->menuTree());
+        $view->with('sidebarMenu', $this->getCurrentUserMenu());
     }
 
-    /**
-     * 获取当前用户权限
-     *
-     * @return mixed
-     */
-    private function getCurrentUserPermission()
+    private function getCurrentUserMenu()
     {
-        $currentUserPermission = Cache::get('currentUserPermission');
-        if (empty($currentUserPermission)) {
-            $user = session('user');
-            $currentUserRole = $this->role->currentUserRole($user->id);
-            $currentUserPermission = $this->permission->currentUserPermission($currentUserRole);
+        $userId = session('user')->id;
+        $roleId = $this->role->currentUserRole($userId);
+        $allMenu = $this->menu->allMenus();
+        $allPermissionName = $this->permission->allPermissionName();
+        $currentUserPermission = $this->permission->currentUserPermission($roleId, $userId, $allPermissionName);
 
-            Cache::put('currentUserPermission', $currentUserPermission, 10);
-        }
+        $currentUserMenu = $this->menu->currentUserMenu($allMenu, $currentUserPermission, $userId);
 
-        return $currentUserPermission;
+        return $this->menu->menuTree($currentUserMenu);
     }
 }

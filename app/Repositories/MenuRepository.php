@@ -10,12 +10,13 @@ namespace App\Repositories;
 
 use App\Interfaces\MenuInterface;
 use App\Models\Menu\Menu;
+use Cache;
 
 class MenuRepository implements MenuInterface
 {
     public function allMenus()
     {
-        return Menu::all()->toArray();
+        return Cache::get('allMenus') ?: $this->putAllMenuCache();
     }
 
     public function findMenu($id)
@@ -65,11 +66,9 @@ class MenuRepository implements MenuInterface
         return Menu::where($data)->count();
     }
 
-    public function menuTree()
+    public function menuTree($menu, $father_id = -1)
     {
-        $menus = $this->allMenus();
-
-        return $this->getMenuTree($menus, -1);
+        return $this->getMenuTree($menu, $father_id);
     }
 
     /**
@@ -107,5 +106,33 @@ class MenuRepository implements MenuInterface
         }
 
         return $menuUrl;
+    }
+
+    public function currentUserMenu($allMenu, $currentUserPermission, $userId)
+    {
+        return Cache::tags(['user', $userId])->get('currentUserMenu') ?: $this->putCurrentUserMenuCache($allMenu, $currentUserPermission, $userId);
+    }
+
+    private function putCurrentUserMenuCache($allMenu, $currentUserPermission, $userId)
+    {
+        $currentUserMenu = array();
+        foreach ($allMenu as $key => $menu){
+            if ($menu['route_name'] == '#' || in_array($menu['route_name'], $currentUserPermission)){
+                $currentUserMenu[] = $menu;
+            }
+        }
+
+        Cache::tags(['user', $userId])->put('currentUserMenu', $currentUserMenu, 10);
+
+        return $currentUserMenu;
+    }
+
+    private function putAllMenuCache()
+    {
+        $allMenu = Menu::all()->toArray();
+
+        Cache::put('allMenus', $allMenu, 10);
+
+        return $allMenu;
     }
 }

@@ -74,7 +74,7 @@ class CheckPermission
                 //返回session('error');到原页面
                 return back()->withInput()->withError('no_permissions');
             }
-            //根据路由名称查询权限
+
             return $next($request);
         }
 
