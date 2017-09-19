@@ -22,5 +22,5 @@ interface RoleInterface
 
     public function allRole();
     
-    public function currentUserRole($userId);
+    public function currentUserRole($user);
 }

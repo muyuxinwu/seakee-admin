@@ -51,7 +51,7 @@ class CheckPermission
         }
 
         $allPermission = $this->permission->allPermissionName();
-        $currentUserRole = $this->role->currentUserRole($user->id);
+        $currentUserRole = $this->role->currentUserRole($user);
         $currentUserPermission = $this->permission->currentUserPermission($currentUserRole, $user->id, $allPermission);
 
         view()->share('sidebarUser', $user);
@@ -64,7 +64,7 @@ class CheckPermission
         }
 
         //超级管理员直接放行
-        if (!in_array(1, $currentUserRole)) {
+        if (!in_array('Super_Admin', $currentUserRole)) {
             //检查是否有权限
             if (!in_array($routeName, $currentUserPermission)) {
                 //ajax请求直接返回json
