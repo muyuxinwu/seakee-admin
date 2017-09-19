@@ -12,77 +12,137 @@ use App\Interfaces\PermissionInterface;
 use App\Models\User\Permission;
 use Cache;
 
-class PermissionRepository implements PermissionInterface
-{
-    public function allPermissionWithPaginate($paginate)
-    {
-        return Permission::orderBy('created_at', 'desc')->paginate($paginate);
-    }
+class PermissionRepository implements PermissionInterface {
 
-    public function createPermission($data)
-    {
-        $permission = new Permission();
+	/**
+	 * 带有分页的权限列表
+	 * 
+	 * @param $paginate
+	 *
+	 * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+	 */
+	public function allPermissionWithPaginate( $paginate ) {
+		return Permission::orderBy( 'created_at', 'desc' )->paginate( $paginate );
+	}
 
-        $permission->name = $data['name'];
-        $permission->display_name = $data['display_name'];
-        $permission->description = $data['description'];
+	/**
+	 * 创建权限
+	 *
+	 * @param $data
+	 *
+	 * @return bool
+	 */
+	public function createPermission( $data ) {
+		$permission = new Permission();
 
-        return $permission->save();
-    }
+		$permission->name         = $data['name'];
+		$permission->display_name = $data['display_name'];
+		$permission->description  = $data['description'];
 
-    public function updatePermission($data)
-    {
-        $permission = Permission::find($data['id']);
+		return $permission->save();
+	}
 
-        $permission->name = $data['name'];
-        $permission->display_name = $data['display_name'];
-        $permission->description = $data['description'];
+	/**
+	 * 更新权限
+	 *
+	 * @param $data
+	 *
+	 * @return bool
+	 */
+	public function updatePermission( $data ) {
+		$permission = Permission::find( $data['id'] );
 
-        return $permission->save();
-    }
+		$permission->name         = $data['name'];
+		$permission->display_name = $data['display_name'];
+		$permission->description  = $data['description'];
 
-    public function deletePermission($id)
-    {
-        return Permission::destroy($id);
-    }
+		return $permission->save();
+	}
 
-    public function findPermission($id)
-    {
-        return Permission::find($id);
-    }
+	/**
+	 * 删除权限
+	 *
+	 * @param $id
+	 *
+	 * @return int
+	 */
+	public function deletePermission( $id ) {
+		return Permission::destroy( $id );
+	}
 
-    public function allPermission()
-    {
-        return Permission::all();
-    }
+	/**
+	 * 根据权限ID查找权限
+	 *
+	 * @param $id
+	 *
+	 * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model|null|static|static[]
+	 */
+	public function findPermission( $id ) {
+		return Permission::find( $id );
+	}
 
-    public function allPermissionName()
-    {
-        return Cache::get('allPermission') ?: $this->putAllPermissionCache();
-    }
+	/**
+	 * 获取所有权限
+	 *
+	 * @return \Illuminate\Database\Eloquent\Collection|static[]
+	 */
+	public function allPermission() {
+		return Permission::all();
+	}
 
-    public function currentUserPermission($roleId, $userId, $allPermissionName)
-    {
-        return Cache::tags(['user', $userId])->get('currentUserPermission') ?: $this->putCurrentUserPermissionCache($roleId, $userId, $allPermissionName);
-    }
+	/**
+	 * 获取所有用户权限名
+	 *
+	 * @return array
+	 */
+	public function allPermissionName() {
+		return Cache::get( 'allPermission' ) ?: $this->putAllPermissionCache();
+	}
 
-    private function putAllPermissionCache()
-    {
-        $allPermission = array_column($this->allPermission()->toArray(), 'name', 'id');
-        Cache::put('allPermission', $allPermission, 10);
+	/**
+	 * 获取当前用户权限
+	 *
+	 * @param $user
+	 *
+	 * @return array
+	 */
+	public function currentUserPermission( $user ) {
+		return Cache::tags( [
+			'user',
+			$user->id
+		] )->get( 'currentUserPermission' ) ?: $this->putCurrentUserPermissionCache( $user );
+	}
 
-        return $allPermission;
-    }
-    
-    private function putCurrentUserPermissionCache($roleId, $userId, $allPermissionName)
-    {
-        $permissionIdList = array_column(Permission::getPermissionIdList($roleId), 'permission_id');
-        $currentUserPermission = [];
-        foreach ($permissionIdList as $item) {
-            $currentUserPermission[] = $allPermissionName[$item];
-        }
-        Cache::tags(['user', $userId])->put('currentUserPermission', $currentUserPermission, 10);
+	/**
+	 * 设置所有权限缓存
+	 *
+	 * @return array
+	 */
+	private function putAllPermissionCache() {
+		$allPermission = array_column( $this->allPermission()->toArray(), 'name', 'id' );
+		Cache::put( 'allPermission', $allPermission, 10 );
 
-        return $currentUserPermission;
-    }
+		return $allPermission;
+	}
+
+	/**
+	 * 设置当前用户权限缓存
+	 *
+	 * @param $user
+	 *
+	 * @return array
+	 */
+	private function putCurrentUserPermissionCache( $user ) {
+		$roles            = head( $user->with( 'roles.perms' )->get()->pluck( 'roles' )->toArray() );
+		$permissionIdList = array_pluck( $roles, 'perms' );
+
+		$currentUserPermission = [];
+		foreach ( $permissionIdList as $item ) {
+			$currentUserPermission += array_column( $item, 'name', 'id' );
+		}
+
+		Cache::tags( [ 'user', $user->id ] )->put( 'currentUserPermission', $currentUserPermission, 10 );
+
+		return $currentUserPermission;
+	}
 }

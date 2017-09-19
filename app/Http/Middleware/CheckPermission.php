@@ -52,7 +52,7 @@ class CheckPermission
 
         $allPermission = $this->permission->allPermissionName();
         $currentUserRole = $this->role->currentUserRole($user);
-        $currentUserPermission = $this->permission->currentUserPermission($currentUserRole, $user->id, $allPermission);
+        $currentUserPermission = $this->permission->currentUserPermission($user);
 
         view()->share('sidebarUser', $user);
 
