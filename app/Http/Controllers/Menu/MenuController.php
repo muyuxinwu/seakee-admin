@@ -88,7 +88,7 @@ class MenuController extends Controller
 	 */
 	public function admin()
 	{
-		$allMenu       = $this->menu->allMenus();
+		$allMenu       = $this->menu->allWithoutCache();
 		$data['menus'] = $this->menu->menuTree($allMenu);
 
 		return view('menu.admin', $data);
@@ -101,7 +101,7 @@ class MenuController extends Controller
 	 */
 	public function createAdmin()
 	{
-		$allMenu        = $this->menu->allMenus();
+		$allMenu        = $this->menu->allWithoutCache();
 		$data['menus']  = $this->menu->menuTree($allMenu);
 		$data['routes'] = $this->routeInfo->allAdminRouteListByGet();
 
@@ -119,7 +119,7 @@ class MenuController extends Controller
 	{
 		$id = $request->input('id');
 
-		$allMenu       = $this->menu->allMenus();
+		$allMenu       = $this->menu->allWithoutCache();
 		$data['menu']  = $this->menu->findMenu($id);
 		$data['menus'] = $this->menu->menuTree($allMenu);
 

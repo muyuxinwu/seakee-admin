@@ -12,6 +12,8 @@ Interface MenuInterface
 {
 	public function allMenus();
 
+	public function allWithoutCache();
+
 	public function findMenu($id);
 
 	public function deleteMenu($id);

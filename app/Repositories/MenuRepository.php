@@ -15,7 +15,17 @@ use Cache;
 class MenuRepository implements MenuInterface
 {
 	/**
-	 * 返回所有菜单
+	 * 返回所有菜单（无缓存）
+	 *
+	 * @return array
+	 */
+	public function allWithoutCache()
+	{
+		return Menu::all()->toArray();
+	}
+
+	/**
+	 * 返回所有菜单（有缓存）
 	 *
 	 * @return array
 	 */
@@ -171,7 +181,10 @@ class MenuRepository implements MenuInterface
 	 */
 	public function currentUserMenu($currentUserPermission, $user)
 	{
-		return Cache::tags(['user', $user['id']])->get('currentUserMenu') ?: $this->putCurrentUserMenuCache($currentUserPermission, $user);
+		return Cache::tags([
+			'user',
+			$user['id'],
+		])->get('currentUserMenu') ?: $this->putCurrentUserMenuCache($currentUserPermission, $user);
 	}
 
 	/**
@@ -194,7 +207,10 @@ class MenuRepository implements MenuInterface
 			}
 		}
 
-		Cache::tags(['user', $user['id']])->put('currentUserMenu', $currentUserMenu ?? $allMenu, 10);
+		Cache::tags([
+			'user',
+			$user['id'],
+		])->put('currentUserMenu', $currentUserMenu ?? $allMenu, 10);
 
 		return $currentUserMenu ?? $allMenu;
 	}
@@ -206,7 +222,7 @@ class MenuRepository implements MenuInterface
 	 */
 	private function putAllMenuCache()
 	{
-		$allMenu = Menu::all()->toArray();
+		$allMenu = Menu::where('display', 1)->orderBy('sort', 'desc')->get()->toArray();
 
 		Cache::put('allMenus', $allMenu, 10);
 
