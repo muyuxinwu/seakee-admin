@@ -14,14 +14,14 @@
             <div class="row">
                 <div class="col-md-12">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                    <input type="hidden" name="menuState" value="1">
+                    <input type="hidden" name="state" value="1">
                     <input type="hidden" name="id" value="{{ $menu['id'] }}">
                     <div class="box-body">
                         <div class="form-group">
                             <div class="col-xs-6">
                                 <label class="col-xs-4 control-label">上级菜单</label>
                                 <div class="col-xs-8">
-                                    <select class="form-control" name="fatherMenu">
+                                    <select class="form-control" name="father_id">
                                         <option value="-1" @if($menu['father_id'] == -1) selected @endif>根目录</option>
                                         @foreach($menus as $key => $m)
                                             <option value="{{ $m['id'] }}" @if($menu['father_id'] == $m['id']) selected @endif>⊢ {{ $m['menu_name'] }}</option>
@@ -47,9 +47,9 @@
                                     <div class="switch" style="display: table">
                                         <input onchange="displayValue()" data-on-text="显示" data-off-text="隐藏" type="checkbox" @if($menu['display'] == 1) checked @endif/>
                                         <label class="control-label" style="padding-left: 80px;">菜单排序&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                                        <input type="text" name="menuSort" class="form-control" style="width: 80px;display: initial" value="{{ $menu['sort'] }}">
+                                        <input type="text" name="sort" class="form-control" style="width: 80px;display: initial" value="{{ $menu['sort'] }}">
                                     </div>
-                                    <input id="display" type="hidden" name="menuDisplay" value="{{ $menu['display'] }}">
+                                    <input id="display" type="hidden" name="display" value="{{ $menu['display'] }}">
                                 </div>
                             </div>
                         </div>
@@ -73,8 +73,8 @@
                                             <option value="{{ $routeName }}" @if($menu['route_name'] == $routeName) selected @endif>{{ $url }}</option>
                                         @endforeach
                                     </select>
-                                    <input type="hidden" name="routeName" id="routeName" value="{{ $menu['route_name'] }}">
-                                    <input type="hidden" name="isCustom" id="isCustom" value="{{ $menu['is_custom'] }}">
+                                    <input type="hidden" name="route_name" id="routeName" value="{{ $menu['route_name'] }}">
+                                    <input type="hidden" name="is_custom" id="isCustom" value="{{ $menu['is_custom'] }}">
                                 </div>
                             </div>
                         </div>
@@ -90,7 +90,7 @@
                             <div class="col-xs-6">
                                 <label class="col-xs-4 control-label">菜单名称</label>
                                 <div class="col-xs-8">
-                                    <input type="text" name="menuName" class="form-control" value="{{ $menu['menu_name'] }}">
+                                    <input type="text" name="menu_name" class="form-control" value="{{ $menu['menu_name'] }}">
                                 </div>
                             </div>
                         </div>

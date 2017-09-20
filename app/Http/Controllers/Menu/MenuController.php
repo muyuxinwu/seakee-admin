@@ -76,13 +76,13 @@ class MenuController extends Controller
 	private function createMenuRules()
 	{
 		return [
-			'state'   => 'required',
+			'state'      => 'required',
 			'father_id'  => 'required',
-			'display' => 'required',
-			'route_name'   => 'required',
-			'menu_name'    => 'required',
-			'sort'    => 'numeric',
-			'icon'        => 'required',
+			'display'    => 'required',
+			'route_name' => 'required',
+			'menu_name'  => 'required',
+			'sort'       => 'numeric',
+			'icon'       => 'required',
 		];
 	}
 
@@ -94,13 +94,13 @@ class MenuController extends Controller
 	protected function errorInfo()
 	{
 		return [
-			'state.required'   => '菜单位置不能为空',
+			'state.required'      => '菜单位置不能为空',
 			'father_id.required'  => '上一级菜单不能为空',
-			'display.required' => '菜单显示状态不能为空',
-			'route_name.required'   => '菜单URL不能为空',
-			'menu_name.required'    => '菜单名称不能为空',
-			'sort.numeric'     => '排序必须为数值',
-			'icon.required'        => '图标不能为空',
+			'display.required'    => '菜单显示状态不能为空',
+			'route_name.required' => '菜单URL不能为空',
+			'menu_name.required'  => '菜单名称不能为空',
+			'sort.numeric'        => '排序必须为数值',
+			'icon.required'       => '图标不能为空',
 		];
 	}
 
@@ -167,15 +167,15 @@ class MenuController extends Controller
 	 */
 	public function update(Request $request)
 	{
-		$validator = $this->validator->validate($request->all(), $this->createMenuRules(), $this->errorInfo());
+		$menuData = $this->requestParams->params(self::menuKeys, $request);
+
+		$validator = $this->validator->validate($menuData, $this->createMenuRules(), $this->errorInfo());
 
 		if (!empty($validator)) {
 			return response()->json($validator);
 		}
 
-		$menuData = $request->all();
-
-		if ($menuData['id'] == $menuData['fatherMenu']) {
+		if ($menuData['id'] == $menuData['father_id']) {
 			return response()->json([
 				'status'  => 500,
 				'message' => '菜单不能和节点菜单相同',
@@ -191,7 +191,7 @@ class MenuController extends Controller
 				'message' => '菜单不存在',
 			]);
 		} else {
-			if ($menu->father_id != $menuData['fatherMenu'] && $menuChildren != 0) {
+			if ($menu->father_id != $menuData['father_id'] && $menuChildren != 0) {
 				return response()->json([
 					'status'  => 500,
 					'message' => '存在子菜单不能更改上级菜单',
@@ -292,10 +292,9 @@ class MenuController extends Controller
 	 */
 	public function display(Request $request)
 	{
-		$id      = $request->input('id');
-		$display = $request->input('display');
+		$params = $this->requestParams->params(self::menuKeys, $request);
 
-		$menu = $this->menu->findMenu($id);
+		$menu = $this->menu->findMenu($params['id']);
 		if (empty($menu)) {
 			return response()->json([
 				'status'  => 500,
@@ -303,11 +302,7 @@ class MenuController extends Controller
 			]);
 		}
 
-		$menu->display = $display;
-
-		$rs = $menu->save();
-
-		if (!$rs) {
+		if (!$this->menu->updateMenu($params)) {
 			return response()->json([
 				'status'  => 500,
 				'message' => '操作失败',

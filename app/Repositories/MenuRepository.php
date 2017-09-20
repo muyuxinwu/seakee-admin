@@ -69,14 +69,14 @@ class MenuRepository implements MenuInterface
 	{
 		$menu = new Menu();
 
-		$menu->menu_name  = $data['menuName'];
-		$menu->route_name = $data['routeName'];
+		$menu->menu_name  = $data['menu_name'];
+		$menu->route_name = $data['route_name'];
 		$menu->icon       = $data['icon'];
-		$menu->is_custom  = $data['isCustom'];
-		$menu->father_id  = $data['fatherMenu'];
-		$menu->sort       = $data['menuSort'];
-		$menu->display    = $data['menuDisplay'];
-		$menu->state      = $data['menuState'];
+		$menu->is_custom  = $data['is_custom'];
+		$menu->father_id  = $data['father_id'];
+		$menu->sort       = $data['sort'];
+		$menu->display    = $data['display'];
+		$menu->state      = $data['state'];
 
 		return $menu->save();
 	}
@@ -90,18 +90,7 @@ class MenuRepository implements MenuInterface
 	 */
 	public function updateMenu(array $data)
 	{
-		$menu = Menu::find($data['id']);
-
-		$menu->menu_name  = $data['menuName'];
-		$menu->route_name = $data['routeName'];
-		$menu->icon       = $data['icon'];
-		$menu->is_custom  = $data['isCustom'];
-		$menu->father_id  = $data['fatherMenu'];
-		$menu->sort       = $data['menuSort'];
-		$menu->display    = $data['menuDisplay'];
-		$menu->state      = $data['menuState'];
-
-		return $menu->save();
+		return Menu::where('id', $data['id'])->update($data);
 	}
 
 	/**
