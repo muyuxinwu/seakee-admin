@@ -10,11 +10,11 @@ namespace App\Interfaces;
 
 Interface RouteInfoInterface
 {
-    public function allAdminRouteListByGet();
+	public function allAdminRouteListByGet();
 
-    public function getAllRouteNameList();
-    
-    public function getRouteList();
+	public function getAllRouteNameList();
 
-    public function getAllAdminRouteNameList();
+	public function getRouteList();
+
+	public function getAllAdminRouteNameList();
 }

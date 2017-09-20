@@ -10,17 +10,17 @@ namespace App\Interfaces;
 
 interface RoleInterface
 {
-    public function allRoleWithPaginate($paginate);
+	public function allRoleWithPaginate($paginate);
 
-    public function createRole($data);
+	public function createRole($data);
 
-    public function updateRole($data);
+	public function updateRole($data);
 
-    public function findRole($id);
+	public function findRole($id);
 
-    public function deleteRole($id);
+	public function deleteRole($id);
 
-    public function allRole();
-    
-    public function currentUserRole($user);
+	public function allRole();
+
+	public function currentUserRole($user);
 }

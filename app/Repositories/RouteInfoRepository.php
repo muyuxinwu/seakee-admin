@@ -15,111 +15,109 @@ use Illuminate\Routing\Router;
 
 class RouteInfoRepository implements RouteInfoInterface
 {
-    /**
-     * @var Router
-     */
-    protected $router;
+	/**
+	 * @var Router
+	 */
+	protected $router;
 
-    /**
-     * @var \Illuminate\Routing\RouteCollection
-     */
-    protected $routes;
+	/**
+	 * @var \Illuminate\Routing\RouteCollection
+	 */
+	protected $routes;
 
-    /**
-     * RouteInfoRepository constructor.
-     * @param Router $router
-     */
-    public function __construct(Router $router)
-    {
-        $this->router = $router;
-        $this->routes = $router->getRoutes();
-    }
+	/**
+	 * RouteInfoRepository constructor.
+	 *
+	 * @param Router $router
+	 */
+	public function __construct(Router $router)
+	{
+		$this->router = $router;
+		$this->routes = $router->getRoutes();
+	}
 
-    public function allAdminRouteListByGet()
-    {
-        $routes = $this->allRoutesByMethod('GET|HEAD');
+	public function allAdminRouteListByGet()
+	{
+		$routes = $this->allRoutesByMethod('GET|HEAD');
 
-        foreach ($routes as $key => $uri) {
-            if (stripos($uri, 'admin/') !== false) {
-                $list[$key] = $uri;
-            }
-        }
+		foreach ($routes as $key => $uri) {
+			if (stripos($uri, 'admin/') !== false) {
+				$list[$key] = $uri;
+			}
+		}
 
-        return $list ?? [];
-    }
+		return $list ?? [];
+	}
 
-    public function getRouteList()
-    {
-        return $this->getRoutes();
-    }
+	public function getRouteList()
+	{
+		return $this->getRoutes();
+	}
 
-    public function getAllRouteNameList()
-    {
-        return array_filter(array_column($this->getRoutes(), 'name'));
-    }
+	public function getAllRouteNameList()
+	{
+		return array_filter(array_column($this->getRoutes(), 'name'));
+	}
 
-    /**
-     * Get all of the Routes(key => route name, value => uri) by method.
-     *
-     * @param string $method GET|HEAD,POST
-     * @return array
-     */
-    protected function allRoutesByMethod($method = '')
-    {
-        $routeLists = $this->getRoutes();
+	/**
+	 * Get all of the Routes(key => route name, value => uri) by method.
+	 *
+	 * @param string $method GET|HEAD,POST
+	 *
+	 * @return array
+	 */
+	protected function allRoutesByMethod($method = '')
+	{
+		$routeLists = $this->getRoutes();
 
-        foreach ($routeLists as $key => $route) {
-            if ($route['method'] == $method && !empty($route['name'])) {
-                $routes[$route['name']] = $route['uri'];
-            }
-        }
+		foreach ($routeLists as $key => $route) {
+			if ($route['method'] == $method && !empty($route['name'])) {
+				$routes[$route['name']] = $route['uri'];
+			}
+		}
 
-        return $routes ?? [];
-    }
+		return $routes ?? [];
+	}
 
-    /**
-     * Compile the routes into a displayable format.
-     *
-     * @return array
-     */
-    protected function getRoutes()
-    {
-        $routes = collect($this->routes)->map(function ($route) {
-            return $this->getRouteInformation($route);
-        })->all();
+	/**
+	 * Compile the routes into a displayable format.
+	 *
+	 * @return array
+	 */
+	protected function getRoutes()
+	{
+		$routes = collect($this->routes)->map(function ($route) {
+			return $this->getRouteInformation($route);
+		})->all();
 
-        return array_filter($routes);
-    }
+		return array_filter($routes);
+	}
 
-    /**
-     * Get the route information for a given route.
-     *
-     * @param  \Illuminate\Routing\Route $route
-     * @return array
-     */
-    protected function getRouteInformation(Route $route)
-    {
-        return [
-            'method' => implode('|', $route->methods()),
-            'uri' => $route->uri(),
-            'name' => $route->getName(),
-            'action' => $route->getActionName(),
-        ];
-    }
-    
-    public function getAllAdminRouteNameList()
-    {
-        $routesByGet = $this->allRoutesByMethod('GET|HEAD');
-        $routesByPost = $this->allRoutesByMethod('POST');
+	/**
+	 * Get the route information for a given route.
+	 *
+	 * @param  \Illuminate\Routing\Route $route
+	 *
+	 * @return array
+	 */
+	protected function getRouteInformation(Route $route)
+	{
+		return ['method' => implode('|', $route->methods()), 'uri' => $route->uri(), 'name' => $route->getName(), 'action' => $route->getActionName(),];
+	}
 
-        $routes = array_merge($routesByGet, $routesByPost);
+	public function getAllAdminRouteNameList()
+	{
+		$routesByGet  = $this->allRoutesByMethod('GET|HEAD');
+		$routesByPost = $this->allRoutesByMethod('POST');
 
-        foreach ($routes as $key => $uri) {
-            if (stripos($uri, 'admin/') !== false) {
-                $list[] = $key;
-            }
-        }
+		$routes = array_merge($routesByGet, $routesByPost);
 
-        return $list ?? [];
-    }
+		foreach ($routes as $key => $uri) {
+			if (stripos($uri, 'admin/') !== false) {
+				$list[] = $key;
+			}
+		}
+
+		return $list ?? [];
+	}
 }

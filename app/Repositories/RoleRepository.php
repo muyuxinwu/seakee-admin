@@ -13,7 +13,8 @@ use App\Interfaces\RoleInterface;
 use App\Models\User\Role;
 use Cache;
 
-class RoleRepository implements RoleInterface {
+class RoleRepository implements RoleInterface
+{
 
 	/**
 	 * 带有分页的角色列表
@@ -22,8 +23,9 @@ class RoleRepository implements RoleInterface {
 	 *
 	 * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
 	 */
-	public function allRoleWithPaginate( $paginate ) {
-		return Role::orderBy( 'created_at', 'desc' )->paginate( $paginate );
+	public function allRoleWithPaginate($paginate)
+	{
+		return Role::orderBy('created_at', 'desc')->paginate($paginate);
 	}
 
 	/**
@@ -33,7 +35,8 @@ class RoleRepository implements RoleInterface {
 	 *
 	 * @return mixed
 	 */
-	public function createRole( $data ) {
+	public function createRole($data)
+	{
 		$role = new Role();
 
 		$role->name         = $data['name'];
@@ -50,8 +53,9 @@ class RoleRepository implements RoleInterface {
 	 *
 	 * @return bool
 	 */
-	public function updateRole( $data ) {
-		$role = Role::find( $data['id'] );
+	public function updateRole($data)
+	{
+		$role = Role::find($data['id']);
 
 		$role->name         = $data['name'];
 		$role->display_name = $data['display_name'];
@@ -67,8 +71,9 @@ class RoleRepository implements RoleInterface {
 	 *
 	 * @return mixed
 	 */
-	public function deleteRole( $id ) {
-		$role = Role::whereId( $id );
+	public function deleteRole($id)
+	{
+		$role = Role::whereId($id);
 
 		return $role->delete();
 	}
@@ -80,8 +85,9 @@ class RoleRepository implements RoleInterface {
 	 *
 	 * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model|null|static|static[]
 	 */
-	public function findRole( $id ) {
-		return Role::find( $id );
+	public function findRole($id)
+	{
+		return Role::find($id);
 	}
 
 	/**
@@ -89,7 +95,8 @@ class RoleRepository implements RoleInterface {
 	 *
 	 * @return \Illuminate\Database\Eloquent\Collection|static[]
 	 */
-	public function allRole() {
+	public function allRole()
+	{
 		return Role::all();
 	}
 
@@ -100,11 +107,9 @@ class RoleRepository implements RoleInterface {
 	 *
 	 * @return array
 	 */
-	public function currentUserRole( $user ) {
-		return Cache::tags( [
-			'user',
-			$user->id
-		] )->get( 'currentUserRole' ) ?: $this->putCurrentUserRoleCache( $user );
+	public function currentUserRole($user)
+	{
+		return Cache::tags(['user', $user->id])->get('currentUserRole') ?: $this->putCurrentUserRoleCache($user);
 	}
 
 	/**
@@ -114,9 +119,10 @@ class RoleRepository implements RoleInterface {
 	 *
 	 * @return array
 	 */
-	private function putCurrentUserRoleCache( $user ) {
-		$currentUserRole = array_column( $user->roles->toArray(), 'name', 'id' );
-		Cache::tags( [ 'user', $user->id ] )->put( 'currentUserRole', $currentUserRole, 10 );
+	private function putCurrentUserRoleCache($user)
+	{
+		$currentUserRole = array_column($user->roles->toArray(), 'name', 'id');
+		Cache::tags(['user', $user->id])->put('currentUserRole', $currentUserRole, 10);
 
 		return $currentUserRole;
 	}

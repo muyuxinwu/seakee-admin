@@ -8,23 +8,23 @@
 
 namespace App\Interfaces;
 
-Interface MenuInterface{
+Interface MenuInterface
+{
+	public function allMenus();
 
-    public function allMenus();
+	public function findMenu($id);
 
-    public function findMenu($id);
+	public function deleteMenu($id);
 
-    public function deleteMenu($id);
+	public function createMenu(array $data);
 
-    public function createMenu(array $data);
+	public function updateMenu(array $data);
 
-    public function updateMenu(array $data);
+	public function menuCount(array $data);
 
-    public function menuCount(array $data);
+	public function menuTree($menu);
 
-    public function menuTree($menu);
-
-    public function currentUserMenu($allMenu, $currentUserPermission, $userId);
+	public function currentUserMenu($allMenu, $currentUserPermission, $userId);
 }
 
 

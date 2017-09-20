@@ -14,20 +14,21 @@ use App\Interfaces\IpInterface;
 
 class IpRepository implements IpInterface
 {
-    /**
-     * @param array $userID
-     * @param $ipAddress
-     * @param int $state
-     * @return bool
-     */
-    public function storageIP($userID, $ipAddress, $state = 2)
-    {
-        $ip = new Ip();
+	/**
+	 * @param array $userID
+	 * @param       $ipAddress
+	 * @param int   $state
+	 *
+	 * @return bool
+	 */
+	public function storageIP($userID, $ipAddress, $state = 2)
+	{
+		$ip = new Ip();
 
-        $ip->user_id = $userID;
-        $ip->state = $state;
-        $ip->ip = $ipAddress;
+		$ip->user_id = $userID;
+		$ip->state   = $state;
+		$ip->ip      = $ipAddress;
 
-        return $ip->save();
-    }
+		return $ip->save();
+	}
 }

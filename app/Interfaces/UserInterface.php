@@ -10,23 +10,25 @@ namespace App\Interfaces;
 
 Interface UserInterface
 {
-    public function allUserWithPaginate($paginate);
+	public function allUserWithPaginate($paginate);
 
-    public function findUser($id);
+	public function findUser($id);
 
-    public function deleteUser($id);
+	public function deleteUser($id);
 
-    public function updateUser(array $data);
+	public function updateUser(array $data);
 
-    /**
-     * @param array $data
-     * @return Object User
-     */
-    public function createUser(array $data);
+	/**
+	 * @param array $data
+	 *
+	 * @return Object User
+	 */
+	public function createUser(array $data);
 
-    /**
-     * @param array $data
-     * @return bool
-     */
-    public function storageUser(array $data);
+	/**
+	 * @param array $data
+	 *
+	 * @return bool
+	 */
+	public function storageUser(array $data);
 }

@@ -10,5 +10,5 @@ namespace App\Interfaces;
 
 Interface IpInterface
 {
-    public function storageIP($userID, $ipAddress, $state);
+	public function storageIP($userID, $ipAddress, $state);
 }

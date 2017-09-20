@@ -11,19 +11,19 @@ namespace App\Interfaces;
 
 interface PermissionInterface
 {
-    public function allPermissionWithPaginate($paginate);
+	public function allPermissionWithPaginate($paginate);
 
-    public function createPermission($data);
+	public function createPermission($data);
 
-    public function updatePermission($data);
+	public function updatePermission($data);
 
-    public function findPermission($id);
+	public function findPermission($id);
 
-    public function deletePermission($id);
+	public function deletePermission($id);
 
-    public function allPermission();
+	public function allPermission();
 
-    public function allPermissionName();
+	public function allPermissionName();
 
-    public function currentUserPermission($user);
+	public function currentUserPermission($user);
 }

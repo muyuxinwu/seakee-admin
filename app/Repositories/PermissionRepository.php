@@ -12,17 +12,18 @@ use App\Interfaces\PermissionInterface;
 use App\Models\User\Permission;
 use Cache;
 
-class PermissionRepository implements PermissionInterface {
-
+class PermissionRepository implements PermissionInterface
+{
 	/**
 	 * 带有分页的权限列表
-	 * 
+	 *
 	 * @param $paginate
 	 *
 	 * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
 	 */
-	public function allPermissionWithPaginate( $paginate ) {
-		return Permission::orderBy( 'created_at', 'desc' )->paginate( $paginate );
+	public function allPermissionWithPaginate($paginate)
+	{
+		return Permission::orderBy('created_at', 'desc')->paginate($paginate);
 	}
 
 	/**
@@ -32,7 +33,8 @@ class PermissionRepository implements PermissionInterface {
 	 *
 	 * @return bool
 	 */
-	public function createPermission( $data ) {
+	public function createPermission($data)
+	{
 		$permission = new Permission();
 
 		$permission->name         = $data['name'];
@@ -49,8 +51,9 @@ class PermissionRepository implements PermissionInterface {
 	 *
 	 * @return bool
 	 */
-	public function updatePermission( $data ) {
-		$permission = Permission::find( $data['id'] );
+	public function updatePermission($data)
+	{
+		$permission = Permission::find($data['id']);
 
 		$permission->name         = $data['name'];
 		$permission->display_name = $data['display_name'];
@@ -66,8 +69,9 @@ class PermissionRepository implements PermissionInterface {
 	 *
 	 * @return int
 	 */
-	public function deletePermission( $id ) {
-		return Permission::destroy( $id );
+	public function deletePermission($id)
+	{
+		return Permission::destroy($id);
 	}
 
 	/**
@@ -77,8 +81,9 @@ class PermissionRepository implements PermissionInterface {
 	 *
 	 * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model|null|static|static[]
 	 */
-	public function findPermission( $id ) {
-		return Permission::find( $id );
+	public function findPermission($id)
+	{
+		return Permission::find($id);
 	}
 
 	/**
@@ -86,7 +91,8 @@ class PermissionRepository implements PermissionInterface {
 	 *
 	 * @return \Illuminate\Database\Eloquent\Collection|static[]
 	 */
-	public function allPermission() {
+	public function allPermission()
+	{
 		return Permission::all();
 	}
 
@@ -95,8 +101,9 @@ class PermissionRepository implements PermissionInterface {
 	 *
 	 * @return array
 	 */
-	public function allPermissionName() {
-		return Cache::get( 'allPermission' ) ?: $this->putAllPermissionCache();
+	public function allPermissionName()
+	{
+		return Cache::get('allPermission') ?: $this->putAllPermissionCache();
 	}
 
 	/**
@@ -106,11 +113,9 @@ class PermissionRepository implements PermissionInterface {
 	 *
 	 * @return array
 	 */
-	public function currentUserPermission( $user ) {
-		return Cache::tags( [
-			'user',
-			$user->id
-		] )->get( 'currentUserPermission' ) ?: $this->putCurrentUserPermissionCache( $user );
+	public function currentUserPermission($user)
+	{
+		return Cache::tags(['user', $user->id])->get('currentUserPermission') ?: $this->putCurrentUserPermissionCache($user);
 	}
 
 	/**
@@ -118,9 +123,10 @@ class PermissionRepository implements PermissionInterface {
 	 *
 	 * @return array
 	 */
-	private function putAllPermissionCache() {
-		$allPermission = array_column( $this->allPermission()->toArray(), 'name', 'id' );
-		Cache::put( 'allPermission', $allPermission, 10 );
+	private function putAllPermissionCache()
+	{
+		$allPermission = array_column($this->allPermission()->toArray(), 'name', 'id');
+		Cache::put('allPermission', $allPermission, 10);
 
 		return $allPermission;
 	}
@@ -132,16 +138,17 @@ class PermissionRepository implements PermissionInterface {
 	 *
 	 * @return array
 	 */
-	private function putCurrentUserPermissionCache( $user ) {
-		$roles            = head( $user->with( 'roles.perms' )->get()->pluck( 'roles' )->toArray() );
-		$permissionIdList = array_pluck( $roles, 'perms' );
+	private function putCurrentUserPermissionCache($user)
+	{
+		$roles            = head($user->with('roles.perms')->get()->pluck('roles')->toArray());
+		$permissionIdList = array_pluck($roles, 'perms');
 
 		$currentUserPermission = [];
-		foreach ( $permissionIdList as $item ) {
-			$currentUserPermission += array_column( $item, 'name', 'id' );
+		foreach ($permissionIdList as $item) {
+			$currentUserPermission += array_column($item, 'name', 'id');
 		}
 
-		Cache::tags( [ 'user', $user->id ] )->put( 'currentUserPermission', $currentUserPermission, 10 );
+		Cache::tags(['user', $user->id])->put('currentUserPermission', $currentUserPermission, 10);
 
 		return $currentUserPermission;
 	}
