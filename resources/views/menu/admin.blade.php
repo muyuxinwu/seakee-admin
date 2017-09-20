@@ -159,7 +159,7 @@
             }
 
             $.ajax({
-                url: '{{ route('menu.changeDisplay') }}',
+                url: '{{ route('menu.display') }}',
                 type: 'POST',
                 data: {
                     id: id,

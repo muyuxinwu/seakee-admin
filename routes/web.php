@@ -28,14 +28,14 @@ Route::group(['prefix' => 'admin', 'middleware' => ['checkPermission']], functio
     Route::group(['prefix' => 'menu', 'namespace' => 'Menu'], function (){
         Route::get('/admin', 'MenuController@admin')->name('menu.admin');
         Route::get('/home', 'MenuController@home')->name('menu.home');
-        Route::get('/createAdminMenu', 'MenuController@createAdminMenu')->name('menu.admin.create');
-        Route::get('/editAdminMenu', 'MenuController@editAdminMenu')->name('menu.admin.edit');
-        Route::get('/editHomeMenu', 'MenuController@editHomeMenu')->name('menu.home.edit');
-        Route::get('/createHomeMenu', 'MenuController@createHomeMenu')->name('menu.home.create');
+        Route::get('/createAdmin', 'MenuController@createAdmin')->name('menu.admin.create');
+        Route::get('/editAdmin', 'MenuController@editAdmin')->name('menu.admin.edit');
+        Route::get('/editHome', 'MenuController@editHome')->name('menu.home.edit');
+        Route::get('/createHome', 'MenuController@createHome')->name('menu.home.create');
         Route::post('/delete', 'MenuController@deleteMenu')->name('menu.delete');
-        Route::post('/changeDisplay', 'MenuController@changeDisplay')->name('menu.changeDisplay');
-        Route::post('/create', 'MenuController@createMenu')->name('menu.create');
-        Route::post('/edit', 'MenuController@editMenu')->name('menu.edit');
+        Route::post('/display', 'MenuController@display')->name('menu.display');
+        Route::post('/storage', 'MenuController@storage')->name('menu.storage');
+        Route::post('/update', 'MenuController@update')->name('menu.update');
     });
 
     Route::group(['prefix' => 'userCenter', 'namespace' => 'User'], function (){

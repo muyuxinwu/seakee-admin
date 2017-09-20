@@ -46,88 +46,103 @@ class MenuController extends Controller
 	}
 
 	/**
-	 * create Menu Rules
+	 * 创建菜单验证规则
+	 *
 	 * @return array
 	 */
 	private function createMenuRules()
 	{
-		return ['menuState' => 'required', 'fatherMenu' => 'required', 'menuDisplay' => 'required', 'routeName' => 'required', 'menuName' => 'required', 'menuSort' => 'numeric', 'icon' => 'required',];
+		return [
+			'menuState'   => 'required',
+			'fatherMenu'  => 'required',
+			'menuDisplay' => 'required',
+			'routeName'   => 'required',
+			'menuName'    => 'required',
+			'menuSort'    => 'numeric',
+			'icon'        => 'required',
+		];
 	}
 
 	/**
-	 * Validation error info
+	 * 验证失败后的返回信息
+	 *
 	 * @return array
 	 */
 	protected function errorInfo()
 	{
-		return [/**
-		         * create menu
-		         */
-		        'menuState.required' => '菜单位置不能为空', 'fatherMenu.required' => '上一级菜单不能为空', 'menuDisplay.required' => '菜单显示状态不能为空', 'routeName.required' => '菜单URL不能为空', 'menuName.required' => '菜单名称不能为空', 'menuSort.numeric' => '排序必须为数值', 'icon.required' => '图标不能为空',];
+		return [
+			'menuState.required'   => '菜单位置不能为空',
+			'fatherMenu.required'  => '上一级菜单不能为空',
+			'menuDisplay.required' => '菜单显示状态不能为空',
+			'routeName.required'   => '菜单URL不能为空',
+			'menuName.required'    => '菜单名称不能为空',
+			'menuSort.numeric'     => '排序必须为数值',
+			'icon.required'        => '图标不能为空',
+		];
 	}
 
 	/**
-	 * return admin menu manage page
+	 * 后台菜单管理页面
+	 *
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function admin()
 	{
-		$allMenu = $this->menu->allMenus();
-		$menus   = $this->menu->menuTree($allMenu);
+		$allMenu       = $this->menu->allMenus();
+		$data['menus'] = $this->menu->menuTree($allMenu);
 
-		return view('menu.admin', ['menus' => $menus]);
+		return view('menu.admin', $data);
 	}
 
 	/**
-	 * return create admin menu page
+	 * 创建后台菜单页面
+	 *
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
-	public function createAdminMenu()
+	public function createAdmin()
 	{
-		$allMenu = $this->menu->allMenus();
-		$menus   = $this->menu->menuTree($allMenu);
+		$allMenu        = $this->menu->allMenus();
+		$data['menus']  = $this->menu->menuTree($allMenu);
+		$data['routes'] = $this->routeInfo->allAdminRouteListByGet();
 
-		$routes = $this->routeInfo->allAdminRouteListByGet();
-
-		return view('menu.createAdmin', ['routes' => $routes, 'menus' => $menus,]);
+		return view('menu.createAdmin', $data);
 	}
 
 	/**
-	 * return edit admin menu page
+	 * 编辑指定后台菜单页面
 	 *
 	 * @param Request $request
 	 *
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
 	 */
-	public function editAdminMenu(Request $request)
+	public function editAdmin(Request $request)
 	{
 		$id = $request->input('id');
 
-		if (empty($id)) {
-			return response()->json(['status' => 500, 'message' => '请选择要编辑的菜单']);
+		$allMenu       = $this->menu->allMenus();
+		$data['menu']  = $this->menu->findMenu($id);
+		$data['menus'] = $this->menu->menuTree($allMenu);
+
+		if (empty($data['menu'])) {
+			return response()->json([
+				'status'  => 500,
+				'message' => '菜单不存在',
+			]);
 		}
 
-		$menu    = $this->menu->findMenu($id);
-		$allMenu = $this->menu->allMenus();
-		$menus   = $this->menu->menuTree($allMenu);
+		$data['routes'] = $this->routeInfo->allAdminRouteListByGet();
 
-		if (empty($menu)) {
-			return response()->json(['status' => 500, 'message' => '菜单不存在']);
-		}
-
-		$routes = $this->routeInfo->allAdminRouteListByGet();
-
-		return view('menu.editAdmin', ['routes' => $routes, 'menu' => $menu, 'menus' => $menus,]);
+		return view('menu.editAdmin', $data);
 	}
 
 	/**
-	 * to edit a menu
+	 * 更新指定菜单
 	 *
 	 * @param Request $request
 	 *
 	 * @return \Illuminate\Http\JsonResponse
 	 */
-	public function editMenu(Request $request)
+	public function update(Request $request)
 	{
 		$validator = $this->validator->validate($request->all(), $this->createMenuRules(), $this->errorInfo());
 
@@ -137,40 +152,51 @@ class MenuController extends Controller
 
 		$menuData = $request->all();
 
-		if (empty($menuData['id'])) {
-			return response()->json(['status' => 500, 'message' => '请选择要编辑的菜单']);
-		}
-
 		if ($menuData['id'] == $menuData['fatherMenu']) {
-			return response()->json(['status' => 500, 'message' => '菜单不能和节点菜单相同']);
+			return response()->json([
+				'status'  => 500,
+				'message' => '菜单不能和节点菜单相同',
+			]);
 		}
 
 		$menu         = $this->menu->findMenu($menuData['id']);
 		$menuChildren = $this->menu->menuCount(['father_id' => $menuData['id']]);
 
 		if (empty($menu)) {
-			return response()->json(['status' => 500, 'message' => '菜单不存在']);
+			return response()->json([
+				'status'  => 500,
+				'message' => '菜单不存在',
+			]);
 		} else {
 			if ($menu->father_id != $menuData['fatherMenu'] && $menuChildren != 0) {
-				return response()->json(['status' => 500, 'message' => '存在子菜单不能更改上级菜单']);
+				return response()->json([
+					'status'  => 500,
+					'message' => '存在子菜单不能更改上级菜单',
+				]);
 			}
 		}
 
 		if (!$this->menu->updateMenu($menuData)) {
-			return response()->json(['status' => 500, 'message' => '编辑失败']);
+			return response()->json([
+				'status'  => 500,
+				'message' => '编辑失败',
+			]);
 		}
 
-		return response()->json(['status' => 200, 'message' => '编辑成功']);
+		return response()->json([
+			'status'  => 200,
+			'message' => '编辑成功',
+		]);
 	}
 
 	/**
-	 * create a menu
+	 * 存储创建的菜单
 	 *
 	 * @param Request $request
 	 *
 	 * @return \Illuminate\Http\JsonResponse
 	 */
-	public function createMenu(Request $request)
+	public function storage(Request $request)
 	{
 		$validator = $this->validator->validate($request->all(), $this->createMenuRules(), $this->errorInfo());
 
@@ -181,60 +207,77 @@ class MenuController extends Controller
 		$menuData = $request->all();
 
 		if (!$this->menu->createMenu($menuData)) {
-			return response()->json(['status' => 500, 'message' => '创建失败']);
+			return response()->json([
+				'status'  => 500,
+				'message' => '创建失败',
+			]);
 		}
 
-		return response()->json(['status' => 200, 'message' => '创建成功']);
+		return response()->json([
+			'status'  => 200,
+			'message' => '创建成功',
+		]);
 	}
 
 	/**
-	 * to delete a menu
+	 * 删除指定菜单
 	 *
 	 * @param Request $request
 	 *
 	 * @return \Illuminate\Http\JsonResponse
 	 */
-	public function deleteMenu(Request $request)
+	public function delete(Request $request)
 	{
 		$id = $request->input('id');
-
-		if (empty($id)) {
-			return response()->json(['status' => 500, 'message' => '请选择要删除的菜单']);
-		}
 
 		$menu         = $this->menu->findMenu($id);
 		$menuChildren = $this->menu->menuCount(['father_id' => $id]);
 
 		if (empty($menu)) {
-			return response()->json(['status' => 500, 'message' => '菜单不存在']);
+			return response()->json([
+				'status'  => 500,
+				'message' => '菜单不存在',
+			]);
 		} else {
 			if ($menuChildren != 0) {
-				return response()->json(['status' => 500, 'message' => '存在子菜单不能删除']);
+				return response()->json([
+					'status'  => 500,
+					'message' => '存在子菜单不能删除',
+				]);
 			}
 		}
 
 		if (!$this->menu->deleteMenu($id)) {
-			return response()->json(['status' => 500, 'message' => '删除失败']);
+			return response()->json([
+				'status'  => 500,
+				'message' => '删除失败',
+			]);
 		}
 
-		return response()->json(['status' => 200, 'message' => '删除成功']);
+		return response()->json([
+			'status'  => 200,
+			'message' => '删除成功',
+		]);
 	}
 
 	/**
-	 * to change the display status of a menu
+	 * 菜单显示状态
 	 *
 	 * @param Request $request
 	 *
 	 * @return \Illuminate\Http\JsonResponse
 	 */
-	public function changeDisplay(Request $request)
+	public function display(Request $request)
 	{
 		$id      = $request->input('id');
 		$display = $request->input('display');
 
 		$menu = $this->menu->findMenu($id);
 		if (empty($menu)) {
-			return response()->json(['status' => 500, 'message' => '菜单不存在']);
+			return response()->json([
+				'status'  => 500,
+				'message' => '菜单不存在',
+			]);
 		}
 
 		$menu->display = $display;
@@ -242,9 +285,15 @@ class MenuController extends Controller
 		$rs = $menu->save();
 
 		if (!$rs) {
-			return response()->json(['status' => 500, 'message' => '操作失败']);
+			return response()->json([
+				'status'  => 500,
+				'message' => '操作失败',
+			]);
 		}
 
-		return response()->json(['status' => 200, 'message' => '操作成功']);
+		return response()->json([
+			'status'  => 200,
+			'message' => '操作成功',
+		]);
 	}
 }
