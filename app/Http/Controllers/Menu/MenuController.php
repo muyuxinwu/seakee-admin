@@ -11,6 +11,7 @@ namespace App\Http\Controllers\Menu;
 use App\Http\Controllers\Controller;
 use App\Interfaces\MenuInterface;
 use App\Interfaces\RouteInfoInterface;
+use App\Services\RequestParamsService;
 use App\Services\ValidatorService;
 use Illuminate\Http\Request;
 
@@ -32,17 +33,39 @@ class MenuController extends Controller
 	protected $routeInfo;
 
 	/**
+	 * @var RequestParamsService
+	 */
+	protected $requestParams;
+
+	/**
+	 * menu对应的数据库字段
+	 */
+	const menuKeys = [
+		'id',
+		'icon',
+		'menu_name',
+		'route_name',
+		'father_id',
+		'sort',
+		'display',
+		'state',
+		'is_custom',
+	];
+
+	/**
 	 * MenuController constructor.
 	 *
-	 * @param MenuInterface      $menu
-	 * @param ValidatorService   $validator
-	 * @param RouteInfoInterface $routeInfo
+	 * @param MenuInterface        $menu
+	 * @param ValidatorService     $validator
+	 * @param RouteInfoInterface   $routeInfo
+	 * @param RequestParamsService $requestParams
 	 */
-	public function __construct(MenuInterface $menu, ValidatorService $validator, RouteInfoInterface $routeInfo)
+	public function __construct(MenuInterface $menu, ValidatorService $validator, RouteInfoInterface $routeInfo, RequestParamsService $requestParams)
 	{
-		$this->menu      = $menu;
-		$this->validator = $validator;
-		$this->routeInfo = $routeInfo;
+		$this->menu          = $menu;
+		$this->validator     = $validator;
+		$this->routeInfo     = $routeInfo;
+		$this->requestParams = $requestParams;
 	}
 
 	/**
@@ -53,12 +76,12 @@ class MenuController extends Controller
 	private function createMenuRules()
 	{
 		return [
-			'menuState'   => 'required',
-			'fatherMenu'  => 'required',
-			'menuDisplay' => 'required',
-			'routeName'   => 'required',
-			'menuName'    => 'required',
-			'menuSort'    => 'numeric',
+			'state'   => 'required',
+			'father_id'  => 'required',
+			'display' => 'required',
+			'route_name'   => 'required',
+			'menu_name'    => 'required',
+			'sort'    => 'numeric',
 			'icon'        => 'required',
 		];
 	}
@@ -71,12 +94,12 @@ class MenuController extends Controller
 	protected function errorInfo()
 	{
 		return [
-			'menuState.required'   => '菜单位置不能为空',
-			'fatherMenu.required'  => '上一级菜单不能为空',
-			'menuDisplay.required' => '菜单显示状态不能为空',
-			'routeName.required'   => '菜单URL不能为空',
-			'menuName.required'    => '菜单名称不能为空',
-			'menuSort.numeric'     => '排序必须为数值',
+			'state.required'   => '菜单位置不能为空',
+			'father_id.required'  => '上一级菜单不能为空',
+			'display.required' => '菜单显示状态不能为空',
+			'route_name.required'   => '菜单URL不能为空',
+			'menu_name.required'    => '菜单名称不能为空',
+			'sort.numeric'     => '排序必须为数值',
 			'icon.required'        => '图标不能为空',
 		];
 	}
@@ -198,15 +221,15 @@ class MenuController extends Controller
 	 */
 	public function storage(Request $request)
 	{
-		$validator = $this->validator->validate($request->all(), $this->createMenuRules(), $this->errorInfo());
+		$params = $this->requestParams->params(self::menuKeys, $request);
+
+		$validator = $this->validator->validate($params, $this->createMenuRules(), $this->errorInfo());
 
 		if (!empty($validator)) {
 			return response()->json($validator);
 		}
 
-		$menuData = $request->all();
-
-		if (!$this->menu->createMenu($menuData)) {
+		if (!$this->menu->createMenu($params)) {
 			return response()->json([
 				'status'  => 500,
 				'message' => '创建失败',

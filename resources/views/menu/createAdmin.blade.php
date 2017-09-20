@@ -14,13 +14,13 @@
             <div class="row">
                 <div class="col-md-12">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                    <input type="hidden" name="menuState" value="1">
+                    <input type="hidden" name="state" value="1">
                     <div class="box-body">
                         <div class="form-group">
                             <div class="col-xs-6">
                                 <label class="col-xs-4 control-label">上级菜单</label>
                                 <div class="col-xs-8">
-                                    <select class="form-control" name="fatherMenu">
+                                    <select class="form-control" name="father_id">
                                         <option value="">选择上级菜单</option>
                                         <option value="-1">根目录</option>
                                         @foreach($menus as $key => $menu)
@@ -47,9 +47,9 @@
                                     <div class="switch" style="display: table">
                                         <input onchange="displayValue()" data-on-text="显示" data-off-text="隐藏" type="checkbox" checked/>
                                         <label class="control-label" style="padding-left: 80px;">菜单排序&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                                        <input type="text" name="menuSort" class="form-control" style="width: 80px;display: initial">
+                                        <input type="text" name="sort" class="form-control" style="width: 80px;display: initial">
                                     </div>
-                                    <input id="display" type="hidden" name="menuDisplay" value="1">
+                                    <input id="display" type="hidden" name="display" value="1">
                                 </div>
                             </div>
                         </div>
@@ -73,8 +73,8 @@
                                             <option value="{{ $routeName }}">{{ $url }}</option>
                                         @endforeach
                                     </select>
-                                    <input type="hidden" name="routeName" id="routeName">
-                                    <input type="hidden" name="isCustom" id="isCustom">
+                                    <input type="hidden" name="route_name" id="routeName">
+                                    <input type="hidden" name="is_custom" id="isCustom">
                                 </div>
                             </div>
                         </div>
@@ -90,7 +90,7 @@
                             <div class="col-xs-6">
                                 <label class="col-xs-4 control-label">菜单名称</label>
                                 <div class="col-xs-8">
-                                    <input type="text" name="menuName" class="form-control">
+                                    <input type="text" name="menu_name" class="form-control">
                                 </div>
                             </div>
                         </div>
