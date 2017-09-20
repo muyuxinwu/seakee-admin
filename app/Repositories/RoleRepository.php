@@ -16,7 +16,7 @@ use Cache;
 class RoleRepository implements RoleInterface {
 
 	/**
-	 * 带有分页的权限列表
+	 * 带有分页的角色列表
 	 *
 	 * @param $paginate
 	 *
@@ -27,7 +27,7 @@ class RoleRepository implements RoleInterface {
 	}
 
 	/**
-	 * 新建权限
+	 * 新建角色
 	 *
 	 * @param $data
 	 *
@@ -44,7 +44,7 @@ class RoleRepository implements RoleInterface {
 	}
 
 	/**
-	 * 更新权限
+	 * 更新角色
 	 *
 	 * @param $data
 	 *
@@ -61,7 +61,7 @@ class RoleRepository implements RoleInterface {
 	}
 
 	/**
-	 * 删除权限
+	 * 删除角色
 	 *
 	 * @param $id
 	 *
@@ -74,7 +74,7 @@ class RoleRepository implements RoleInterface {
 	}
 
 	/**
-	 * 通过权限ID查找权限
+	 * 通过角色ID查找角色
 	 *
 	 * @param $id
 	 *
@@ -85,7 +85,7 @@ class RoleRepository implements RoleInterface {
 	}
 
 	/**
-	 * 所有权限列表
+	 * 所有角色列表
 	 *
 	 * @return \Illuminate\Database\Eloquent\Collection|static[]
 	 */
@@ -94,7 +94,7 @@ class RoleRepository implements RoleInterface {
 	}
 
 	/**
-	 * 当前用户的权限
+	 * 当前用户的角色
 	 *
 	 * @param $user
 	 *
@@ -108,7 +108,7 @@ class RoleRepository implements RoleInterface {
 	}
 
 	/**
-	 * 设置当前用户权限缓存
+	 * 设置当前用户角色缓存
 	 *
 	 * @param $user
 	 *
