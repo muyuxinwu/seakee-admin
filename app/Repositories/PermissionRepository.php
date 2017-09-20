@@ -142,10 +142,17 @@ class PermissionRepository implements PermissionInterface
 	{
 		$roles            = head($user->with('roles.perms')->get()->pluck('roles')->toArray());
 		$permissionIdList = array_pluck($roles, 'perms');
+		$roleNameList     = array_pluck($roles, 'name');
 
 		$currentUserPermission = [];
-		foreach ($permissionIdList as $item) {
-			$currentUserPermission += array_column($item, 'name', 'id');
+
+		//当前用户角色为管理员时，权限为所有权
+		if (!in_array('Super_Admin', $roleNameList)) {
+			foreach ($permissionIdList as $item) {
+				$currentUserPermission += array_column($item, 'name', 'id');
+			}
+		} else {
+			$currentUserPermission = $this->allPermissionName();
 		}
 
 		Cache::tags(['user', $user->id])->put('currentUserPermission', $currentUserPermission, 10);
