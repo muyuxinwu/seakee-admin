@@ -73,7 +73,7 @@ class MenuController extends Controller
 	 *
 	 * @return array
 	 */
-	private function createMenuRules()
+	private function createRules()
 	{
 		return [
 			'state'      => 'required',
@@ -91,7 +91,7 @@ class MenuController extends Controller
 	 *
 	 * @return array
 	 */
-	protected function errorInfo()
+	protected function validatorMessage()
 	{
 		return [
 			'state.required'      => '菜单位置不能为空',
@@ -169,7 +169,7 @@ class MenuController extends Controller
 	{
 		$menuData = $this->requestParams->params(self::menuKeys, $request);
 
-		$validator = $this->validator->validate($menuData, $this->createMenuRules(), $this->errorInfo());
+		$validator = $this->validator->validate($menuData, $this->createRules(), $this->validatorMessage());
 
 		if (!empty($validator)) {
 			return response()->json($validator);
@@ -223,7 +223,7 @@ class MenuController extends Controller
 	{
 		$params = $this->requestParams->params(self::menuKeys, $request);
 
-		$validator = $this->validator->validate($params, $this->createMenuRules(), $this->errorInfo());
+		$validator = $this->validator->validate($params, $this->createRules(), $this->validatorMessage());
 
 		if (!empty($validator)) {
 			return response()->json($validator);
