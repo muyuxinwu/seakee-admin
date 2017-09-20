@@ -61,12 +61,12 @@ Route::group(['prefix' => 'admin', 'middleware' => ['checkPermission']], functio
 
         Route::group(['prefix' => 'permission'], function (){
             Route::get('/index', 'PermissionController@index')->name('permission.index');
-            Route::get('/getRolePermissionList', 'PermissionController@getRolePermissionList')->name('permission.rolePermissionList');
-            Route::get('/showEdit', 'PermissionController@showEditInfo')->name('permission.showEdit');
+            Route::get('/rolePermission', 'PermissionController@rolePermission')->name('permission.rolePermission');
+            Route::get('/edit', 'PermissionController@edit')->name('permission.edit');
             Route::get('/batchCreate', 'PermissionController@batchCreate')->name('permission.batchCreate');
-            Route::post('/create', 'PermissionController@createPermission')->name('permission.create');
-            Route::post('/delete', 'PermissionController@deletePermission')->name('permission.delete');
-            Route::post('/edit', 'PermissionController@editPermission')->name('permission.edit');
+            Route::post('/storage', 'PermissionController@storage')->name('permission.storage');
+            Route::post('/delete', 'PermissionController@delete')->name('permission.delete');
+            Route::post('/update', 'PermissionController@update')->name('permission.update');
             Route::post('/authorization', 'PermissionController@authorization')->name('permission.authorization');
         });
 

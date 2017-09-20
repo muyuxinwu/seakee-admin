@@ -126,6 +126,21 @@
                         {!! csrf_field() !!}
                         <input type="hidden" name="id" value="" id="editID">
                         <div class="form-group">
+                            <label class="col-sm-3 control-label">自定义权限</label>
+                            <div class="col-sm-8">
+                                <div class="radio col-sm-3">
+                                    <label>
+                                        <input type="radio" name="isCustom" value="0" checked>否
+                                    </label>
+                                </div>
+                                <div class="radio col-sm-3">
+                                    <label>
+                                        <input type="radio" name="isCustom" value="1">是
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label class="col-sm-3 control-label">权限标识</label>
                             <div class="col-sm-8">
                                 <input type="text" id="editName" name="name" class="form-control">
@@ -210,7 +225,7 @@
         });
         function getEdit(id) {
             $.ajax({
-                url: '{{ route('permission.showEdit') }}',
+                url: '{{ route('permission.edit') }}',
                 type: 'GET',
                 data: {id: id},
                 dataType: 'JSON',
@@ -236,7 +251,7 @@
             $form.find('#toEdit, #draftSave').prop('disabled', true);
             var formData = new FormData($form[0]);
             $.ajax({
-                url: '{{ route('permission.edit') }}',
+                url: '{{ route('permission.update') }}',
                 type: 'POST',
                 data: formData,
                 processData: false,  // 告诉jQuery不要去处理发送的数据
@@ -264,7 +279,7 @@
             $form.find('#toCreate, #draftSave').prop('disabled', true);
             var formData = new FormData($form[0]);
             $.ajax({
-                url: '{{ route('permission.create') }}',
+                url: '{{ route('permission.storage') }}',
                 type: 'POST',
                 data: formData,
                 processData: false,  // 告诉jQuery不要去处理发送的数据

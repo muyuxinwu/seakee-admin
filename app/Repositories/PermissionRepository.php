@@ -53,13 +53,7 @@ class PermissionRepository implements PermissionInterface
 	 */
 	public function updatePermission($data)
 	{
-		$permission = Permission::find($data['id']);
-
-		$permission->name         = $data['name'];
-		$permission->display_name = $data['display_name'];
-		$permission->description  = $data['description'];
-
-		return $permission->save();
+		return Permission::where('id', $data['id'])->update($data);
 	}
 
 	/**
