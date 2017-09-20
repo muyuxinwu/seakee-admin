@@ -24,7 +24,7 @@ Interface MenuInterface
 
 	public function menuTree($menu);
 
-	public function currentUserMenu($allMenu, $currentUserPermission, $userId);
+	public function currentUserMenu($currentUserPermission, $roles);
 }
 
 

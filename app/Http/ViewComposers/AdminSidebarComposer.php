@@ -56,10 +56,11 @@ class AdminSidebarComposer
 	private function getCurrentUserMenu()
 	{
 		$user                  = session('user');
-		$allMenu               = $this->menu->allMenus();
+		$userData['id']        = $user->id;
+		$userData['roles']     = $this->role->currentUserRole($user);
 		$currentUserPermission = $this->permission->currentUserPermission($user);
 
-		$currentUserMenu = $this->menu->currentUserMenu($allMenu, $currentUserPermission, $user->id);
+		$currentUserMenu = $this->menu->currentUserMenu($currentUserPermission, $userData);
 
 		return $this->menu->menuTree($currentUserMenu);
 	}

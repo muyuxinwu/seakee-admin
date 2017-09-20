@@ -8,7 +8,6 @@ use Route;
 use Request;
 use App\Interfaces\PermissionInterface;
 use App\Interfaces\RoleInterface;
-use Cache;
 
 class CheckPermission
 {

@@ -14,21 +14,47 @@ use Cache;
 
 class MenuRepository implements MenuInterface
 {
+	/**
+	 * 返回所有菜单
+	 *
+	 * @return array
+	 */
 	public function allMenus()
 	{
 		return Cache::get('allMenus') ?: $this->putAllMenuCache();
 	}
 
+	/**
+	 * 获取指定菜单
+	 *
+	 * @param $id
+	 *
+	 * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model|null|static|static[]
+	 */
 	public function findMenu($id)
 	{
 		return Menu::find($id);
 	}
 
+	/**
+	 * 删除指定菜单
+	 *
+	 * @param $id
+	 *
+	 * @return int
+	 */
 	public function deleteMenu($id)
 	{
 		return Menu::destroy($id);
 	}
 
+	/**
+	 * 创建菜单
+	 *
+	 * @param array $data
+	 *
+	 * @return bool
+	 */
 	public function createMenu(array $data)
 	{
 		$menu = new Menu();
@@ -45,6 +71,13 @@ class MenuRepository implements MenuInterface
 		return $menu->save();
 	}
 
+	/**
+	 * 更新指定菜单
+	 *
+	 * @param array $data
+	 *
+	 * @return bool
+	 */
 	public function updateMenu(array $data)
 	{
 		$menu = Menu::find($data['id']);
@@ -61,32 +94,47 @@ class MenuRepository implements MenuInterface
 		return $menu->save();
 	}
 
+	/**
+	 * 查询菜单数目
+	 *
+	 * @param array $data
+	 *
+	 * @return int
+	 */
 	public function menuCount(array $data)
 	{
 		return Menu::where($data)->count();
 	}
 
+	/**
+	 * 获取菜单树形数组
+	 *
+	 * @param     $menu
+	 * @param int $father_id
+	 *
+	 * @return array|string
+	 */
 	public function menuTree($menu, $father_id = -1)
 	{
-		return $this->getMenuTree($menu, $father_id);
+		return $this->setMenuTree($menu, $father_id);
 	}
 
 	/**
-	 * return menu tree
+	 * 获取菜单树形数组
 	 *
 	 * @param $menuList
 	 * @param $father_id
 	 *
 	 * @return array|string
 	 */
-	private function getMenuTree(&$menuList, $father_id)
+	private function setMenuTree(&$menuList, $father_id)
 	{
 		if (!empty($menuList)) {
 			foreach ($menuList as $menu) {
 				$menu             = (array)$menu;
 				$menu['menu_url'] = $this->_getMenuUrl($menu);
 				if ($menu['father_id'] == $father_id) {
-					$nodes    = $this->getMenuTree($menuList, $menu['id']);
+					$nodes    = $this->setMenuTree($menuList, $menu['id']);
 					$result[] = empty($nodes) ? $menu : array_merge($menu, ['nodes' => $nodes]);
 				}
 			}
@@ -96,6 +144,8 @@ class MenuRepository implements MenuInterface
 	}
 
 	/**
+	 * 获取菜单Url
+	 *
 	 * @param array $menu
 	 *
 	 * @return string
@@ -111,25 +161,49 @@ class MenuRepository implements MenuInterface
 		return $menuUrl;
 	}
 
-	public function currentUserMenu($allMenu, $currentUserPermission, $userId)
+	/**
+	 * 获取当前用户菜单
+	 *
+	 * @param $currentUserPermission
+	 * @param $user
+	 *
+	 * @return array
+	 */
+	public function currentUserMenu($currentUserPermission, $user)
 	{
-		return Cache::tags(['user', $userId])->get('currentUserMenu') ?: $this->putCurrentUserMenuCache($allMenu, $currentUserPermission, $userId);
+		return Cache::tags(['user', $user['id']])->get('currentUserMenu') ?: $this->putCurrentUserMenuCache($currentUserPermission, $user);
 	}
 
-	private function putCurrentUserMenuCache($allMenu, $currentUserPermission, $userId)
+	/**
+	 * 设置当前用户菜单缓存
+	 *
+	 * @param $currentUserPermission
+	 * @param $user
+	 *
+	 * @return array
+	 */
+	private function putCurrentUserMenuCache($currentUserPermission, $user)
 	{
-		$currentUserMenu = [];
-		foreach ($allMenu as $key => $menu) {
-			if ($menu['route_name'] == '#' || in_array($menu['route_name'], $currentUserPermission)) {
-				$currentUserMenu[] = $menu;
+		$allMenu = $this->allMenus();
+
+		if (!in_array('Super_Admin', $user['roles'])) {
+			foreach ($allMenu as $key => $menu) {
+				if ($menu['route_name'] == '#' || in_array($menu['route_name'], $currentUserPermission)) {
+					$currentUserMenu[] = $menu;
+				}
 			}
 		}
 
-		Cache::tags(['user', $userId])->put('currentUserMenu', $currentUserMenu, 10);
+		Cache::tags(['user', $user['id']])->put('currentUserMenu', $currentUserMenu ?? $allMenu, 10);
 
-		return $currentUserMenu;
+		return $currentUserMenu ?? $allMenu;
 	}
 
+	/**
+	 * 设置所有菜单缓存
+	 *
+	 * @return array
+	 */
 	private function putAllMenuCache()
 	{
 		$allMenu = Menu::all()->toArray();
