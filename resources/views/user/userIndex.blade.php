@@ -10,7 +10,7 @@
             <h3 class="box-title">用户列表</h3>
             共找到{{ $users->total() }}条结果
             <div class="box-tools pull-right">
-                <a href="{{ route('user.admin.create') }}" class="btn btn-primary">新增用户</a>
+                <a href="{{ route('user.adminCreate') }}" class="btn btn-primary">新增用户</a>
             </div>
         </div>
         <div class="box-body">
@@ -38,7 +38,7 @@
                                    @if($user['status'] == 1) checked @endif/>
                         </td>
                         <td style="padding: 4px 8px;">
-                            <a href="{{ route('user.admin.edit') }}?id={{ $user['id'] }}"
+                            <a href="{{ route('user.adminEdit') }}?id={{ $user['id'] }}"
                                class="btn btn-primary btn-sm mr10">编辑</a>
                             <a href="{{ route('role.userRole') }}?userID={{ $user['id'] }}"
                                class="btn btn-info btn-sm mr10">角色</a>

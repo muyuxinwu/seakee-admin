@@ -11,7 +11,7 @@
             <h3 class="box-title">后台菜单列表</h3>
 
             <div class="box-tools pull-right">
-                <a href="{{ route('menu.admin.create') }}" class="btn btn-primary">新增菜单</a>
+                <a href="{{ route('menu.createAdmin') }}" class="btn btn-primary">新增菜单</a>
             </div>
         </div>
         <div class="box-body">
@@ -73,7 +73,7 @@
                                                    type="checkbox" @if($menu['display'] == 1) checked @endif/>
                                         </td>
                                         <td style="padding: 4px 8px;">
-                                            <a href="{{ route('menu.admin.edit') }}?id={{ $menu['id'] }}"
+                                            <a href="{{ route('menu.editAdmin') }}?id={{ $menu['id'] }}"
                                                class="btn btn-primary btn-sm mr10">编辑</a>
                                             <button onclick="deleteMenu({{ $menu['id'] }})"
                                                     class="btn btn-danger btn-sm">删除

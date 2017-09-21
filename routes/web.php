@@ -28,10 +28,10 @@ Route::group(['prefix' => 'admin', 'middleware' => ['checkPermission']], functio
     Route::group(['prefix' => 'menu', 'namespace' => 'Menu'], function (){
         Route::get('/admin', 'MenuController@admin')->name('menu.admin');
         Route::get('/home', 'MenuController@home')->name('menu.home');
-        Route::get('/createAdmin', 'MenuController@createAdmin')->name('menu.admin.create');
-        Route::get('/editAdmin', 'MenuController@editAdmin')->name('menu.admin.edit');
-        Route::get('/editHome', 'MenuController@editHome')->name('menu.home.edit');
-        Route::get('/createHome', 'MenuController@createHome')->name('menu.home.create');
+        Route::get('/createAdmin', 'MenuController@createAdmin')->name('menu.createAdmin');
+        Route::get('/editAdmin', 'MenuController@editAdmin')->name('menu.editAdmin');
+        Route::get('/editHome', 'MenuController@editHome')->name('menu.editHome');
+        Route::get('/createHome', 'MenuController@createHome')->name('menu.createHome');
         Route::post('/delete', 'MenuController@delete')->name('menu.delete');
         Route::post('/display', 'MenuController@display')->name('menu.display');
         Route::post('/storage', 'MenuController@storage')->name('menu.storage');
@@ -41,8 +41,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['checkPermission']], functio
     Route::group(['prefix' => 'userCenter', 'namespace' => 'User'], function (){
         Route::group(['prefix' => 'user'], function (){
             Route::get('/index', 'UserController@index')->name('user.index');
-            Route::get('/adminCreate', 'UserController@adminCreate')->name('user.admin.create');
-            Route::get('/adminEdit', 'UserController@adminEdit')->name('user.admin.edit');
+            Route::get('/adminCreate', 'UserController@adminCreate')->name('user.adminCreate');
+            Route::get('/adminEdit', 'UserController@adminEdit')->name('user.adminEdit');
             Route::post('/delete', 'UserController@delete')->name('user.delete');
             Route::post('/status', 'UserController@status')->name('user.status');
             Route::post('/storage', 'UserController@storage')->name('user.storage');
