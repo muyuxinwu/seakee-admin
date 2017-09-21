@@ -40,35 +40,9 @@ class MenusTableSeeder extends Seeder
         DB::table('menus')->insert([
             'icon' => 'fa-list-ul',
             'menu_name' => '菜单管理',
-            'route_name' => '#',
+            'route_name' => 'menu.admin',
             'father_id' => 1,
             'sort' => 1,
-            'display' => 1,
-            'state' => 1,
-            'is_custom' => 0,
-            'created_at' => \Carbon\Carbon::now()->toDateTimeString(),
-            'updated_at' => \Carbon\Carbon::now()->toDateTimeString(),
-        ]);
-
-        DB::table('menus')->insert([
-            'icon' => 'fa-circle-o',
-            'menu_name' => '后台菜单',
-            'route_name' => 'menu.admin',
-            'father_id' => 3,
-            'sort' => 0,
-            'display' => 1,
-            'state' => 1,
-            'is_custom' => 0,
-            'created_at' => \Carbon\Carbon::now()->toDateTimeString(),
-            'updated_at' => \Carbon\Carbon::now()->toDateTimeString(),
-        ]);
-
-        DB::table('menus')->insert([
-            'icon' => 'fa-circle-o',
-            'menu_name' => '前台菜单',
-            'route_name' => 'menu.home',
-            'father_id' => 3,
-            'sort' => 0,
             'display' => 1,
             'state' => 1,
             'is_custom' => 0,
