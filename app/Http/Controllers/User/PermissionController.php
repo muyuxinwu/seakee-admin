@@ -44,6 +44,9 @@ class PermissionController extends Controller
 	 */
 	protected $requestParams;
 
+	/**
+	 * Permission对应的数据库字段
+	 */
 	const permissionKeys = [
 		'id',
 		'name',
@@ -190,13 +193,6 @@ class PermissionController extends Controller
 			return response()->json([
 				'status'  => 500,
 				'message' => '路由不存在',
-			]);
-		}
-
-		if (empty($permissionData['id'])) {
-			return response()->json([
-				'status'  => 500,
-				'message' => '请选择要编辑的权限',
 			]);
 		}
 

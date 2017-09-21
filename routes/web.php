@@ -51,11 +51,11 @@ Route::group(['prefix' => 'admin', 'middleware' => ['checkPermission']], functio
 
         Route::group(['prefix' => 'role'], function (){
             Route::get('/index', 'RoleController@index')->name('role.index');
-            Route::get('/getUserRoleList', 'RoleController@getUserRoleList')->name('role.userRoleList');
-            Route::get('/showEdit', 'RoleController@showEditInfo')->name('role.showEdit');
+            Route::get('/userRole', 'RoleController@userRole')->name('role.userRole');
+            Route::get('/edit', 'RoleController@edit')->name('role.edit');
             Route::post('/delete', 'RoleController@deleteRole')->name('role.delete');
-            Route::post('/create', 'RoleController@createRole')->name('role.create');
-            Route::post('/edit', 'RoleController@editRole')->name('role.edit');
+            Route::post('/storage', 'RoleController@storage')->name('role.storage');
+            Route::post('/update', 'RoleController@update')->name('role.update');
             Route::post('/assignRole', 'RoleController@assignRole')->name('role.assignRole');
         });
 

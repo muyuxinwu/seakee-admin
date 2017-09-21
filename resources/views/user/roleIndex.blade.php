@@ -35,7 +35,7 @@
                         <td>{{ $role['updated_at'] }}</td>
                         <td style="padding: 4px 8px;">
                             <button onclick="getEdit({{ $role['id'] }})" class="btn btn-primary btn-sm mr10">编辑</button>
-                            <a href="{{ route('permission.rolePermissionList') }}?roleID={{ $role['id'] }}" class="btn btn-info btn-sm mr10">授权</a>
+                            <a href="{{ route('permission.rolePermission') }}?roleID={{ $role['id'] }}" class="btn btn-info btn-sm mr10">授权</a>
                             <button onclick="deleteRole({{ $role['id'] }})" class="btn btn-danger btn-sm">删除</button>
                         </td>
                     </tr>
@@ -150,7 +150,7 @@
     <script>
         function getEdit(id) {
             $.ajax({
-                url: '{{ route('role.showEdit') }}',
+                url: '{{ route('role.edit') }}',
                 type: 'GET',
                 data: {id: id},
                 dataType: 'JSON',
@@ -176,7 +176,7 @@
             $form.find('#toEdit, #draftSave').prop('disabled', true);
             var formData = new FormData($form[0]);
             $.ajax({
-                url: '{{ route('role.edit') }}',
+                url: '{{ route('role.update') }}',
                 type: 'POST',
                 data: formData,
                 processData: false,  // 告诉jQuery不要去处理发送的数据
@@ -204,7 +204,7 @@
             $form.find('#toCreate, #draftSave').prop('disabled', true);
             var formData = new FormData($form[0]);
             $.ajax({
-                url: '{{ route('role.create') }}',
+                url: '{{ route('role.storage') }}',
                 type: 'POST',
                 data: formData,
                 processData: false,  // 告诉jQuery不要去处理发送的数据

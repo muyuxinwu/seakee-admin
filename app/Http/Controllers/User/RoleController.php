@@ -12,6 +12,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Interfaces\RoleInterface;
 use App\Interfaces\UserInterface;
+use App\Services\RequestParamsService;
 use App\Services\ValidatorService;
 use Illuminate\Http\Request;
 
@@ -27,173 +28,246 @@ class RoleController extends Controller
 	 */
 	protected $validator;
 
+	/**
+	 * @var UserInterface
+	 */
 	protected $user;
+
+	/**
+	 * @var RequestParamsService
+	 */
+	protected $requestParams;
+
+	/**
+	 * Role对应的数据库字段
+	 */
+	const roleKeys = [
+		'id',
+		'name',
+		'display_name',
+		'description',
+	];
 
 	/**
 	 * RoleController constructor.
 	 *
-	 * @param RoleInterface    $role
-	 * @param ValidatorService $validator
-	 * @param UserInterface    $user
+	 * @param RequestParamsService $requestParams
+	 * @param RoleInterface        $role
+	 * @param ValidatorService     $validator
+	 * @param UserInterface        $user
 	 */
-	public function __construct(RoleInterface $role, ValidatorService $validator, UserInterface $user)
+	public function __construct(RequestParamsService $requestParams, RoleInterface $role, ValidatorService $validator, UserInterface $user)
 	{
-		$this->role      = $role;
-		$this->validator = $validator;
-		$this->user      = $user;
+		$this->role          = $role;
+		$this->validator     = $validator;
+		$this->user          = $user;
+		$this->requestParams = $requestParams;
 	}
 
 	/**
+	 * 创建角色校验规则
+	 *
 	 * @return array
 	 */
-	protected function createRoleRules()
+	protected function createRules()
 	{
-		return ['name' => 'required|unique:roles|max:30', 'display_name' => 'required|max:30', 'description' => 'required|max:30',];
+		return [
+			'name'         => 'required|unique:roles|max:30',
+			'display_name' => 'required|max:30',
+			'description'  => 'required|max:30',
+		];
 	}
 
 	/**
+	 * 编辑角色校验规则
+	 *
 	 * @param $id
 	 *
 	 * @return array
 	 */
-	protected function editRoleRules($id)
+	protected function editRules($id)
 	{
-		return ['name' => 'required|max:30|unique:roles,name,' . $id, 'display_name' => 'required|max:30', 'description' => 'required|max:30',];
+		return [
+			'name'         => 'required|max:30|unique:roles,name,' . $id,
+			'display_name' => 'required|max:30',
+			'description'  => 'required|max:30',
+		];
 	}
 
 	/**
-	 * Validation error info
+	 * 验证失败后的返回信息
+	 *
 	 * @return array
 	 */
-	protected function errorInfo()
+	protected function validatorMessage()
 	{
-		return ['name.required' => '角色标识不能为空', 'name.unique' => '已存在该角色', 'name.max' => '不能超过30个字符', 'display_name.required' => '角色名称不能为空', 'display_name.max' => '不能超过30个字符', 'description.required' => '角色描述不能为空', 'description.max' => '不能超过30个字符',];
+		return [
+			'name.required'         => '角色标识不能为空',
+			'name.unique'           => '已存在该角色',
+			'name.max'              => '不能超过30个字符',
+			'display_name.required' => '角色名称不能为空',
+			'display_name.max'      => '不能超过30个字符',
+			'description.required'  => '角色描述不能为空',
+			'description.max'       => '不能超过30个字符',
+		];
 	}
 
 	/**
+	 * 角色管理页面
+	 *
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function index()
 	{
-		$roles = $this->role->allRoleWithPaginate(10);
+		$data['roles'] = $this->role->allRoleWithPaginate(10);
 
-		return view('user.roleIndex', ['roles' => $roles]);
+		return view('user.roleIndex', $data);
 	}
 
 	/**
+	 * 保存角色
+	 *
 	 * @param Request $request
 	 *
 	 * @return \Illuminate\Http\JsonResponse
 	 */
-	public function createRole(Request $request)
+	public function storage(Request $request)
 	{
-		$validator = $this->validator->validate($request->all(), $this->createRoleRules(), $this->errorInfo());
+		$roleData  = $this->requestParams->params(self::roleKeys, $request);
+		$validator = $this->validator->validate($roleData, $this->createRules(), $this->validatorMessage());
 
 		if (!empty($validator)) {
 			return response()->json($validator);
 		}
-
-		$roleData = $request->all();
 
 		if (!$this->role->createRole($roleData)) {
-			return response()->json(['status' => 500, 'message' => '新增失败']);
+			return response()->json([
+				'status'  => 500,
+				'message' => '新增失败',
+			]);
 		}
 
-		return response()->json(['status' => 200, 'message' => '新增成功']);
+		return response()->json([
+			'status'  => 200,
+			'message' => '新增成功',
+		]);
 	}
 
 	/**
+	 * 更新角色
+	 *
 	 * @param Request $request
 	 *
 	 * @return \Illuminate\Http\JsonResponse
 	 */
-	public function editRole(Request $request)
+	public function update(Request $request)
 	{
-		$validator = $this->validator->validate($request->all(), $this->editRoleRules($request->input('id')), $this->errorInfo());
+		$roleData  = $this->requestParams->params(self::roleKeys, $request);
+		$validator = $this->validator->validate($roleData, $this->editRules($request->input('id')), $this->validatorMessage());
 
 		if (!empty($validator)) {
 			return response()->json($validator);
-		}
-
-		$roleData = $request->all();
-
-		if (empty($roleData['id'])) {
-			return response()->json(['status' => 500, 'message' => '请选择要编辑的角色']);
 		}
 
 		$role = $this->role->findRole($roleData['id']);
 
 		if (empty($role)) {
-			return response()->json(['status' => 500, 'message' => '角色不存在']);
+			return response()->json([
+				'status'  => 500,
+				'message' => '角色不存在',
+			]);
 		}
 
 		if (!$this->role->updateRole($roleData)) {
-			return response()->json(['status' => 500, 'message' => '编辑失败']);
+			return response()->json([
+				'status'  => 500,
+				'message' => '编辑失败',
+			]);
 		}
 
-		return response()->json(['status' => 200, 'message' => '编辑成功']);
+		return response()->json([
+			'status'  => 200,
+			'message' => '编辑成功',
+		]);
 	}
 
 	/**
+	 * 返回Ajax角色编辑信息
+	 *
 	 * @param Request $request
 	 *
 	 * @return \Illuminate\Http\JsonResponse
 	 */
-	public function showEditInfo(Request $request)
+	public function edit(Request $request)
 	{
 		$id = $request->input('id');
-
-		if (empty($id)) {
-			return response()->json(['status' => 500, 'message' => '请选择要编辑的角色']);
-		}
 
 		$role = $this->role->findRole($id);
 
 		if (empty($role)) {
-			return response()->json(['status' => 500, 'message' => '角色不存在']);
+			return response()->json([
+				'status'  => 500,
+				'message' => '角色不存在',
+			]);
 		}
 
-		return response()->json(['status' => 200, 'message' => 'success', 'data' => $role]);
+		return response()->json([
+			'status'  => 200,
+			'message' => 'success',
+			'data'    => $role,
+		]);
 	}
 
 	/**
+	 * 删除角色
+	 *
 	 * @param Request $request
 	 *
 	 * @return \Illuminate\Http\JsonResponse
 	 */
-	public function deleteRole(Request $request)
+	public function delete(Request $request)
 	{
 		$id = $request->input('id');
-
-		if (empty($id)) {
-			return response()->json(['status' => 500, 'message' => '请选择要删除的角色']);
-		}
 
 		$role = $this->role->findRole($id);
 
 		if (empty($role)) {
-			return response()->json(['status' => 500, 'message' => '角色不存在']);
+			return response()->json([
+				'status'  => 500,
+				'message' => '角色不存在',
+			]);
 		}
 
 		if (!$this->role->deleteRole($id)) {
-			return response()->json(['status' => 500, 'message' => '删除失败']);
+			return response()->json([
+				'status'  => 500,
+				'message' => '删除失败',
+			]);
 		}
 
-		return response()->json(['status' => 200, 'message' => '删除成功']);
+		return response()->json([
+			'status'  => 200,
+			'message' => '删除成功',
+		]);
 	}
 
 	/**
+	 * 用户角色页面
+	 *
 	 * @param Request $request
 	 *
 	 * @return \Illuminate\Http\JsonResponse
 	 */
-	public function getUserRoleList(Request $request)
+	public function userRole(Request $request)
 	{
 		$userID = $request->input('userID');
 		$user   = $this->user->findUser($userID);
 
 		if (empty($user)) {
-			return response()->json(['status' => 500, 'message' => '用户不存在']);
+			return response()->json([
+				'status'  => 500,
+				'message' => '用户不存在',
+			]);
 		}
 
 		$userRole           = $user->roles()->getResults()->toArray();
@@ -205,6 +279,8 @@ class RoleController extends Controller
 	}
 
 	/**
+	 * 角色分配
+	 *
 	 * @param Request $request
 	 *
 	 * @return \Illuminate\Http\JsonResponse
@@ -217,17 +293,26 @@ class RoleController extends Controller
 		$user = $this->user->findUser($userID);
 
 		if (empty($user)) {
-			return response()->json(['status' => 500, 'message' => '用户不存在']);
+			return response()->json([
+				'status'  => 500,
+				'message' => '用户不存在',
+			]);
 		}
 
 		$roles = explode(",", $rolesID);
 
 		if (empty($roles[0])) {
-			return response()->json(['status' => 500, 'message' => '请指定角色']);
+			return response()->json([
+				'status'  => 500,
+				'message' => '请指定角色',
+			]);
 		}
 
 		$user->roles()->sync($roles, true);
 
-		return response()->json(['status' => 200, 'message' => 'success']);
+		return response()->json([
+			'status'  => 200,
+			'message' => 'success',
+		]);
 	}
 }

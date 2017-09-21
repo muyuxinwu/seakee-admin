@@ -55,13 +55,7 @@ class RoleRepository implements RoleInterface
 	 */
 	public function updateRole($data)
 	{
-		$role = Role::find($data['id']);
-
-		$role->name         = $data['name'];
-		$role->display_name = $data['display_name'];
-		$role->description  = $data['description'];
-
-		return $role->save();
+		return Role::where('id', $data['id'])->update($data);
 	}
 
 	/**
