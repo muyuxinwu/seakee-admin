@@ -4,8 +4,7 @@ namespace App\Presenters\Admin;
 
 
 use App\Interfaces\MenuInterface;
-use App\Interfaces\PermissionInterface;
-use App\Interfaces\RoleInterface;
+use Route;
 
 class MenuPresenter
 {
@@ -15,31 +14,47 @@ class MenuPresenter
 	private $menu;
 
 	/**
-	 * @var RoleInterface
-	 */
-	private $role;
-
-	/**
-	 * @var PermissionInterface
-	 */
-	private $permission;
-
-	/**
 	 * MenuPresenter constructor.
 	 *
-	 * @param MenuInterface       $menu
-	 * @param RoleInterface       $role
-	 * @param PermissionInterface $permission
+	 * @param MenuInterface $menu
 	 */
-	public function __construct(MenuInterface $menu, RoleInterface $role, PermissionInterface $permission)
+	public function __construct(MenuInterface $menu)
 	{
-		$this->menu       = $menu;
-		$this->role       = $role;
-		$this->permission = $permission;
+		$this->menu = $menu;
 	}
 
-	public function sidebarMenu()
+	/**
+	 * 边栏菜单列表
+	 *
+	 * @param $sidebarMenu
+	 *
+	 * @return mixed
+	 */
+	public function sidebarMenu($sidebarMenu)
 	{
+		$currentRouteName = explode('.', Route::currentRouteName());
 
+		foreach ($sidebarMenu as $key => $menu) {
+
+			$routeName = explode('.', $menu['route_name']);
+
+			if ($currentRouteName[0] == $routeName[0]) {
+				$menu['class']     = 'active';
+				$sidebarMenu[$key] = $menu;
+				$fatherMenus       = &$sidebarMenu;
+
+				if ($menu['father_id'] != -1) {
+					foreach ($fatherMenus as $fatherKey => $fatherMenu) {
+						if ($fatherMenu['id'] == $menu['father_id']) {
+							$fatherMenu['class'] = 'active';
+						}
+
+						$fatherMenus[$fatherKey] = $fatherMenu;
+					}
+				}
+			}
+		}
+
+		return $this->menu->menuTree($sidebarMenu);
 	}
 }

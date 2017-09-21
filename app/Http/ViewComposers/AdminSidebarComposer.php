@@ -67,6 +67,6 @@ class AdminSidebarComposer
 			$currentUserMenu       = $this->menu->currentUserMenu($currentUserPermission, $userData);
 		}
 
-		return $this->menu->menuTree($currentUserMenu);
+		return $currentUserMenu;
 	}
 }
