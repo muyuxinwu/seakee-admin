@@ -55,16 +55,16 @@ class AdminSidebarComposer
 
 	private function getCurrentUserMenu()
 	{
-		$user                  = session('user');
-		$userData['id']        = $user->id;
-		$userData['roles']     = $this->role->currentUserRole($user);
+		$user              = session('user');
+		$userData['id']    = $user->id;
+		$userData['roles'] = $this->role->currentUserRole($user);
 
 		//当前用户角色为超级管理员时，显示所有菜单
-		if (in_array('Super_Admin', $userData['roles'])){
+		if (in_array('Super_Admin', $userData['roles'])) {
 			$currentUserMenu = $this->menu->allMenus();
 		} else {
 			$currentUserPermission = $this->permission->currentUserPermission($user);
-			$currentUserMenu = $this->menu->currentUserMenu($currentUserPermission, $userData);
+			$currentUserMenu       = $this->menu->currentUserMenu($currentUserPermission, $userData);
 		}
 
 		return $this->menu->menuTree($currentUserMenu);

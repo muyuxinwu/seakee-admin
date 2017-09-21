@@ -50,7 +50,7 @@ class CheckPermission
 			return Redirect::intended('/login');
 		}
 
-		$currentUserRole       = $this->role->currentUserRole($user);
+		$currentUserRole = $this->role->currentUserRole($user);
 
 		view()->share('sidebarUser', $user);
 
@@ -71,7 +71,10 @@ class CheckPermission
 			if (!in_array($routeName, $currentUserPermission)) {
 				//ajax请求直接返回json
 				if (Request::ajax()) {
-					return response()->json(['status' => 500, 'message' => '权限不足，请联系管理员']);
+					return response()->json([
+						'status'  => 500,
+						'message' => '权限不足，请联系管理员',
+					]);
 				}
 
 				//返回session('error');到原页面
