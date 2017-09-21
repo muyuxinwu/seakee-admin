@@ -37,7 +37,7 @@
                                    @if($menu['display'] == 1) checked @endif/>
                         </td>
                         <td style="padding: 4px 8px;">
-                            <a href="{{ route('menu.admin.edit') }}?id={{ $menu['id'] }}"
+                            <a href="{{ route('menu.editAdmin') }}?id={{ $menu['id'] }}"
                                class="btn btn-primary btn-sm mr10">编辑</a>
                             <button onclick="deleteMenu({{ $menu['id'] }})" class="btn btn-danger btn-sm">删除</button>
                         </td>
@@ -54,7 +54,7 @@
                                            @if($menu['display'] == 1) checked @endif/>
                                 </td>
                                 <td style="padding: 4px 8px;">
-                                    <a href="{{ route('menu.admin.edit') }}?id={{ $menu['id'] }}"
+                                    <a href="{{ route('menu.editAdmin') }}?id={{ $menu['id'] }}"
                                        class="btn btn-primary btn-sm mr10">编辑</a>
                                     <button onclick="deleteMenu({{ $menu['id'] }})" class="btn btn-danger btn-sm">删除
                                     </button>
