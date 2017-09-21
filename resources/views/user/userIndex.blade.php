@@ -73,7 +73,6 @@
     </style>
     <link rel="stylesheet" href="{{ asset('css/highlight.css') }}">
     <link rel="stylesheet" href="{{ asset('css/bootstrap-switch.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/main.css') }}">
 @endsection
 
 @section('page_js')

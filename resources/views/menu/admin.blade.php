@@ -9,7 +9,6 @@
     <div class="box">
         <div class="box-header">
             <h3 class="box-title">后台菜单列表</h3>
-
             <div class="box-tools pull-right">
                 <a href="{{ route('menu.createAdmin') }}" class="btn btn-primary">新增菜单</a>
             </div>
@@ -109,7 +108,6 @@
     </style>
     <link rel="stylesheet" href="{{ asset('css/highlight.css') }}">
     <link rel="stylesheet" href="{{ asset('css/bootstrap-switch.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/main.css') }}">
 @endsection
 
 @section('page_js')
