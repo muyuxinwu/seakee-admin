@@ -41,19 +41,19 @@ Route::group(['prefix' => 'admin', 'middleware' => ['checkPermission']], functio
     Route::group(['prefix' => 'userCenter', 'namespace' => 'User'], function (){
         Route::group(['prefix' => 'user'], function (){
             Route::get('/index', 'UserController@index')->name('user.index');
-            Route::get('/adminCreateUser', 'UserController@adminCreateUser')->name('user.admin.create');
-            Route::get('/adminEditUser', 'UserController@adminEditUser')->name('user.admin.edit');
-            Route::post('/delete', 'UserController@deleteUser')->name('user.delete');
-            Route::post('/changeStatus', 'UserController@changeStatus')->name('user.changeStatus');
-            Route::post('/create', 'UserController@createUser')->name('user.create');
-            Route::post('/edit', 'UserController@editUser')->name('user.edit');
+            Route::get('/adminCreate', 'UserController@adminCreate')->name('user.admin.create');
+            Route::get('/adminEdit', 'UserController@adminEdit')->name('user.admin.edit');
+            Route::post('/delete', 'UserController@delete')->name('user.delete');
+            Route::post('/status', 'UserController@status')->name('user.status');
+            Route::post('/storage', 'UserController@storage')->name('user.storage');
+            Route::post('/update', 'UserController@update')->name('user.update');
         });
 
         Route::group(['prefix' => 'role'], function (){
             Route::get('/index', 'RoleController@index')->name('role.index');
             Route::get('/userRole', 'RoleController@userRole')->name('role.userRole');
             Route::get('/edit', 'RoleController@edit')->name('role.edit');
-            Route::post('/delete', 'RoleController@deleteRole')->name('role.delete');
+            Route::post('/delete', 'RoleController@delete')->name('role.delete');
             Route::post('/storage', 'RoleController@storage')->name('role.storage');
             Route::post('/update', 'RoleController@update')->name('role.update');
             Route::post('/assignRole', 'RoleController@assignRole')->name('role.assignRole');
