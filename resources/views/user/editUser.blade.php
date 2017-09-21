@@ -20,7 +20,8 @@
                             <div class="col-xs-6">
                                 <label class="col-xs-4 control-label">用户名</label>
                                 <div class="col-xs-8">
-                                    <input type="text" value="{{ $user['user_name'] }}" name="user_name" class="form-control" verify-key="notNull">
+                                    <input type="text" value="{{ $user['user_name'] }}" name="user_name"
+                                           class="form-control">
                                 </div>
                             </div>
                         </div>
@@ -28,7 +29,8 @@
                             <div class="col-xs-6">
                                 <label class="col-xs-4 control-label">昵称</label>
                                 <div class="col-xs-8">
-                                    <input type="text" value="{{ $user['nick_name'] }}" name="nick_name" class="form-control" verify-key="notNull">
+                                    <input type="text" value="{{ $user['nick_name'] }}" name="nick_name"
+                                           class="form-control" >
                                 </div>
                             </div>
                         </div>
@@ -36,7 +38,7 @@
                             <div class="col-xs-6">
                                 <label class="col-xs-4 control-label">E-mail</label>
                                 <div class="col-xs-8">
-                                    <input type="text" value="{{ $user['email'] }}" name="email" class="form-control" verify-key="notNull">
+                                    <input type="text" value="{{ $user['email'] }}" name="email" class="form-control">
                                 </div>
                             </div>
                         </div>
@@ -44,7 +46,7 @@
                             <div class="col-xs-6">
                                 <label class="col-xs-4 control-label">电话</label>
                                 <div class="col-xs-8">
-                                    <input type="text" value="{{ $user['phone'] }}" name="phone" class="form-control" verify-key="notNull">
+                                    <input type="text" value="{{ $user['phone'] }}" name="phone" class="form-control">
                                 </div>
                             </div>
                         </div>
@@ -52,7 +54,7 @@
                             <div class="col-xs-6">
                                 <label class="col-xs-4 control-label">密码</label>
                                 <div class="col-xs-8">
-                                    <input type="password" name="password" class="form-control" verify-key="notNull">
+                                    <input type="password" name="password" class="form-control">
                                 </div>
                             </div>
                         </div>
@@ -60,7 +62,7 @@
                             <div class="col-xs-6">
                                 <label class="col-xs-4 control-label">确认密码</label>
                                 <div class="col-xs-8">
-                                    <input type="password" name="password_confirmation" class="form-control" verify-key="notNull">
+                                    <input type="password" name="password_confirmation" class="form-control">
                                 </div>
                             </div>
                         </div>
@@ -101,14 +103,14 @@
             $form.find('#editUser, #draftSave').prop('disabled', true);
             var formData = new FormData($form[0]);
             $.ajax({
-                url: '{{ route('user.edit') }}',
+                url: '{{ route('user.update') }}',
                 type: 'POST',
                 data: formData,
                 processData: false,  // 告诉jQuery不要去处理发送的数据
                 contentType: false,   // 告诉jQuery不要去设置Content-Type请求头
                 dataType: 'JSON',
                 success: function (res) {
-                    if(res.status == 200){
+                    if (res.status == 200) {
                         swal({
                             title: '编辑成功',
                             text: '点击确定返回',

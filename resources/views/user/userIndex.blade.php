@@ -26,22 +26,26 @@
                 </tr>
                 </thead>
                 <tbody>
-                    @foreach($users as $key => $user)
-                        <tr>
-                            <td>{{ $user['user_name'] }}</td>
-                            <td>{{ $user['nick_name'] }}</td>
-                            <td>{{ $user['email'] }}</td>
-                            <td>{{ $user['phone'] }}</td>
-                            <td style="padding: 4px 8px;" class="text-center">
-                                <input onchange="changeStatus('{{ $user['status'] }}','{{ $user['id'] }}')" data-size="small" data-on-text="启用" data-off-text="禁用" type="checkbox" @if($user['status'] == 1) checked @endif/>
-                            </td>
-                            <td style="padding: 4px 8px;">
-                                <a href="{{ route('user.admin.edit') }}?id={{ $user['id'] }}" class="btn btn-primary btn-sm mr10">编辑</a>
-                                <a href="{{ route('role.userRoleList') }}?userID={{ $user['id'] }}" class="btn btn-info btn-sm mr10">角色</a>
-                                <button onclick="deleteUser({{ $user['id'] }})" class="btn btn-danger btn-sm">删除</button>
-                            </td>
-                        </tr>
-                    @endforeach
+                @foreach($users as $key => $user)
+                    <tr>
+                        <td>{{ $user['user_name'] }}</td>
+                        <td>{{ $user['nick_name'] }}</td>
+                        <td>{{ $user['email'] }}</td>
+                        <td>{{ $user['phone'] }}</td>
+                        <td style="padding: 4px 8px;" class="text-center">
+                            <input onchange="changeStatus('{{ $user['status'] }}','{{ $user['id'] }}')"
+                                   data-size="small" data-on-text="启用" data-off-text="禁用" type="checkbox"
+                                   @if($user['status'] == 1) checked @endif/>
+                        </td>
+                        <td style="padding: 4px 8px;">
+                            <a href="{{ route('user.admin.edit') }}?id={{ $user['id'] }}"
+                               class="btn btn-primary btn-sm mr10">编辑</a>
+                            <a href="{{ route('role.userRole') }}?userID={{ $user['id'] }}"
+                               class="btn btn-info btn-sm mr10">角色</a>
+                            <button onclick="deleteUser({{ $user['id'] }})" class="btn btn-danger btn-sm">删除</button>
+                        </td>
+                    </tr>
+                @endforeach
                 </tbody>
                 <tfoot>
                 <tr>
@@ -63,7 +67,7 @@
 
 @section('page_style')
     <style>
-        .mr10{
+        .mr10 {
             margin-right: 10px;
         }
     </style>
@@ -110,7 +114,7 @@
             })
         }
 
-        function changeStatus(state,id) {
+        function changeStatus(state, id) {
 
             if (state == 1) {
                 var status = 0;
@@ -119,10 +123,12 @@
             }
 
             $.ajax({
-                url: '{{ route('user.changeStatus') }}',
+                url: '{{ route('user.status') }}',
                 type: 'POST',
-                data: {id: id,
-                    status: status},
+                data: {
+                    id: id,
+                    status: status
+                },
                 dataType: 'JSON',
                 success: function (res) {
                     if (res.status == 500) {

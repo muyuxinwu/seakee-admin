@@ -14,52 +14,77 @@ use App\Models\User\User;
 
 class UserRepository implements UserInterface
 {
+	/**
+	 * 带分页用户列表
+	 *
+	 * @param $paginate
+	 *
+	 * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+	 */
 	public function allUserWithPaginate($paginate)
 	{
 		return User::orderBy('created_at', 'desc')->paginate($paginate);
 	}
 
+	/**
+	 * 返回指定用户
+	 *
+	 * @param $id
+	 *
+	 * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model|null|static|static[]
+	 */
 	public function findUser($id)
 	{
 		return User::find($id);
 	}
 
+	/**
+	 * 删除指定用户
+	 *
+	 * @param $id
+	 *
+	 * @return int
+	 */
 	public function deleteUser($id)
 	{
 		return User::destroy($id);
 	}
 
+	/**
+	 * 创建用户（基于Eloquent基本添加）
+	 *
+	 * @param array $data
+	 *
+	 * @return $this|\Illuminate\Database\Eloquent\Model
+	 */
 	public function createUser(array $data)
 	{
-		return User::create(['user_name' => $data['user_name'], 'email' => $data['email'], 'password' => bcrypt($data['password']),]);
+		return User::create([
+			'user_name' => $data['user_name'],
+			'email'     => $data['email'],
+			'password'  => bcrypt($data['password']),
+		]);
 	}
 
+	/**
+	 * 更新用户
+	 *
+	 * @param array $data
+	 *
+	 * @return bool
+	 */
 	public function updateUser(array $data)
 	{
-		$user = User::find($data['id']);
-
-		$user->user_name = $data['user_name'];
-		$user->email     = $data['email'];
-
-		if (isset($data['password']) && !empty($data['password'])) {
-			$user->password = bcrypt($data['password']);
-		}
-
-		if (isset($data['nick_name'])) {
-			$user->nick_name = $data['nick_name'];
-		}
-
-		if (isset($data['avatar'])) {
-			$user->avatar = $data['avatar'];
-		}
-
-		if (isset($data['phone'])) {
-			$user->phone = $data['phone'];
-		}
-
-		return $user->save();
+		return User::where('id', $data['id'])->update($data);
 	}
 
+	/**
+	 * 创建用户
+	 *
+	 * @param array $data
+	 *
+	 * @return mixed
+	 */
 	public function storageUser(array $data)
 	{
 		$user = new User();
