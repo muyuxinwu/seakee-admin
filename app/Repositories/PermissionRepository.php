@@ -140,7 +140,7 @@ class PermissionRepository implements PermissionInterface
 
 		$currentUserPermission = [];
 
-		//当前用户角色为管理员时，权限为所有权
+		//当前用户角色为超级管理员时，权限为所有权
 		if (!in_array('Super_Admin', $roleNameList)) {
 			foreach ($permissionIdList as $item) {
 				$currentUserPermission += array_column($item, 'name', 'id');

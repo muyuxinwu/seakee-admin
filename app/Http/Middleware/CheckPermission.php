@@ -50,21 +50,23 @@ class CheckPermission
 			return Redirect::intended('/login');
 		}
 
-		$allPermission         = $this->permission->allPermissionName();
 		$currentUserRole       = $this->role->currentUserRole($user);
-		$currentUserPermission = $this->permission->currentUserPermission($user);
 
 		view()->share('sidebarUser', $user);
 
 		$routeName = Route::currentRouteName();
 
-		//如果查不到路由名对应的权限直接放行
-		if (!in_array($routeName, $allPermission)) {
-			return $next($request);
-		}
-
 		//超级管理员直接放行
 		if (!in_array('Super_Admin', $currentUserRole)) {
+
+			$currentUserPermission = $this->permission->currentUserPermission($user);
+			$allPermission         = $this->permission->allPermissionName();
+
+			//如果查不到路由名对应的权限直接放行
+			if (!in_array($routeName, $allPermission)) {
+				return $next($request);
+			}
+
 			//检查是否有权限
 			if (!in_array($routeName, $currentUserPermission)) {
 				//ajax请求直接返回json
