@@ -120,7 +120,6 @@
 @section('page_style')
     <link rel="stylesheet" href="{{ asset('css/highlight.css') }}">
     <link rel="stylesheet" href="{{ asset('css/bootstrap-switch.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/main.css') }}">
     <link rel="stylesheet" href="{{ asset('css/fontawesome-iconpicker.min.css') }}">
 @endsection
 
