@@ -1,15 +1,12 @@
 @extends('layouts.admin')
 
 @section('title','菜单管理')
-@section('page_title','后台菜单管理')
+@section('page_title','编辑后台菜单')
 @section('Optional_description','')
 
 @section('content')
     <!-- Default box -->
     <div class="box box-primary">
-        <div class="box-header">
-            <h3 class="box-title">编辑后台菜单</h3>
-        </div>
         <form class="form-horizontal" onsubmit="return false;" id="menuForm">
             <div class="row">
                 <div class="col-md-12">

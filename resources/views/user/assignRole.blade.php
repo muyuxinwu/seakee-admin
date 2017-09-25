@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('title','用户中心')
-@section('page_title','用户管理')
+@section('page_title','角色分配')
 @section('Optional_description','')
 
 @section('content')
@@ -13,7 +13,6 @@
             <div class="col-md-8">
                 <div class="box box-primary">
                     <div class="box-header">
-                        <h3 class="box-title">角色分配</h3>
                         <div class="pull-right">
                             <label class="control-label" style="padding-right: 10px;">用户名</label>{{ $user['user_name'] }} &nbsp;&nbsp;&nbsp;&nbsp;
                             <label class="control-label" style="padding-right: 10px;">E-mail</label>{{ $user['email'] }}

@@ -1,15 +1,12 @@
 @extends('layouts.admin')
 
 @section('title','用户中心')
-@section('page_title','用户管理')
+@section('page_title','新增用户')
 @section('Optional_description','')
 
 @section('content')
     <!-- Default box -->
     <div class="box box-primary">
-        <div class="box-header">
-            <h3 class="box-title">新增用户</h3>
-        </div>
         <form class="form-horizontal" onsubmit="return false;" id="userForm">
             <div class="row">
                 <div class="col-md-12">
