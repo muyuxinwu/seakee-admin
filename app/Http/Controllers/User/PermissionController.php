@@ -143,7 +143,7 @@ class PermissionController extends Controller
 	public function storage(Request $request)
 	{
 		$permissionData = $this->requestParams->params(self::permissionKeys, $request);
-		$validator      = $this->validator->validate($permissionData, $this->createRules(), $this->validatorMessage());
+		$validator      = $this->validator->firstError($permissionData, $this->createRules(), $this->validatorMessage());
 		$isCustom       = $request->input('isCustom');
 		$allRouteName   = $this->routeInfo->getAllRouteNameList();
 
@@ -181,7 +181,7 @@ class PermissionController extends Controller
 	public function update(Request $request)
 	{
 		$permissionData = $this->requestParams->params(self::permissionKeys, $request);
-		$validator      = $this->validator->validate($permissionData, $this->editRules($permissionData['id']), $this->validatorMessage());
+		$validator      = $this->validator->firstError($permissionData, $this->editRules($permissionData['id']), $this->validatorMessage());
 		$isCustom       = $request->input('isCustom');
 		$allRouteName   = $this->routeInfo->getAllRouteNameList();
 

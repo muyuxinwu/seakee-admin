@@ -134,7 +134,7 @@ class RoleController extends Controller
 	public function storage(Request $request)
 	{
 		$roleData  = $this->requestParams->params(self::roleKeys, $request);
-		$validator = $this->validator->validate($roleData, $this->createRules(), $this->validatorMessage());
+		$validator = $this->validator->firstError($roleData, $this->createRules(), $this->validatorMessage());
 
 		if (!empty($validator)) {
 			return response()->json($validator);
@@ -163,7 +163,7 @@ class RoleController extends Controller
 	public function update(Request $request)
 	{
 		$roleData  = $this->requestParams->params(self::roleKeys, $request);
-		$validator = $this->validator->validate($roleData, $this->editRules($request->input('id')), $this->validatorMessage());
+		$validator = $this->validator->firstError($roleData, $this->editRules($request->input('id')), $this->validatorMessage());
 
 		if (!empty($validator)) {
 			return response()->json($validator);

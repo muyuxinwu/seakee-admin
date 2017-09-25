@@ -169,7 +169,7 @@ class MenuController extends Controller
 	{
 		$menuData = $this->requestParams->params(self::menuKeys, $request);
 
-		$validator = $this->validator->validate($menuData, $this->createRules(), $this->validatorMessage());
+		$validator = $this->validator->firstError($menuData, $this->createRules(), $this->validatorMessage());
 
 		if (!empty($validator)) {
 			return response()->json($validator);
@@ -223,7 +223,7 @@ class MenuController extends Controller
 	{
 		$params = $this->requestParams->params(self::menuKeys, $request);
 
-		$validator = $this->validator->validate($params, $this->createRules(), $this->validatorMessage());
+		$validator = $this->validator->firstError($params, $this->createRules(), $this->validatorMessage());
 
 		if (!empty($validator)) {
 			return response()->json($validator);

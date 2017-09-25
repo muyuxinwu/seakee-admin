@@ -151,7 +151,7 @@ class UserController extends Controller
 	public function storage(Request $request)
 	{
 		$userData  = $this->requestParams->params(self::userKeys, $request);
-		$validator = $this->validator->validate($userData, $this->registrationRules(), $this->validatorMessage());
+		$validator = $this->validator->firstError($userData, $this->registrationRules(), $this->validatorMessage());
 
 		if (!empty($validator)) {
 			return response()->json($validator);
@@ -234,7 +234,7 @@ class UserController extends Controller
 	public function update(Request $request)
 	{
 		$userData  = $this->requestParams->params(self::userKeys, $request);
-		$validator = $this->validator->validate($userData, $this->editRules($request->input('id')), $this->validatorMessage());
+		$validator = $this->validator->firstError($userData, $this->editRules($request->input('id')), $this->validatorMessage());
 
 		if (!empty($validator)) {
 			return response()->json($validator);
