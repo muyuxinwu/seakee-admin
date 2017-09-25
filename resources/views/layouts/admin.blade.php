@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>@yield('title') | {{ config('app.name', 'SKCMS') }}</title>
+    <title>@yield('title') | {{ config('app.name', 'SKAdmin') }}</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.7 -->
@@ -54,9 +54,9 @@ desired effect
         <!-- Logo -->
         <a href="{{ route('admin') }}" class="logo">
             <!-- mini logo for sidebar mini 50x50 pixels -->
-            <span class="logo-mini"><b>S</b>C</span>
+            <span class="logo-mini"><b>SA</b></span>
             <!-- logo for regular state and mobile devices -->
-            <span class="logo-lg"><b>SK</b>CMS</span>
+            <span class="logo-lg"><b>SK</b>Admin</span>
         </a>
 
         <!-- Header Navbar -->
@@ -278,7 +278,7 @@ desired effect
             <b>Version</b> 0.1.0
         </div>
         <!-- Default to the left -->
-        <strong>Copyright &copy; {{ date('Y') }} <a href="#">SKCMS</a>.</strong> All rights reserved.
+        <strong>Copyright &copy; {{ date('Y') }} <a href="#">SKAdmin</a>.</strong> All rights reserved.
     </footer>
 
     <!-- Control Sidebar -->

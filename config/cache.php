@@ -86,5 +86,5 @@ return [
     |
     */
 
-    'prefix' => 'skcms',
+    'prefix' => 'SKAdmin',
 ];
