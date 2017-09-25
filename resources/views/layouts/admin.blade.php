@@ -256,8 +256,9 @@ desired effect
                 <small>@yield('Optional_description')</small>
             </h1>
             <ol class="breadcrumb">
-                <li><a href="#"><i class="fa fa-dashboard"></i> 管理中心</a></li>
-                <li class="active">当前页</li>
+                @inject('CrumbsPresenter', 'App\Presenters\Admin\CrumbsPresenter')
+                {!! $CrumbsPresenter->crumbsMenu() !!}
+                <li class="active">@yield('page_title')</li>
             </ol>
         </section>
 

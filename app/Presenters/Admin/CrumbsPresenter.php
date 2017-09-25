@@ -6,7 +6,7 @@ namespace App\Presenters\Admin;
 use App\Interfaces\MenuInterface;
 use Route;
 
-class MenuPresenter
+class CrumbsPresenter
 {
 	/**
 	 * @var MenuInterface
@@ -36,37 +36,40 @@ class MenuPresenter
 	}
 
 	/**
-	 * 边栏菜单列表
+	 * 面包屑菜单
 	 *
-	 * @param $sidebarMenu
-	 *
-	 * @return mixed
+	 * @return string
 	 */
-	public function sidebarMenu($sidebarMenu)
+	public function crumbsMenu()
 	{
+		$allMenu = $this->menu->allMenus();
+
 		$currentRoutePrefix = $this->routePrefix(Route::currentRouteName());
 
-		foreach ($sidebarMenu as $key => $menu) {
-
+		foreach ($allMenu as $key => $menu) {
 			$routePrefix = $this->routePrefix($menu['route_name']);
 
 			if ($currentRoutePrefix == $routePrefix) {
-				$menu['class']     = 'active';
-				$sidebarMenu[$key] = $menu;
-				$fatherMenus       = &$sidebarMenu;
+				$crumbsChild = $menu;
+				$fatherMenus = &$allMenu;
 
 				if ($menu['father_id'] != -1) {
 					foreach ($fatherMenus as $fatherKey => $fatherMenu) {
 						if ($fatherMenu['id'] == $menu['father_id']) {
-							$fatherMenu['class'] = 'active';
+							$crumbsFather = $fatherMenu;
 						}
-
-						$fatherMenus[$fatherKey] = $fatherMenu;
 					}
 				}
 			}
 		}
 
-		return $this->menu->menuTree($sidebarMenu);
+		if (!empty($crumbsChild) && !empty($crumbsFather)) {
+			$menu = '<li><a href="#"><i class="fa ' . $crumbsFather['icon'] . '"></i>' . $crumbsFather['menu_name'] . '</a></li>';
+			$menu .= '<li><a href="' . route($crumbsChild['route_name']) . '">' . $crumbsChild['menu_name'] . '</a></li>';
+		} else {
+			$menu = '<li><a href="#"><i class="fa fa-circle-o"></i>SKAdmin</a></li>';
+		}
+
+		return $menu;
 	}
 }
