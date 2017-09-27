@@ -24,12 +24,7 @@
                                             <option value="{{ $menu['id'] }}">⊢ {{ $menu['menu_name'] }}</option>
                                             @if(isset($menu['nodes']))
                                                 @foreach($menu['nodes'] as $key => $menu)
-                                                    <option value="{{ $menu['id'] }}">&nbsp;&nbsp;&nbsp;&nbsp;⊢ {{ $menu['menu_name'] }}</option>
-                                                    @if(isset($menu['nodes']))
-                                                        @foreach($menu['nodes'] as $key => $menu)
-                                                            <option value="{{ $menu['id'] }}" disabled="disabled">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;⊢ {{ $menu['menu_name'] }}</option>
-                                                        @endforeach
-                                                    @endif
+                                                    <option value="{{ $menu['id'] }}" disabled="disabled">&nbsp;&nbsp;&nbsp;&nbsp;⊢ {{ $menu['menu_name'] }}</option>
                                                 @endforeach
                                             @endif
                                         @endforeach
