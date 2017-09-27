@@ -1,6 +1,8 @@
 <?php
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use App\Models\User\Role;
+use App\Models\User\User;
 
 class EntrustSetupTables extends Migration
 {
@@ -54,6 +56,8 @@ class EntrustSetupTables extends Migration
 
             $table->primary(['permission_id', 'role_id']);
         });
+
+        $this->setupUserRole();
     }
 
     /**
@@ -68,4 +72,40 @@ class EntrustSetupTables extends Migration
         Schema::drop('role_user');
         Schema::drop('roles');
     }
+
+	/**
+	 * 初始化管理员和超级管理权限
+	 */
+	public function setupUserRole()
+	{
+		//初始化权限
+		$role = new Role();
+
+		$role->name         = 'Super_Admin';
+		$role->display_name = '超级管理员';
+		$role->description  = '超级管理员，拥有所有权限';
+
+		$role->save();
+
+		//初始化管理员
+		$user = new User();
+
+		$user->user_name = 'admin';
+		$user->nick_name = 'admin';
+		$user->email     = 'admin@admin.com';
+		$user->phone     = '18888888888';
+		$user->rank      = 1;
+		$user->password  = bcrypt('admin123456');
+
+		$user->save();
+
+		if (!$user->save()) {
+			Log::info('Unable to create user ' . $user->username, (array)$user->errors());
+		} else {
+			Log::info('Created user "' . $user->username . '" <' . $user->email . '>');
+		}
+
+		//授权
+		$user->roles()->attach($role->id);
+	}
 }
