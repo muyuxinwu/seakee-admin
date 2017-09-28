@@ -45,6 +45,7 @@ class UserController extends Controller
 		'status',
 		'rank',
 		'password',
+		'password_confirmation',
 	];
 
 	/**
@@ -72,7 +73,7 @@ class UserController extends Controller
 			'user_name' => 'required|max:255|unique:users',
 			'nick_name' => 'max:255|unique:users',
 			'email'     => 'required|email|max:255|unique:users',
-			'phone'     => 'regex:/^1[34578][0-9]{9}$/',
+			'phone'     => 'regex:/^1[34578][0-9]{9}$/|unique:users',
 			'password'  => 'required|min:6|confirmed',
 		];
 	}
@@ -98,6 +99,7 @@ class UserController extends Controller
 			'nick_name.unique'   => '昵称已存在',
 			'nick_name.max'      => '昵称不能超过255位',
 			'phone.regex'        => '手机号错误',
+			'phone.unique'   => '手机号已存在',
 		];
 	}
 
