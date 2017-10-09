@@ -119,7 +119,7 @@ class MenuRepository implements MenuInterface
 	}
 
 	/**
-	 * 获取菜单树形数组
+	 * 设置菜单树形数组
 	 *
 	 * @param $menuList
 	 * @param $father_id
@@ -189,8 +189,16 @@ class MenuRepository implements MenuInterface
 		$allMenu = $this->allMenus();
 
 		if (!in_array('Super_Admin', $user['roles'])) {
-			foreach ($allMenu as $key => $menu) {
-				if ($menu['route_name'] == '#' || in_array($menu['route_name'], $currentUserPermission)) {
+			foreach ($allMenu as $menu) {
+				if (in_array($menu['route_name'], $currentUserPermission)) {
+					//查找父菜单
+					if ($menu['father_id'] != -1) {
+						foreach ($allMenu as $m) {
+							if ($menu['father_id'] == $m['id']){
+								$currentUserMenu[] = $m;
+							}
+						}
+					}
 					$currentUserMenu[] = $menu;
 				}
 			}
