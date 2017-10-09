@@ -10,6 +10,7 @@ namespace App\Http\Controllers\User;
 
 
 use App\Http\Controllers\Controller;
+use App\Interfaces\CacheInterface;
 use App\Interfaces\RoleInterface;
 use App\Interfaces\UserInterface;
 use App\Services\RequestParamsService;
@@ -39,6 +40,11 @@ class RoleController extends Controller
 	protected $requestParams;
 
 	/**
+	 * @var CacheInterface
+	 */
+	protected $cache;
+
+	/**
 	 * Role对应的数据库字段
 	 */
 	const roleKeys = [
@@ -56,12 +62,13 @@ class RoleController extends Controller
 	 * @param ValidatorService     $validator
 	 * @param UserInterface        $user
 	 */
-	public function __construct(RequestParamsService $requestParams, RoleInterface $role, ValidatorService $validator, UserInterface $user)
+	public function __construct(RequestParamsService $requestParams, RoleInterface $role, ValidatorService $validator, UserInterface $user, CacheInterface $cache)
 	{
 		$this->role          = $role;
 		$this->validator     = $validator;
 		$this->user          = $user;
 		$this->requestParams = $requestParams;
+		$this->cache         = $cache;
 	}
 
 	/**
@@ -147,6 +154,8 @@ class RoleController extends Controller
 			]);
 		}
 
+		$this->cache->clearAllUserRole();
+
 		return response()->json([
 			'status'  => 200,
 			'message' => '新增成功',
@@ -184,6 +193,8 @@ class RoleController extends Controller
 				'message' => '编辑失败',
 			]);
 		}
+
+		$this->cache->clearAllUserRole();
 
 		return response()->json([
 			'status'  => 200,
@@ -244,6 +255,8 @@ class RoleController extends Controller
 				'message' => '删除失败',
 			]);
 		}
+
+		$this->cache->clearAllUserRole();
 
 		return response()->json([
 			'status'  => 200,
@@ -309,6 +322,8 @@ class RoleController extends Controller
 		}
 
 		$user->roles()->sync($roles, true);
+
+		$this->cache->clearUserRole($userID);
 
 		return response()->json([
 			'status'  => 200,

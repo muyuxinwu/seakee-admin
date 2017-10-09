@@ -9,6 +9,7 @@
 namespace App\Http\Controllers\Menu;
 
 use App\Http\Controllers\Controller;
+use App\Interfaces\CacheInterface;
 use App\Interfaces\MenuInterface;
 use App\Interfaces\RouteInfoInterface;
 use App\Services\RequestParamsService;
@@ -38,6 +39,11 @@ class MenuController extends Controller
 	protected $requestParams;
 
 	/**
+	 * @var CacheInterface
+	 */
+	protected $cache;
+
+	/**
 	 * menu对应的数据库字段
 	 */
 	const menuKeys = [
@@ -59,13 +65,15 @@ class MenuController extends Controller
 	 * @param ValidatorService     $validator
 	 * @param RouteInfoInterface   $routeInfo
 	 * @param RequestParamsService $requestParams
+	 * @param CacheInterface       $cache
 	 */
-	public function __construct(MenuInterface $menu, ValidatorService $validator, RouteInfoInterface $routeInfo, RequestParamsService $requestParams)
+	public function __construct(MenuInterface $menu, ValidatorService $validator, RouteInfoInterface $routeInfo, RequestParamsService $requestParams, CacheInterface $cache)
 	{
 		$this->menu          = $menu;
 		$this->validator     = $validator;
 		$this->routeInfo     = $routeInfo;
 		$this->requestParams = $requestParams;
+		$this->cache         = $cache;
 	}
 
 	/**
@@ -206,6 +214,9 @@ class MenuController extends Controller
 			]);
 		}
 
+		$this->cache->clearMenu();
+		$this->cache->clearAllUserMenu();
+
 		return response()->json([
 			'status'  => 200,
 			'message' => '编辑成功',
@@ -235,6 +246,9 @@ class MenuController extends Controller
 				'message' => '创建失败',
 			]);
 		}
+
+		$this->cache->clearMenu();
+		$this->cache->clearAllUserMenu();
 
 		return response()->json([
 			'status'  => 200,
@@ -277,6 +291,9 @@ class MenuController extends Controller
 			]);
 		}
 
+		$this->cache->clearMenu();
+		$this->cache->clearAllUserMenu();
+
 		return response()->json([
 			'status'  => 200,
 			'message' => '删除成功',
@@ -308,6 +325,9 @@ class MenuController extends Controller
 				'message' => '操作失败',
 			]);
 		}
+
+		$this->cache->clearMenu();
+		$this->cache->clearAllUserMenu();
 
 		return response()->json([
 			'status'  => 200,

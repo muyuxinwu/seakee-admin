@@ -10,6 +10,7 @@ namespace App\Http\Controllers\User;
 
 
 use App\Http\Controllers\Controller;
+use App\Interfaces\CacheInterface;
 use App\Interfaces\PermissionInterface;
 use App\Interfaces\RoleInterface;
 use App\Interfaces\RouteInfoInterface;
@@ -45,6 +46,11 @@ class PermissionController extends Controller
 	protected $requestParams;
 
 	/**
+	 * @var CacheInterface
+	 */
+	protected $cache;
+
+	/**
 	 * Permission对应的数据库字段
 	 */
 	const permissionKeys = [
@@ -62,14 +68,16 @@ class PermissionController extends Controller
 	 * @param ValidatorService     $validator
 	 * @param RouteInfoInterface   $routeInfo
 	 * @param RoleInterface        $role
+	 * @param CacheInterface       $cache
 	 */
-	public function __construct(RequestParamsService $requestParams, PermissionInterface $permission, ValidatorService $validator, RouteInfoInterface $routeInfo, RoleInterface $role)
+	public function __construct(RequestParamsService $requestParams, PermissionInterface $permission, ValidatorService $validator, RouteInfoInterface $routeInfo, RoleInterface $role, CacheInterface $cache)
 	{
 		$this->permission    = $permission;
 		$this->validator     = $validator;
 		$this->routeInfo     = $routeInfo;
 		$this->role          = $role;
 		$this->requestParams = $requestParams;
+		$this->cache         = $cache;
 	}
 
 	/**
@@ -165,6 +173,9 @@ class PermissionController extends Controller
 			]);
 		}
 
+		$this->cache->clearPermission();
+		$this->cache->clearAllUserPermission();
+
 		return response()->json([
 			'status'  => 200,
 			'message' => '新增成功',
@@ -211,6 +222,9 @@ class PermissionController extends Controller
 				'message' => '编辑失败',
 			]);
 		}
+
+		$this->cache->clearPermission();
+		$this->cache->clearAllUserPermission();
 
 		return response()->json([
 			'status'  => 200,
@@ -286,6 +300,9 @@ class PermissionController extends Controller
 			]);
 		}
 
+		$this->cache->clearPermission();
+		$this->cache->clearAllUserPermission();
+
 		return response()->json([
 			'status'  => 200,
 			'message' => '删除成功',
@@ -351,6 +368,9 @@ class PermissionController extends Controller
 
 		$role->perms()->sync($permission, true);
 
+		$this->cache->clearPermission();
+		$this->cache->clearAllUserPermission();
+
 		return response()->json([
 			'status'  => 200,
 			'message' => 'success',
@@ -391,6 +411,9 @@ class PermissionController extends Controller
 				$failure += 1;
 			}
 		}
+
+		$this->cache->clearPermission();
+		$this->cache->clearAllUserPermission();
 
 		return response()->json([
 			'status'  => 200,
