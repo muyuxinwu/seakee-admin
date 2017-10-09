@@ -63,8 +63,8 @@ if (!function_exists('friendly_date')) {
  *
  * @return array
  */
-if (!function_exists('array_filter')) {
-	function array_filter($array, $key)
+if (!function_exists('array_filter_repeat')) {
+	function array_filter_repeat($array, $key)
 	{
 		$i          = 0;
 		$temp_array = [];
