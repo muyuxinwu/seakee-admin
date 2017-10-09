@@ -203,7 +203,7 @@ class MenuRepository implements MenuInterface
 				}
 			}
 		}
-		$currentUserMenu = $this->_filterList($currentUserMenu, 'id');
+		$currentUserMenu = array_filter($currentUserMenu, 'id');
 		Cache::tags([
 			'menu',
 			$user['id'],
@@ -224,29 +224,5 @@ class MenuRepository implements MenuInterface
 		Cache::put('allMenus', $allMenu, 10);
 
 		return $allMenu;
-	}
-
-	/**
-	 * 过滤二维数组中重复的数组(以数组中某个键值为判断)
-	 *
-	 * @param array $array
-	 * @param $key
-	 * @return array
-	 */
-	private function _filterList($array, $key)
-	{
-		$i = 0;
-		$temp_array = array();
-		$key_array = array();
-
-		foreach ($array as $val) {
-			if (!in_array($val[$key], $key_array)) {
-				$key_array[$i] = $val[$key];
-				$temp_array[$i] = $val;
-			}
-			$i++;
-		}
-
-		return $temp_array;
 	}
 }
