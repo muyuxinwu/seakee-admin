@@ -134,22 +134,25 @@ class PermissionRepository implements PermissionInterface
 	 */
 	private function putCurrentUserPermissionCache($user)
 	{
-		$roles            = head($user->with('roles.perms')->get()->pluck('roles')->toArray());
-		$permissionIdList = array_pluck($roles, 'perms');
-		$roleNameList     = array_pluck($roles, 'name');
-
-		$currentUserPermission = [];
+		$roles        = $user->roles->toArray();
+		$roleNameList = array_column($roles, 'name', 'id');
 
 		//当前用户角色为超级管理员时，权限为所有权
 		if (!in_array('Super_Admin', $roleNameList)) {
-			foreach ($permissionIdList as $item) {
-				$currentUserPermission += array_column($item, 'name', 'id');
+			$permissionId   = Permission::getPermissionIdList(array_keys($roleNameList))->pluck('permission_id');
+			$permissionList = Permission::getPermissionList($permissionId);
+
+			foreach ($permissionList as $item) {
+				$currentUserPermission[$item->id] = $item->name;
 			}
 		} else {
 			$currentUserPermission = $this->allPermissionName();
 		}
 
-		Cache::tags(['user', $user->id])->put('currentUserPermission', $currentUserPermission, 10);
+		Cache::tags([
+			'user',
+			$user->id,
+		])->put('currentUserPermission', $currentUserPermission, 10);
 
 		return $currentUserPermission;
 	}
