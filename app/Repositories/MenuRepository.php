@@ -171,7 +171,7 @@ class MenuRepository implements MenuInterface
 	public function currentUserMenu($currentUserPermission, $user)
 	{
 		return Cache::tags([
-			'user',
+			'menu',
 			$user['id'],
 		])->get('currentUserMenu') ?: $this->putCurrentUserMenuCache($currentUserPermission, $user);
 	}
@@ -205,7 +205,7 @@ class MenuRepository implements MenuInterface
 		}
 
 		Cache::tags([
-			'user',
+			'menu',
 			$user['id'],
 		])->put('currentUserMenu', $currentUserMenu ?? $allMenu, 10);
 

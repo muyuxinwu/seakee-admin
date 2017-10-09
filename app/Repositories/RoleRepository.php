@@ -103,7 +103,7 @@ class RoleRepository implements RoleInterface
 	 */
 	public function currentUserRole($user)
 	{
-		return Cache::tags(['user', $user->id])->get('currentUserRole') ?: $this->putCurrentUserRoleCache($user);
+		return Cache::tags(['role', $user->id])->get('currentUserRole') ?: $this->putCurrentUserRoleCache($user);
 	}
 
 	/**
@@ -116,7 +116,7 @@ class RoleRepository implements RoleInterface
 	private function putCurrentUserRoleCache($user)
 	{
 		$currentUserRole = array_column($user->roles->toArray(), 'name', 'id');
-		Cache::tags(['user', $user->id])->put('currentUserRole', $currentUserRole, 10);
+		Cache::tags(['role', $user->id])->put('currentUserRole', $currentUserRole, 10);
 
 		return $currentUserRole;
 	}

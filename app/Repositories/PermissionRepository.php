@@ -109,7 +109,7 @@ class PermissionRepository implements PermissionInterface
 	 */
 	public function currentUserPermission($user)
 	{
-		return Cache::tags(['user', $user->id])->get('currentUserPermission') ?: $this->putCurrentUserPermissionCache($user);
+		return Cache::tags(['permission', $user->id])->get('currentUserPermission') ?: $this->putCurrentUserPermissionCache($user);
 	}
 
 	/**
@@ -150,7 +150,7 @@ class PermissionRepository implements PermissionInterface
 		}
 
 		Cache::tags([
-			'user',
+			'permission',
 			$user->id,
 		])->put('currentUserPermission', $currentUserPermission, 10);
 
