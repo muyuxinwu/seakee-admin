@@ -39,7 +39,7 @@
                                     <div class="switch" style="display: table">
                                         <input onchange="displayValue()" data-on-text="显示" data-off-text="隐藏" type="checkbox" checked/>
                                         <label class="control-label" style="padding-left: 80px;">菜单排序&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                                        <input type="text" name="sort" class="form-control" style="width: 80px;display: initial">
+                                        <input type="text" name="sort" class="form-control" style="width: 80px;display: initial" value="0">
                                     </div>
                                     <input id="display" type="hidden" name="display" value="1">
                                 </div>
