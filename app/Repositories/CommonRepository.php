@@ -26,9 +26,13 @@ class CommonRepository implements CommonInterface
 		$client = new Client(['base_uri' => self::bingUrl]);
 
 		$response = $client->request('GET', '/HPImageArchive.aspx', ['query' => $data]);
-		$body = json_decode($response->getBody()->getContents(), true);
+		$body     = json_decode($response->getBody()->getContents(), true);
+		$urls     = array_pluck(head($body), 'url');
 
-$ff = array_pluck(head($body), 'url');
-		return $ff;
+		foreach ($urls as $url){
+			$imageUrls[] = self::bingUrl . $url;
+		}
+
+		return $imageUrls ?? [];
 	}
 }
