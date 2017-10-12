@@ -23,7 +23,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::group(['prefix' => 'admin', 'middleware' => ['checkPermission']], function() {
     
-    Route::get('/', 'AdminController@index')->name('admin');
+    Route::get('/index', 'AdminController@index')->name('admin.index');
 
     Route::group(['prefix' => 'menu', 'namespace' => 'Menu'], function (){
         Route::get('/admin', 'MenuController@admin')->name('menu.admin');

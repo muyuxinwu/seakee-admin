@@ -52,7 +52,7 @@ desired effect
     <header class="main-header">
 
         <!-- Logo -->
-        <a href="{{ route('admin') }}" class="logo">
+        <a href="{{ route('admin.index') }}" class="logo">
             <!-- mini logo for sidebar mini 50x50 pixels -->
             <span class="logo-mini"><b>SA</b></span>
             <!-- logo for regular state and mobile devices -->
