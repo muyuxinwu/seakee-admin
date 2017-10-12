@@ -204,10 +204,13 @@ class MenuRepository implements MenuInterface
 			}
 		}
 
+		//过滤重复菜单
+		$currentUserMenu = array_filter_repeat($currentUserMenu, 'id');
+
 		Cache::tags([
 			'menu',
 			$user['id'],
-		])->put('currentUserMenu', array_filter_repeat($currentUserMenu, 'id') ?? $allMenu, 10);
+		])->put('currentUserMenu', $currentUserMenu ?? $allMenu, 10);
 
 		return $currentUserMenu ?? $allMenu;
 	}
