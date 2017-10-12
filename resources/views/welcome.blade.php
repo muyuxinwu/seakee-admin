@@ -68,22 +68,22 @@
         <div class="flex-center position-ref full-height">
             @if (Route::has('login'))
                 <div class="top-right links">
-                    <a href="{{ url('/login') }}">Login</a>
-                    <a href="{{ url('/register') }}">Register</a>
+                    <a href="{{ url('/login') }}">登录</a>
+                    <a href="{{ url('/register') }}">注册</a>
                 </div>
             @endif
 
             <div class="content">
                 <div class="title m-b-md">
-                    Laravel
+                    SkAdmin
                 </div>
 
                 <div class="links">
-                    <a href="https://laravel.com/docs">Documentation</a>
-                    <a href="https://laracasts.com">Laracasts</a>
-                    <a href="https://laravel-news.com">News</a>
-                    <a href="https://forge.laravel.com">Forge</a>
-                    <a href="https://github.com/laravel/laravel">GitHub</a>
+                    <a href="{{ route('admin.index') }}">仪表盘</a>
+                    <a href="#">文档</a>
+                    <a href="#">News</a>
+                    <a href="https://seakee.top">博客</a>
+                    <a href="https://github.com/seakee">GitHub</a>
                 </div>
             </div>
         </div>
