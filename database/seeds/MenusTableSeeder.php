@@ -53,7 +53,7 @@ class MenusTableSeeder extends Seeder
 	    DB::table('menus')->insert([
 		    'icon' => 'fa-gears',
 		    'menu_name' => '系统配置',
-		    'route_name' => '#',
+		    'route_name' => 'config.index',
 		    'father_id' => 1,
 		    'sort' => 0,
 		    'display' => 1,
