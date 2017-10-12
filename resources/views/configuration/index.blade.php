@@ -5,7 +5,6 @@
 @section('Optional_description','系统基础参数设置')
 
 @section('content')
-    <div class="container">
         <div class="row">
             <div class="col-md-12">
                 <!-- Custom Tabs -->
