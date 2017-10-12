@@ -5,7 +5,6 @@
 @section('Optional_description','系统概述')
 
 @section('content')
-<div class="container">
     <div class="row">
         <div class="col-md-6">
             <div class="box box-solid">
@@ -46,5 +45,4 @@
             <!-- /.box -->
         </div>
     </div>
-</div>
 @endsection
