@@ -12,7 +12,7 @@ class MenusTableSeeder extends Seeder
     public function run()
     {
         DB::table('menus')->insert([
-            'icon' => 'fa-dashboard',
+            'icon' => 'fa-home',
             'menu_name' => '管理中心',
             'route_name' => '#',
             'father_id' => -1,
@@ -36,6 +36,32 @@ class MenusTableSeeder extends Seeder
             'created_at' => \Carbon\Carbon::now()->toDateTimeString(),
             'updated_at' => \Carbon\Carbon::now()->toDateTimeString(),
         ]);
+
+	    DB::table('menus')->insert([
+		    'icon' => 'fa-dashboard',
+		    'menu_name' => '仪表盘',
+		    'route_name' => 'admin.index',
+		    'father_id' => 1,
+		    'sort' => 1,
+		    'display' => 1,
+		    'state' => 1,
+		    'is_custom' => 0,
+		    'created_at' => \Carbon\Carbon::now()->toDateTimeString(),
+		    'updated_at' => \Carbon\Carbon::now()->toDateTimeString(),
+	    ]);
+
+	    DB::table('menus')->insert([
+		    'icon' => 'fa-gears',
+		    'menu_name' => '系统配置',
+		    'route_name' => '#',
+		    'father_id' => 1,
+		    'sort' => 0,
+		    'display' => 1,
+		    'state' => 1,
+		    'is_custom' => 0,
+		    'created_at' => \Carbon\Carbon::now()->toDateTimeString(),
+		    'updated_at' => \Carbon\Carbon::now()->toDateTimeString(),
+	    ]);
 
         DB::table('menus')->insert([
             'icon' => 'fa-list-ul',
@@ -81,19 +107,6 @@ class MenusTableSeeder extends Seeder
             'menu_name' => '权限管理',
             'route_name' => 'permission.index',
             'father_id' => 2,
-            'sort' => 0,
-            'display' => 1,
-            'state' => 1,
-            'is_custom' => 0,
-            'created_at' => \Carbon\Carbon::now()->toDateTimeString(),
-            'updated_at' => \Carbon\Carbon::now()->toDateTimeString(),
-        ]);
-
-        DB::table('menus')->insert([
-            'icon' => 'fa-gears',
-            'menu_name' => '系统配置',
-            'route_name' => '#',
-            'father_id' => 1,
             'sort' => 0,
             'display' => 1,
             'state' => 1,
