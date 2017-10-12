@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Interfaces\CommonInterface;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -21,8 +22,10 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(CommonInterface $common)
     {
+    	$image = $common->getBingImage(0,2);
+    	dd($image);
         return view('home');
     }
 }
