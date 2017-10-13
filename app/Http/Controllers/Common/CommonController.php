@@ -26,15 +26,15 @@ class CommonController extends Controller
 	 */
 	public function getBingImage(Request $request, CommonInterface $common)
 	{
-		$idx = $request->input('idx', 0);
-		$n = $request->input('idx', 1);
+		$idx = $request->input('idx', rand(0, 16));
+		$n = $request->input('n', 8);
 
-		$bingImageUrls = $common->getBingImage($idx, $n);
+		$imageUrl = head(array_random($common->getBingImage($idx, $n), 1));
 
 		return response()->json([
-			'status'  => 200,
-			'message' => 'success',
-			'list'    => $bingImageUrls,
+			'status'   => 200,
+			'message'  => 'success',
+			'imageUrl' => $imageUrl,
 		]);
 	}
 }
