@@ -42,7 +42,7 @@
     </style>
     @yield('page_style')
 </head>
-<body id="skadmin">
+<body id="skadmin" @if(!config('app.bingImage')) style="background-image: url({{ asset('image/bkg.jpg') }});" @endif>
     <div id="app">
         <nav class="navbar navbar-default navbar-static-top opacity">
             <div class="container">
@@ -105,7 +105,8 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
-    <script>
+    @if(config('app.bingImage'))
+        <script>
         getBingImage();
 
         function getBingImage() {
@@ -124,5 +125,6 @@
             });
         }
     </script>
+    @endif
 </body>
 </html>
