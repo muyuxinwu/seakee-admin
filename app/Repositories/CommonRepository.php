@@ -15,8 +15,17 @@ use GuzzleHttp\Client;
 
 class CommonRepository implements CommonInterface
 {
+	//Bing Url
 	const bingUrl = 'http://cn.bing.com';
 
+	/**
+	 * Bing每日图片
+	 *
+	 * @param int $idx 往前第$idx天
+	 * @param int $n 共$n张图片
+	 *
+	 * @return array
+	 */
 	public function getBingImage($idx = 0, $n = 5)
 	{
 		$data['format'] = 'js';
