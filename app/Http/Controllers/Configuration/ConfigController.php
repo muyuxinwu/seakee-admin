@@ -11,10 +11,22 @@ namespace App\Http\Controllers\Configuration;
 
 
 use App\Http\Controllers\Controller;
+use Illuminate\Config\Repository;
 
 class ConfigController extends Controller
 {
+	protected $config;
+
+	public function __construct(Repository $config)
+	{
+		$this->config = $config;
+	}
+
 	public function index(){
 		return view('configuration.index');
+	}
+
+	public function app(){
+		
 	}
 }
