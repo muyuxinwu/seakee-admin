@@ -42,7 +42,7 @@
     </style>
     @yield('page_style')
 </head>
-<body id="skadmin" @if(!config('app.bingImage')) style="background-image: url({{ asset('image/bkg.jpg') }});" @endif>
+<body id="skadmin" @if(!config('app.bingImage')) style="background-size:100%;background-image: url({{ asset('image/bkg.jpg') }});" @endif>
     <div id="app">
         <nav class="navbar navbar-default navbar-static-top opacity">
             <div class="container">
@@ -118,8 +118,10 @@
                     var $bg = document.getElementById('skadmin');
                     if (res.status == 200) {
                         $bg.style.cssText += 'background-image:url(' + res.imageUrl + ')';
+                        $bg.style.cssText += 'background-size:100%';
                     } else {
                         $bg.style.cssText += 'background-image:url({{ asset('image/bkg.jpg') }})';
+                        $bg.style.cssText += 'background-size:100%';
                     }
                 }
             });
