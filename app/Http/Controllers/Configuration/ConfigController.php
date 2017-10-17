@@ -15,18 +15,48 @@ use Illuminate\Config\Repository;
 
 class ConfigController extends Controller
 {
+	/**
+	 * @var Repository
+	 */
 	protected $config;
 
+	/**
+	 * ConfigController constructor.
+	 *
+	 * @param Repository $config
+	 */
 	public function __construct(Repository $config)
 	{
 		$this->config = $config;
 	}
 
-	public function index(){
+	/**
+	 * 系统配置页面
+	 *
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+	 */
+	public function index()
+	{
 		return view('configuration.index');
 	}
 
-	public function app(){
-		
+	/**
+	 * 系统基础信息
+	 *
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+	public function app()
+	{
+		$data['name']        = $this->config->get('app.name', 'SKAdmin');
+		$data['keywords']    = $this->config->get('app.keywords');
+		$data['description'] = $this->config->get('app.description');
+		$data['icp']         = $this->config->get('app.icp');
+		$data['bingImage']   = $this->config->get('app.bingImage');
+
+		return response()->json([
+			'status'  => 200,
+			'message' => 'success',
+			'data'    => $data,
+		]);
 	}
 }

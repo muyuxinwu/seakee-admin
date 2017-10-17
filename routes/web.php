@@ -74,5 +74,6 @@ Route::group(['prefix' => 'admin', 'middleware' => ['checkPermission']], functio
 
 	Route::group(['prefix' => 'config', 'namespace' => 'Configuration'], function (){
 		Route::get('/index', 'ConfigController@index')->name('config.index');
+		Route::get('/app', 'ConfigController@app')->name('config.app');
 	});
 });

@@ -6,7 +6,7 @@
 
 @section('content')
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-8">
                 <!-- Custom Tabs -->
                 <div class="nav-tabs-custom">
                     <ul class="nav nav-tabs">
@@ -15,17 +15,52 @@
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane active" id="base">
-                            <b>How to use:</b>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <!-- form start -->
+                                    <form id="baseForm">
+                                            <div class="box-body">
+                                                <div class="form-group">
+                                                    <label>系统名称</label>
+                                                    <div class="row">
+                                                        <div class="col-xs-4">
+                                                            <input type="text" class="form-control" name="name" id="name">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>系统关键字</label>
+                                                    <div class="row">
+                                                        <div class="col-xs-4">
+                                                            <input type="text" class="form-control" name="keywords" id="keywords">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>系统描述</label>
+                                                    <div class="row">
+                                                        <div class="col-xs-4">
+                                                            <input type="text" class="form-control" name="description" id="description">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>ICP备案号</label>
+                                                    <div class="row">
+                                                        <div class="col-xs-4">
+                                                            <input type="text" class="form-control" name="icp" id="icp">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- /.box-body -->
 
-                            <p>Exactly like the original bootstrap tabs except you should use
-                                the custom wrapper <code>.nav-tabs-custom</code> to achieve this style.</p>
-                            A wonderful serenity has taken possession of my entire soul,
-                            like these sweet mornings of spring which I enjoy with my whole heart.
-                            I am alone, and feel the charm of existence in this spot,
-                            which was created for the bliss of souls like mine. I am so happy,
-                            my dear friend, so absorbed in the exquisite sense of mere tranquil existence,
-                            that I neglect my talents. I should be incapable of drawing a single stroke
-                            at the present moment; and yet I feel that I never was a greater artist than now.
+                                            <div class="box-footer">
+                                                <button type="submit" class="btn btn-primary" id="submitBase">更新配置</button>
+                                            </div>
+                                        </form>
+                                </div>
+                            </div>
                         </div>
                         <!-- /.tab-pane -->
                         <div class="tab-pane" id="cache">
@@ -44,4 +79,22 @@
                 <!-- nav-tabs-custom -->
             </div>
         </div>
+@endsection
+
+@section('page_js')
+    <script>
+        function getData(url) {
+            $.ajax({
+                url: url,
+                type: 'GET',
+                dataType: 'JSON',
+                success: function (res) {
+                    if(res.status == 200){
+
+                    }
+                }
+            });
+        }
+
+    </script>
 @endsection
