@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Interfaces\CacheInterface;
 use App\Interfaces\IpInterface;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -37,15 +38,19 @@ class LoginController extends Controller
 	 */
 	protected $ip;
 
+	protected $cache;
+
 	/**
 	 * LoginController constructor.
 	 *
-	 * @param IpInterface $ip
+	 * @param IpInterface    $ip
+	 * @param CacheInterface $cache
 	 */
-	public function __construct(IpInterface $ip)
+	public function __construct(IpInterface $ip, CacheInterface $cache)
 	{
 		$this->middleware('guest', ['except' => 'logout']);
-		$this->ip = $ip;
+		$this->ip    = $ip;
+		$this->cache = $cache;
 	}
 
 	/**
@@ -128,9 +133,34 @@ class LoginController extends Controller
 	 */
 	protected function credentials(Request $request)
 	{
-		return $request->only($this->username(), 'password');
+		$login      = $request->input($this->username());
+		$loginField = $this->loginField($login);
+
+		$credentials[$loginField] = $login;
+		$credentials['password']  = $request->input('password');
+
+		return $credentials;
 	}
 
+	/**
+	 * Get the login field
+	 *
+	 * @param $login
+	 *
+	 * @return string
+	 */
+	protected function loginField($login)
+	{
+		if (filter_var($login, FILTER_VALIDATE_EMAIL)) {
+			return 'email';
+		}
+
+		if (is_phone_number($login)) {
+			return 'phone';
+		}
+
+		return 'user_name';
+	}
 	/**
 	 * Send the response after the user was authenticated.
 	 *
@@ -191,7 +221,7 @@ class LoginController extends Controller
 	 */
 	public function username()
 	{
-		return 'email';
+		return 'login';
 	}
 
 	/**
@@ -203,7 +233,7 @@ class LoginController extends Controller
 	 */
 	public function logout(Request $request)
 	{
-		Cache::tags(['user', $request->user()->id])->flush();
+		$this->clearCache($request->user()->id);
 
 		$this->guard()->logout();
 
@@ -222,5 +252,17 @@ class LoginController extends Controller
 	protected function guard()
 	{
 		return Auth::guard();
+	}
+
+	/**
+	 * Clear all caches of current logon user
+	 *
+	 * @param $userId
+	 */
+	protected function clearCache($userId)
+	{
+		$this->cache->clearUserRole($userId);
+		$this->cache->clearUserPermission($userId);
+		$this->cache->clearUserMenu($userId);
 	}
 }

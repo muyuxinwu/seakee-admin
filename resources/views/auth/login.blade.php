@@ -10,14 +10,14 @@
                     <form class="form-horizontal" role="form" method="POST" action="{{ route('login') }}">
                         {{ csrf_field() }}
                         <input type="hidden" name="previousUrl" value="{{ $previousUrl }}">
-                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                            <label for="email" class="col-md-4 control-label">账号</label>
+                        <div class="form-group{{ $errors->has('login') ? ' has-error' : '' }}">
+                            <label for="login" class="col-md-4 control-label">账号</label>
 
                             <div class="col-md-6">
-                                <input placeholder="用户名\手机\E-Mail" id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required autofocus>
-                                @if ($errors->has('email'))
+                                <input placeholder="用户名\手机\E-Mail" id="login" type="text" class="form-control" name="login" value="{{ old('login') }}" required autofocus>
+                                @if ($errors->has('login'))
                                     <span class="help-block">
-                                        <strong>{{ $errors->first('email') }}</strong>
+                                        <strong>{{ $errors->first('login') }}</strong>
                                     </span>
                                 @endif
                             </div>
