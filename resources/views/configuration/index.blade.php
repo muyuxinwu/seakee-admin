@@ -10,7 +10,7 @@
                 <!-- Custom Tabs -->
                 <div class="nav-tabs-custom">
                     <ul class="nav nav-tabs">
-                        <li class="active"><a href="#base" data-toggle="tab">基础配置</a></li>
+                        <li class="active"><a href="#base" onclick="getData('base')" data-toggle="tab">基础配置</a></li>
                         <li><a href="#cache" data-toggle="tab">缓存配置</a></li>
                     </ul>
                     <div class="tab-content">
@@ -83,7 +83,14 @@
 
 @section('page_js')
     <script>
-        function getData(url) {
+        function getData(tab) {
+
+            switch (tab) {
+                case 'base':
+                    var url = '{{ route('config.app') }}';
+                    break;
+            }
+
             $.ajax({
                 url: url,
                 type: 'GET',
