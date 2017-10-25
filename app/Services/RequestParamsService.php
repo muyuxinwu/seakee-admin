@@ -12,7 +12,7 @@ namespace App\Services;
 class RequestParamsService
 {
 	/**
-	 * 获取指定key的输入值
+	 * 获取指定key的输入值，并过滤空值项
 	 *
 	 * @param $paramKeys
 	 * @param $request
@@ -22,7 +22,7 @@ class RequestParamsService
 	public function params($paramKeys, $request)
 	{
 		foreach ($paramKeys as $key) {
-			if ($request->has($key)) {
+			if ($request->filled($key)) {
 				$data[$key] = $request->input($key);
 			}
 		}

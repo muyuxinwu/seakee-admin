@@ -10,15 +10,16 @@
                 <!-- Custom Tabs -->
                 <div class="nav-tabs-custom">
                     <ul class="nav nav-tabs">
-                        <li class="active"><a href="#base" onclick="getData('base')" data-toggle="tab">基础配置</a></li>
+                        <li class="active"><a href="#app" onclick="getData('app')" data-toggle="tab">基础配置</a></li>
                         <li><a href="#cache" data-toggle="tab">缓存配置</a></li>
                     </ul>
                     <div class="tab-content">
-                        <div class="tab-pane active" id="base">
+                        <div class="tab-pane active" id="app">
                             <div class="row">
                                 <div class="col-md-12">
                                     <!-- form start -->
-                                    <form id="baseForm">
+                                    <form id="appForm" onsubmit="return false;">
+                                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                             <div class="box-body">
                                                 <div class="form-group">
                                                     <label>系统名称</label>
@@ -56,7 +57,7 @@
                                             <!-- /.box-body -->
 
                                             <div class="box-footer">
-                                                <button type="submit" class="btn btn-primary" id="submitBase">更新配置</button>
+                                                <button type="button" class="btn btn-primary" onclick="updateData('appForm')">更新配置</button>
                                             </div>
                                         </form>
                                 </div>
@@ -83,10 +84,12 @@
 
 @section('page_js')
     <script>
+        getData('app');
+
         function getData(tab) {
 
             switch (tab) {
-                case 'base':
+                case 'app':
                     var url = '{{ route('config.app') }}';
                     break;
             }
@@ -97,11 +100,43 @@
                 dataType: 'JSON',
                 success: function (res) {
                     if(res.status == 200){
-
+                        render(res.data, tab)
                     }
                 }
             });
         }
+        
+        function render(data, tab) {
+            if (tab == 'app'){
+                $('#name').val(data.name);
+                $('#keywords').val(data.keywords);
+                $('#description').val(data.description);
+                $('#icp').val(data.icp);
+            }
+        }
 
+        function updateData(tab) {
+            var obj = '#' + tab;
+            $form = $(obj);
+            var formData = new FormData($form[0]);
+            $.ajax({
+                url: '{{ route('config.update') }}',
+                type: 'POST',
+                data: formData,
+                processData: false,  // 告诉jQuery不要去处理发送的数据
+                contentType: false,   // 告诉jQuery不要去设置Content-Type请求头
+                dataType: 'JSON',
+                success: function (res) {
+                    if(res.status == 200){
+                        swal({
+                            title: '更新成功',
+                            type: 'success'
+                        });
+                    } else {
+                        swal('更新失败', res.message || '出错', 'error');
+                    }
+                }
+            });
+        }
     </script>
 @endsection
