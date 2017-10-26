@@ -96,7 +96,7 @@ class ConfigController extends Controller
 		$data['keywords']    = $this->config->get('app.keywords', '');
 		$data['description'] = $this->config->get('app.description', '');
 		$data['icp']         = $this->config->get('app.icp', '');
-		$data['bingImage']   = $this->config->get('app.bingImage');
+		$data['bingImage']   = $this->config->get('app.bingImage', 0);
 
 		return response()->json([
 			'status'  => 200,
