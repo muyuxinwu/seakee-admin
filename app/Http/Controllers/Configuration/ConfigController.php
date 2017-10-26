@@ -93,8 +93,8 @@ class ConfigController extends Controller
 	public function app()
 	{
 		$data['name']        = $this->config->get('app.name', 'SKAdmin');
-		$data['keywords']    = $this->config->get('app.keywords', '');
-		$data['description'] = $this->config->get('app.description', '');
+		$data['keywords']    = $this->config->get('app.keywords', 'SKAdmin,Laravel,AdminLTE');
+		$data['description'] = $this->config->get('app.description', 'SKAdmin是基于Laravel5.5的后台管理脚手架');
 		$data['icp']         = $this->config->get('app.icp', '');
 		$data['bingImage']   = $this->config->get('app.bingImage', 0);
 
