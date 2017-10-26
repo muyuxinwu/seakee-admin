@@ -22,7 +22,7 @@
                 <div class="nav-tabs-custom">
                     <ul class="nav nav-tabs">
                         <li class="active"><a href="#app" onclick="getData('app')" data-toggle="tab">基础配置</a></li>
-                        <li><a href="#cache" data-toggle="tab">缓存配置</a></li>
+                        {{--<li><a href="#cache" data-toggle="tab">缓存配置</a></li>--}}
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane active" id="app">
@@ -102,7 +102,7 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- /.tab-pane -->
+                        {{--<!-- /.tab-pane -->
                         <div class="tab-pane" id="cache">
                             The European languages are members of the same family. Their separate existence is a myth.
                             For science, music, sport, etc, Europe uses the same vocabulary. The languages only differ
@@ -112,7 +112,7 @@
                             words. If several languages coalesce, the grammar of the resulting language is more simple
                             and regular than that of the individual languages.
                         </div>
-                        <!-- /.tab-pane -->
+                        <!-- /.tab-pane -->--}}
                     </div>
                     <!-- /.tab-content -->
                 </div>
