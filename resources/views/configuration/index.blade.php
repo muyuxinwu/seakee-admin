@@ -4,6 +4,17 @@
 @section('page_title','系统参数配置')
 @section('Optional_description','系统基础参数设置')
 
+@section('page_style')
+    <style>
+        .description {
+            color: #999;height: 34px;padding: 6px 12px;
+        }
+        .pt6{
+            padding-top: 6px;
+        }
+    </style>
+@endsection
+
 @section('content')
         <div class="row">
             <div class="col-md-8">
@@ -25,7 +36,10 @@
                                                     <label>系统名称</label>
                                                     <div class="row">
                                                         <div class="col-xs-4">
-                                                            <input type="text" class="form-control" name="name" id="name">
+                                                            <input placeholder="请输入系统名称" type="text" class="form-control" name="name" id="name">
+                                                        </div>
+                                                        <div class="col-xs-8">
+                                                            <small><p class="description">系统标题，也是搜索引擎为搜录做筛选标题的重要信息。</p></small>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -33,7 +47,10 @@
                                                     <label>系统关键字</label>
                                                     <div class="row">
                                                         <div class="col-xs-4">
-                                                            <input type="text" class="form-control" name="keywords" id="keywords">
+                                                            <input placeholder="请输入系统关键字" type="text" class="form-control" name="keywords" id="keywords">
+                                                        </div>
+                                                        <div class="col-xs-8">
+                                                            <small><p class="description">系统关键字，是通过搜索引擎检索网站的重要信息，多个关键词使用英文半角符号“,”分割。</p></small>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -41,7 +58,10 @@
                                                     <label>系统描述</label>
                                                     <div class="row">
                                                         <div class="col-xs-4">
-                                                            <input type="text" class="form-control" name="description" id="description">
+                                                            <input placeholder="请输入系统描述" type="text" class="form-control" name="description" id="description">
+                                                        </div>
+                                                        <div class="col-xs-8">
+                                                            <small><p class="description">描述用于简单的介绍站点，在搜索引擎中用于搜索结果的概述。</p></small>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -49,7 +69,26 @@
                                                     <label>ICP备案号</label>
                                                     <div class="row">
                                                         <div class="col-xs-4">
-                                                            <input type="text" class="form-control" name="icp" id="icp">
+                                                            <input placeholder="请输入ICP备案号" type="text" class="form-control" name="icp" id="icp">
+                                                        </div>
+                                                        <div class="col-xs-8">
+                                                            <small><p class="description">填写ICP备案的信息，例如:京ICP备xxxxxxxx号</p></small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Bing登录背景图片</label>
+                                                    <div class="row">
+                                                        <div class="col-xs-4">
+                                                            <div class="control pt6">
+                                                                <input value="0" type="radio" name="bingImage" class="minimal" checked>
+                                                                关闭&emsp;&emsp;
+                                                                <input id="bingImage" value="1" type="radio" name="bingImage" class="minimal">
+                                                                开启
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xs-8">
+                                                            <small><p class="description">控制Bing登录背景图片开关。开启时会随机获取Bing每日图片作为登录背景图片。</p></small>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -112,6 +151,10 @@
                 $('#keywords').val(data.keywords);
                 $('#description').val(data.description);
                 $('#icp').val(data.icp);
+
+                if (data.bingImage == 1){
+                    $('#bingImage').prop("checked",true);
+                }
             }
         }
 
