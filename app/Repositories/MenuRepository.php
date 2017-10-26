@@ -210,7 +210,7 @@ class MenuRepository implements MenuInterface
 		Cache::tags([
 			'menu',
 			$user['id'],
-		])->put('currentUserMenu', $currentUserMenu ?? $allMenu, 10);
+		])->put('currentUserMenu', $currentUserMenu ?? $allMenu, config('cache.ttl'));
 
 		return $currentUserMenu ?? $allMenu;
 	}
@@ -224,7 +224,7 @@ class MenuRepository implements MenuInterface
 	{
 		$allMenu = Menu::where('display', 1)->orderBy('sort', 'desc')->get()->toArray();
 
-		Cache::put('allMenus', $allMenu, 10);
+		Cache::put('allMenus', $allMenu, config('cache.ttl'));
 
 		return $allMenu;
 	}

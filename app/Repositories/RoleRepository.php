@@ -116,7 +116,7 @@ class RoleRepository implements RoleInterface
 	private function putCurrentUserRoleCache($user)
 	{
 		$currentUserRole = array_column($user->roles->toArray(), 'name', 'id');
-		Cache::tags(['role', $user->id])->put('currentUserRole', $currentUserRole, 10);
+		Cache::tags(['role', $user->id])->put('currentUserRole', $currentUserRole, config('cache.ttl'));
 
 		return $currentUserRole;
 	}

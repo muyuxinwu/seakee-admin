@@ -120,7 +120,7 @@ class PermissionRepository implements PermissionInterface
 	private function putAllPermissionCache()
 	{
 		$allPermission = array_column($this->allPermission()->toArray(), 'name', 'id');
-		Cache::put('allPermission', $allPermission, 10);
+		Cache::put('allPermission', $allPermission, config('cache.ttl'));
 
 		return $allPermission;
 	}
@@ -152,7 +152,7 @@ class PermissionRepository implements PermissionInterface
 		Cache::tags([
 			'permission',
 			$user->id,
-		])->put('currentUserPermission', $currentUserPermission, 10);
+		])->put('currentUserPermission', $currentUserPermission, config('cache.ttl'));
 
 		return $currentUserPermission;
 	}
