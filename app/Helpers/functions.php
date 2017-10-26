@@ -109,3 +109,24 @@ if (!function_exists('is_valid_name')) {
 		return preg_match('/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/', $name);
 	}
 }
+
+/**
+ * 将数组键值出现的'_'用'.'替代
+ *
+ * @param array $array
+ *
+ * @return array
+ */
+if (!function_exists('array_key_to_dot')) {
+	function array_key_to_dot(array $array)
+	{
+		foreach ($array as $key => $value) {
+			if (strpos($key, '_') !== false) {
+				$key         = str_replace('_', '.', $key);
+				$array[$key] = $value;
+			}
+		}
+
+		return $array;
+	}
+}
