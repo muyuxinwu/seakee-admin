@@ -32,11 +32,11 @@ class ConfigController extends Controller
 	 * 配置字段
 	 */
 	const configKeys = [
-		'name',
-		'keywords',
-		'description',
-		'icp',
-		'bingImage',
+		'app_name',
+		'app_keywords',
+		'app_description',
+		'app_icp',
+		'app_bingImage',
 	];
 
 	/**
@@ -73,9 +73,7 @@ class ConfigController extends Controller
 	{
 		$configData = $this->requestParams->params(self::configKeys, $request);
 
-		foreach ($configData as $key => $value) {
-			$config['app.' . $key] = $value;
-		}
+		$config = array_key_to_dot($configData);
 
 		$configuration->set($config);
 
