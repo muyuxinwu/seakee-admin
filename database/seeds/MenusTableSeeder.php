@@ -77,7 +77,7 @@ class MenusTableSeeder extends Seeder
         ]);
 
 	    DB::table('menus')->insert([
-		    'icon' => 'fa-files-o',
+		    'icon' => 'fa-folder-o',
 		    'menu_name' => '文件管理',
 		    'route_name' => 'file.index',
 		    'father_id' => 1,
