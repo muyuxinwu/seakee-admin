@@ -76,7 +76,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['checkPermission']], functio
 		Route::post('/update', 'ConfigController@update')->name('config.update');
 	});
 
-	Route::group(['prefix' => 'file', 'namespace' => 'FileController'], function (){
+	Route::group(['prefix' => 'file', 'namespace' => 'Files'], function (){
 		Route::get('/index', 'FileController@index')->name('file.index');
 	});
 });
