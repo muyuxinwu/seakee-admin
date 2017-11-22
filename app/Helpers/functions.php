@@ -130,3 +130,21 @@ if (!function_exists('array_key_to_dot')) {
 		return $array;
 	}
 }
+
+/**
+ * 返回可读性更好的文件尺寸
+ *
+ * @param     $bytes
+ * @param int $decimals
+ *
+ * @return string
+ */
+if (!function_exists('human_file_size')){
+	function human_file_size($bytes, $decimals = 2)
+	{
+		$size   = ['B', 'kB', 'MB', 'GB', 'TB', 'PB'];
+		$factor = floor((strlen($bytes) - 1) / 3);
+
+		return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) .@$size[$factor];
+	}
+}
