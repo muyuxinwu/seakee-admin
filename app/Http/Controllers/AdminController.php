@@ -34,7 +34,7 @@ class AdminController extends Controller
 			'phpVersion'     => PHP_VERSION,
 			'os'             => PHP_OS,
 			'server'         => $_SERVER['SERVER_SOFTWARE'],
-			'db'             => env('DB_CONNECTION'),
+			'db'             => $_ENV['DB_CONNECTION'],
 			'root'           => $_SERVER['DOCUMENT_ROOT'],
 			'laravelVersion' => app()::VERSION,
 			'maxUploadSize'  => ini_get('upload_max_filesize'),
