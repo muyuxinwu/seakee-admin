@@ -10,6 +10,8 @@
 namespace App\Interfaces;
 
 
+use Illuminate\Http\Request;
+
 Interface FilesInterface
 {
 	/**
@@ -57,4 +59,6 @@ Interface FilesInterface
 	 * @return mixed
 	 */
 	public function get(array $where);
+
+	public function info(Request $request);
 }

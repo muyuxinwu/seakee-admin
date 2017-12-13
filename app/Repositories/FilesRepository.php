@@ -12,6 +12,7 @@ namespace App\Repositories;
 
 use App\Interfaces\FilesInterface;
 use App\Models\Files\Files;
+use Illuminate\Http\Request;
 
 class FilesRepository implements FilesInterface
 {
@@ -74,5 +75,21 @@ class FilesRepository implements FilesInterface
 	public function store(array $data)
 	{
 		return Files::create($data);
+	}
+
+	public function info(Request $request)
+	{
+		$disk      = $request->input('disk');
+		$file      = $request->file('file');
+		$directory = date('Y/m/d');
+
+		$info['name'] = $file->getClientOriginalName();
+		$info['disk'] = $disk;
+		$info['type'] = $file->getMimeType();
+		$info['size'] = $file->getSize();
+		$info['path'] = $file->store($directory, $disk);
+		$info['uploader'] = $request->user()->id;
+
+		return $info;
 	}
 }

@@ -10,10 +10,18 @@ namespace App\Http\Controllers\Files;
 
 
 use App\Http\Controllers\Controller;
+use App\Interfaces\FilesInterface;
 use Illuminate\Http\Request;
 
 class FileController extends Controller
 {
+	protected $file;
+
+	public function __construct(FilesInterface $file)
+	{
+		$this->file = $file;
+	}
+
 	public function index()
 	{
 		return view('file.index');
@@ -21,7 +29,10 @@ class FileController extends Controller
 
 	public function upload(Request $request)
 	{
-		var_dump($request->file('file'));exit();
+		$info = $this->file->info($request);
+
+
+		 dd($info);
 	}
 
 	/**

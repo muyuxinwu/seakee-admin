@@ -330,7 +330,7 @@
                     if (res.status == 200) {
                         var list = res.data;
                         var length = list.length;
-                        var html = '<option value="' + '{{ config('filesystems.default') }}' + '">请选择存储磁盘</option>';
+                        var html = '<option value="' + '{{ config('filesystems.default') }}' + '">默认磁盘</option>';
                         for (var i = 0; i < length; i++){
                             html += '<option value="'+ list[i] +'">'+ list[i] +'</option>';
                         }
