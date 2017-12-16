@@ -301,9 +301,9 @@
                                 <div class="col-xs-9" style="padding-left: 0">
                                     <input type='text' id='textField' class='form-control ' />
                                 </div>
-                                <a href="javascript:;" class="file btn btn-primary" style="float: right">选择文件
+                                <button class="file btn btn-primary" style="float: right">选择文件
                                     <input type="file" name="file" onchange="document.getElementById('textField').value=this.value">
-                                </a>
+                                </button>
 
                             </div>
                         </div>
