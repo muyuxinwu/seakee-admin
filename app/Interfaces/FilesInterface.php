@@ -60,5 +60,12 @@ Interface FilesInterface
 	 */
 	public function get(array $where);
 
+	/**
+	 * 获取上传文件信息
+	 *
+	 * @param Request $request
+	 *
+	 * @return array
+	 */
 	public function info(Request $request);
 }

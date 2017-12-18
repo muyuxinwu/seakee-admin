@@ -38,7 +38,7 @@ class FilesRepository implements FilesInterface
 	 */
 	public function get(array $where)
 	{
-		return Files::where($where)->get();
+		return Files::where($where)->get()->toArray();
 	}
 
 	/**
@@ -77,17 +77,36 @@ class FilesRepository implements FilesInterface
 		return Files::create($data);
 	}
 
-	public function info(Request $request)
+	/**
+	 * 获取上传文件信息
+	 *
+	 * @param Request $request
+	 *
+	 * @return array
+	 */
+	public function info(Request $request):array
 	{
 		$disk      = $request->input('disk');
 		$file      = $request->file('file');
 		$directory = date('Y/m/d');
 
-		$info['name'] = $file->getClientOriginalName();
 		$info['disk'] = $disk;
+		$info['md5']  = md5_file($file);
+
+		$fileInfo = head(self::get($info));
+
+		//如果指定磁盘已经存储过文件，则直接使用已存储过的路径
+		if (!empty($fileInfo)){
+			$info['path'] = $fileInfo['path'];
+		} else {
+			$info['path'] = $file->store($directory, $disk);
+		}
+
+		$info['name'] = $file->getClientOriginalName();
 		$info['type'] = $file->getMimeType();
 		$info['size'] = $file->getSize();
-		$info['path'] = $file->store($directory, $disk);
+
+
 		$info['uploader'] = $request->user()->id;
 
 		return $info;

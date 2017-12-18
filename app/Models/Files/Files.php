@@ -22,6 +22,6 @@ class Files extends Model
 	 * @var array
 	 */
 	protected $fillable = [
-		'name', 'type', 'path', 'disk', 'size', 'uploader'
+		'name', 'type', 'path', 'disk', 'size', 'uploader','md5',
 	];
 }
