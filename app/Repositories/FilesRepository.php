@@ -13,6 +13,7 @@ namespace App\Repositories;
 use App\Interfaces\FilesInterface;
 use App\Models\Files\Files;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class FilesRepository implements FilesInterface
 {
@@ -96,7 +97,7 @@ class FilesRepository implements FilesInterface
 		$fileInfo = head(self::get($info));
 
 		//如果指定磁盘已经存储过文件，则直接使用已存储过的路径
-		if (!empty($fileInfo)){
+		if (!empty($fileInfo) && Storage::exists($fileInfo['path'])){
 			$info['path'] = $fileInfo['path'];
 		} else {
 			$info['path'] = $file->store($directory, $disk);
