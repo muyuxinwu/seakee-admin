@@ -21,13 +21,52 @@ class FileController extends Controller
 	protected $file;
 
 	/**
+	 * File对应的数据库字段
+	 */
+	const fileKeys = [
+		'name', 'type', 'path', 'disk', 'size', 'uploader','md5',
+	];
+
+	/**
+	 * 服务器最大允许上传文件大小（单位M:M）
+	 *
+	 * @var string
+	 */
+	protected $upMaxSize;
+
+	/**
 	 * FileController constructor.
 	 *
 	 * @param FilesInterface $file
 	 */
 	public function __construct(FilesInterface $file)
 	{
-		$this->file = $file;
+		$this->file      = $file;
+		$this->upMaxSize = ini_get('upload_max_filesize');
+	}
+
+	/**
+	 * 注册验证规则
+	 *
+	 * @return array
+	 */
+	protected function uploadRules()
+	{
+		return [
+			'file' => 'size:',
+		];
+	}
+
+	/**
+	 * 验证失败后的返回信息
+	 *
+	 * @return array
+	 */
+	protected function validatorMessage()
+	{
+		return [
+			'file.size' => '文件大小不能超过' . ini_get('upload_max_filesize'),
+		];
 	}
 
 	/**
