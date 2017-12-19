@@ -44,21 +44,21 @@ Interface FilesInterface
 	/**
 	 * 带分页的文件列表
 	 *
-	 * @param array $where
+	 * @param array $condition
 	 * @param       $paginate
 	 *
 	 * @return mixed
 	 */
-	public function allWithPaginate(array $where, $paginate);
+	public function allWithPaginate(array $condition, $paginate);
 
 	/**
 	 * 获取指定条件的文件
 	 *
-	 * @param array $where
+	 * @param array $condition
 	 *
 	 * @return mixed
 	 */
-	public function get(array $where);
+	public function get(array $condition);
 
 	/**
 	 * 获取上传文件信息

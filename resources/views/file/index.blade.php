@@ -37,13 +37,10 @@
                 </div>
                 <div class="box-body no-padding">
                     <ul class="nav nav-pills nav-stacked">
-                        <li class="active"><a href="#"><i class="fa fa-files-o"></i> 所有
-                                <span class="label label-primary pull-right">12</span></a></li>
+                        <li class="active"><a href="#"><i class="fa fa-files-o"></i>所有</a></li>
                         <li><a href="#"><i class="fa fa-file-image-o"></i> 图片</a></li>
                         <li><a href="#"><i class="fa fa-file-audio-o"></i> 音乐</a></li>
-                        <li><a href="#"><i class="fa fa-file-word-o"></i> 文档 <span
-                                        class="label label-warning pull-right">65</span></a>
-                        </li>
+                        <li><a href="#"><i class="fa fa-file-word-o"></i> 文档</a></li>
                         <li><a href="#"><i class="fa fa-file-video-o"></i> 视频</a></li>
                         <li><a href="#"><i class="fa fa-file-o"></i> 其它</a></li>
                     </ul>

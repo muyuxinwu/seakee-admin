@@ -20,26 +20,48 @@ class FilesRepository implements FilesInterface
 	/**
 	 * 带分页的文件列表
 	 *
-	 * @param array $where
+	 * @param array $condition
 	 * @param       $paginate
 	 *
 	 * @return mixed
 	 */
-	public function allWithPaginate(array $where, $paginate)
+	public function allWithPaginate(array $condition, $paginate = 10)
 	{
+		$where = self::setWhere($condition);
+
 		return Files::where($where)->orderBy('created_at', 'desc')->paginate($paginate);
+	}
+
+	/**
+	 * 设置搜索条件
+	 *
+	 * @param array $condition
+	 *
+	 * @return array
+	 */
+	protected function setWhere(array $condition)
+	{
+		foreach ($condition as $key => $value){
+			if ($key == 'type' || $key == 'name'){
+				$where[] = [$key, 'like', $value];
+			} else {
+				$where[] = [$key, '=', $value];
+			}
+		}
+
+		return $where ?? [];
 	}
 
 	/**
 	 * 获取指定条件的文件
 	 *
-	 * @param array $where
+	 * @param array $condition
 	 *
 	 * @return mixed
 	 */
-	public function get(array $where)
+	public function get(array $condition)
 	{
-		return Files::where($where)->get()->toArray();
+		return Files::where($condition)->get()->toArray();
 	}
 
 	/**
