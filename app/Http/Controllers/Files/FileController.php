@@ -28,7 +28,7 @@ class FileController extends Controller
 	];
 
 	/**
-	 * 服务器最大允许上传文件大小（单位M:M）
+	 * 服务器最大允许上传文件大小（单位:M）
 	 *
 	 * @var string
 	 */
@@ -41,32 +41,7 @@ class FileController extends Controller
 	 */
 	public function __construct(FilesInterface $file)
 	{
-		$this->file      = $file;
-		$this->upMaxSize = ini_get('upload_max_filesize');
-	}
-
-	/**
-	 * 注册验证规则
-	 *
-	 * @return array
-	 */
-	protected function uploadRules()
-	{
-		return [
-			'file' => 'size:',
-		];
-	}
-
-	/**
-	 * 验证失败后的返回信息
-	 *
-	 * @return array
-	 */
-	protected function validatorMessage()
-	{
-		return [
-			'file.size' => '文件大小不能超过' . ini_get('upload_max_filesize'),
-		];
+		$this->file = $file;
 	}
 
 	/**
@@ -121,5 +96,10 @@ class FileController extends Controller
 			'message' => 'success',
 			'data'    => $disk,
 		]);
+	}
+
+	public function getList(Request $request)
+	{
+
 	}
 }
