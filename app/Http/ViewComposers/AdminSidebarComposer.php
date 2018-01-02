@@ -57,14 +57,14 @@ class AdminSidebarComposer
 	{
 		$user              = session('user');
 		$userData['id']    = $user->id;
-		$userData['roles'] = $this->role->currentUserRole($user);
+		$userData['roles'] = $this->role->currentUser($user);
 
 		//当前用户角色为超级管理员时，显示所有菜单
 		if (in_array('Super_Admin', $userData['roles'])) {
-			$currentUserMenu = $this->menu->allMenus();
+			$currentUserMenu = $this->menu->all();
 		} else {
-			$currentUserPermission = $this->permission->currentUserPermission($user);
-			$currentUserMenu       = $this->menu->currentUserMenu($currentUserPermission, $userData);
+			$currentUserPermission = $this->permission->currentUser($user);
+			$currentUserMenu       = $this->menu->currentUser($currentUserPermission, $userData);
 		}
 
 		return $currentUserMenu;

@@ -3,7 +3,7 @@
  * File: UserControllers.php
  * Author: Seakee <seakee23@163.com>
  * Date: 2017/5/8 14:53
- * Description:
+ * Description:用户相关
  */
 
 namespace App\Http\Controllers\User;
@@ -128,7 +128,7 @@ class UserController extends Controller
 	 */
 	public function index()
 	{
-		$data['users'] = $this->user->allUserWithPaginate(10);
+		$data['users'] = $this->user->allWithPaginate(10);
 
 		return view('user.userIndex', $data);
 	}
@@ -150,7 +150,7 @@ class UserController extends Controller
 	 *
 	 * @return \Illuminate\Http\JsonResponse
 	 */
-	public function storage(Request $request)
+	public function store(Request $request)
 	{
 		$userData  = $this->requestParams->params(self::userKeys, $request);
 		$validator = $this->validator->firstError($userData, $this->registrationRules(), $this->validatorMessage());
@@ -183,15 +183,7 @@ class UserController extends Controller
 	{
 		$userData = $this->requestParams->params(self::userKeys, $request);
 
-		$user = $this->user->findUser($userData['id']);
-		if (empty($user)) {
-			return response()->json([
-				'status'  => 500,
-				'message' => '用户不存在',
-			]);
-		}
-
-		if (!$this->user->updateUser($userData)) {
+		if (!$this->user->update($userData)) {
 			return response()->json([
 				'status'  => 500,
 				'message' => '操作失败',
@@ -214,14 +206,7 @@ class UserController extends Controller
 	public function adminEdit(Request $request)
 	{
 		$id           = $request->input('id');
-		$data['user'] = $this->user->findUser($id);
-
-		if (empty($data['user'])) {
-			return response()->json([
-				'status'  => 500,
-				'message' => '用户不存在',
-			]);
-		}
+		$data['user'] = $this->user->get($id);
 
 		return view('user.editUser', $data);
 	}
@@ -242,16 +227,7 @@ class UserController extends Controller
 			return response()->json($validator);
 		}
 
-		$user = $this->user->findUser($userData['id']);
-
-		if (empty($user)) {
-			return response()->json([
-				'status'  => 500,
-				'message' => '用户不存在',
-			]);
-		}
-
-		if (!$this->user->updateUser($userData)) {
+		if (!$this->user->update($userData)) {
 			return response()->json([
 				'status'  => 500,
 				'message' => '编辑失败',
@@ -274,16 +250,8 @@ class UserController extends Controller
 	public function delete(Request $request)
 	{
 		$id   = $request->input('id');
-		$user = $this->user->findUser($id);
 
-		if (empty($user)) {
-			return response()->json([
-				'status'  => 500,
-				'message' => '用户不存在',
-			]);
-		}
-
-		if (!$this->user->deleteUser($id)) {
+		if (!$this->user->delete($id)) {
 			return response()->json([
 				'status'  => 500,
 				'message' => '删除失败',

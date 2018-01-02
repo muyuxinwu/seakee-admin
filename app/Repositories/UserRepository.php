@@ -21,7 +21,7 @@ class UserRepository implements UserInterface
 	 *
 	 * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
 	 */
-	public function allUserWithPaginate($paginate)
+	public function allWithPaginate($paginate)
 	{
 		return User::orderBy('created_at', 'desc')->paginate($paginate);
 	}
@@ -33,7 +33,7 @@ class UserRepository implements UserInterface
 	 *
 	 * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model|null|static|static[]
 	 */
-	public function findUser($id)
+	public function get($id)
 	{
 		return User::find($id);
 	}
@@ -45,7 +45,7 @@ class UserRepository implements UserInterface
 	 *
 	 * @return int
 	 */
-	public function deleteUser($id)
+	public function delete($id)
 	{
 		return User::destroy($id);
 	}
@@ -57,7 +57,7 @@ class UserRepository implements UserInterface
 	 *
 	 * @return $this|\Illuminate\Database\Eloquent\Model
 	 */
-	public function createUser(array $data)
+	public function store(array $data)
 	{
 		return User::create([
 			'user_name' => $data['user_name'],
@@ -73,7 +73,7 @@ class UserRepository implements UserInterface
 	 *
 	 * @return bool
 	 */
-	public function updateUser(array $data)
+	public function update(array $data)
 	{
 		return User::where('id', $data['id'])->update($data);
 	}

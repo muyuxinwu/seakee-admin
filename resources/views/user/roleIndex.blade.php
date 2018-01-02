@@ -204,7 +204,7 @@
             $form.find('#toCreate, #draftSave').prop('disabled', true);
             var formData = new FormData($form[0]);
             $.ajax({
-                url: '{{ route('role.storage') }}',
+                url: '{{ route('role.store') }}',
                 type: 'POST',
                 data: formData,
                 processData: false,  // 告诉jQuery不要去处理发送的数据

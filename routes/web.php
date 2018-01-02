@@ -43,7 +43,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['checkPermission']], functio
             Route::get('/adminEdit', 'UserController@adminEdit')->name('user.adminEdit');
             Route::post('/delete', 'UserController@delete')->name('user.delete');
             Route::post('/status', 'UserController@status')->name('user.status');
-            Route::post('/storage', 'UserController@storage')->name('user.storage');
+            Route::post('/store', 'UserController@store')->name('user.store');
             Route::post('/update', 'UserController@update')->name('user.update');
         });
 
@@ -52,7 +52,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['checkPermission']], functio
             Route::get('/userRole', 'RoleController@userRole')->name('role.userRole');
             Route::get('/edit', 'RoleController@edit')->name('role.edit');
             Route::post('/delete', 'RoleController@delete')->name('role.delete');
-            Route::post('/storage', 'RoleController@storage')->name('role.storage');
+            Route::post('/store', 'RoleController@store')->name('role.store');
             Route::post('/update', 'RoleController@update')->name('role.update');
             Route::post('/assignRole', 'RoleController@assignRole')->name('role.assignRole');
         });
@@ -62,7 +62,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['checkPermission']], functio
             Route::get('/rolePermission', 'PermissionController@rolePermission')->name('permission.rolePermission');
             Route::get('/edit', 'PermissionController@edit')->name('permission.edit');
             Route::get('/batchCreate', 'PermissionController@batchCreate')->name('permission.batchCreate');
-            Route::post('/storage', 'PermissionController@storage')->name('permission.storage');
+            Route::post('/store', 'PermissionController@store')->name('permission.store');
             Route::post('/delete', 'PermissionController@delete')->name('permission.delete');
             Route::post('/update', 'PermissionController@update')->name('permission.update');
             Route::post('/authorization', 'PermissionController@authorization')->name('permission.authorization');

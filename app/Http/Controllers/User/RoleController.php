@@ -3,7 +3,7 @@
  * File: RoleController.php
  * Author: Seakee <seakee23@163.com>
  * Date: 2017/5/8 15:03
- * Description:
+ * Description:角色相关
  */
 
 namespace App\Http\Controllers\User;
@@ -126,7 +126,7 @@ class RoleController extends Controller
 	 */
 	public function index()
 	{
-		$data['roles'] = $this->role->allRoleWithPaginate(10);
+		$data['roles'] = $this->role->allWithPaginate(10);
 
 		return view('user.roleIndex', $data);
 	}
@@ -138,7 +138,7 @@ class RoleController extends Controller
 	 *
 	 * @return \Illuminate\Http\JsonResponse
 	 */
-	public function storage(Request $request)
+	public function store(Request $request)
 	{
 		$roleData  = $this->requestParams->params(self::roleKeys, $request);
 		$validator = $this->validator->firstError($roleData, $this->createRules(), $this->validatorMessage());
@@ -147,13 +147,14 @@ class RoleController extends Controller
 			return response()->json($validator);
 		}
 
-		if (!$this->role->createRole($roleData)) {
+		if (!$this->role->store($roleData)) {
 			return response()->json([
 				'status'  => 500,
 				'message' => '新增失败',
 			]);
 		}
 
+		//清除用户缓存
 		$this->cache->clearAllUserRole();
 
 		return response()->json([
@@ -178,22 +179,14 @@ class RoleController extends Controller
 			return response()->json($validator);
 		}
 
-		$role = $this->role->findRole($roleData['id']);
-
-		if (empty($role)) {
-			return response()->json([
-				'status'  => 500,
-				'message' => '角色不存在',
-			]);
-		}
-
-		if (!$this->role->updateRole($roleData)) {
+		if (!$this->role->update($roleData)) {
 			return response()->json([
 				'status'  => 500,
 				'message' => '编辑失败',
 			]);
 		}
 
+		//清除用户缓存
 		$this->cache->clearAllUserRole();
 
 		return response()->json([
@@ -213,7 +206,7 @@ class RoleController extends Controller
 	{
 		$id = $request->input('id');
 
-		$role = $this->role->findRole($id);
+		$role = $this->role->get($id);
 
 		if (empty($role)) {
 			return response()->json([
@@ -240,22 +233,14 @@ class RoleController extends Controller
 	{
 		$id = $request->input('id');
 
-		$role = $this->role->findRole($id);
-
-		if (empty($role)) {
-			return response()->json([
-				'status'  => 500,
-				'message' => '角色不存在',
-			]);
-		}
-
-		if (!$this->role->deleteRole($id)) {
+		if (!$this->role->delete($id)) {
 			return response()->json([
 				'status'  => 500,
 				'message' => '删除失败',
 			]);
 		}
 
+		//清除用户缓存
 		$this->cache->clearAllUserRole();
 
 		return response()->json([
@@ -274,7 +259,7 @@ class RoleController extends Controller
 	public function userRole(Request $request)
 	{
 		$userID = $request->input('userID');
-		$user   = $this->user->findUser($userID);
+		$user   = $this->user->get($userID);
 
 		if (empty($user)) {
 			return response()->json([
@@ -284,7 +269,7 @@ class RoleController extends Controller
 		}
 
 		$userRole           = $user->roles()->getResults()->toArray();
-		$data['roles']      = $this->role->allRole()->toArray();
+		$data['roles']      = $this->role->all()->toArray();
 		$data['userRoleID'] = array_column($userRole, 'id');
 		$data['user']       = $user->toArray();
 
@@ -303,15 +288,7 @@ class RoleController extends Controller
 		$userID  = $request->input('userID');
 		$rolesID = $request->input('rolesID');
 
-		$user = $this->user->findUser($userID);
-
-		if (empty($user)) {
-			return response()->json([
-				'status'  => 500,
-				'message' => '用户不存在',
-			]);
-		}
-
+		$user  = $this->user->get($userID);
 		$roles = explode(",", $rolesID);
 
 		if (empty($roles[0])) {

@@ -11,19 +11,71 @@ namespace App\Interfaces;
 
 interface PermissionInterface
 {
-	public function allPermissionWithPaginate($paginate);
+	/**
+	 * 带有分页的权限列表
+	 *
+	 * @param $paginate
+	 *
+	 * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+	 */
+	public function allWithPaginate($paginate);
 
-	public function createPermission($data);
+	/**
+	 * 创建权限
+	 *
+	 * @param $data
+	 *
+	 * @return bool
+	 */
+	public function store($data);
 
-	public function updatePermission($data);
+	/**
+	 * 更新权限
+	 *
+	 * @param $data
+	 *
+	 * @return bool
+	 */
+	public function update($data);
 
-	public function findPermission($id);
+	/**
+	 * 获取指定ID的权限
+	 *
+	 * @param $id
+	 *
+	 * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model|null|static|static[]
+	 */
+	public function get($id);
 
-	public function deletePermission($id);
+	/**
+	 * 删除指定ID权限
+	 *
+	 * @param $id
+	 *
+	 * @return int
+	 */
+	public function delete($id);
 
-	public function allPermission();
+	/**
+	 * 获取所有权限
+	 *
+	 * @return \Illuminate\Database\Eloquent\Collection|static[]
+	 */
+	public function all();
 
-	public function allPermissionName();
+	/**
+	 * 获取所有用户权限名
+	 *
+	 * @return array
+	 */
+	public function allName();
 
-	public function currentUserPermission($user);
+	/**
+	 * 获取当前用户权限
+	 *
+	 * @param $user
+	 *
+	 * @return array
+	 */
+	public function currentUser($user);
 }

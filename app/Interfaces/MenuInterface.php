@@ -10,23 +10,83 @@ namespace App\Interfaces;
 
 Interface MenuInterface
 {
-	public function allMenus();
+	/**
+	 * 返回所有菜单（有缓存）
+	 *
+	 * @return array
+	 */
+	public function all();
 
+	/**
+	 * 返回所有菜单（无缓存）
+	 *
+	 * @return array
+	 */
 	public function allWithoutCache();
 
-	public function findMenu($id);
+	/**
+	 * 获取指定菜单
+	 *
+	 * @param $id
+	 *
+	 * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model|null|static|static[]
+	 */
+	public function get($id);
 
-	public function deleteMenu($id);
+	/**
+	 * 删除指定菜单
+	 *
+	 * @param $id
+	 *
+	 * @return int
+	 */
+	public function delete($id);
 
-	public function createMenu(array $data);
+	/**
+	 * 存储菜单
+	 *
+	 * @param array $data
+	 *
+	 * @return bool
+	 */
+	public function store(array $data);
 
-	public function updateMenu(array $data);
+	/**
+	 * 更新指定菜单
+	 *
+	 * @param array $data
+	 *
+	 * @return bool
+	 */
+	public function update(array $data);
 
-	public function menuCount(array $data);
+	/**
+	 * 查询菜单数目
+	 *
+	 * @param array $data
+	 *
+	 * @return int
+	 */
+	public function count(array $data);
 
-	public function menuTree($menu);
+	/**
+	 * 获取菜单树形数组
+	 *
+	 * @param     $menu
+	 *
+	 * @return array|string
+	 */
+	public function tree($menu);
 
-	public function currentUserMenu($currentUserPermission, $roles);
+	/**
+	 * 获取当前用户菜单
+	 *
+	 * @param $currentUserPermission
+	 * @param $user
+	 *
+	 * @return array
+	 */
+	public function currentUser($currentUserPermission, $user);
 }
 
 

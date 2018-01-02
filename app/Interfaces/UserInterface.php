@@ -10,25 +10,58 @@ namespace App\Interfaces;
 
 Interface UserInterface
 {
-	public function allUserWithPaginate($paginate);
-
-	public function findUser($id);
-
-	public function deleteUser($id);
-
-	public function updateUser(array $data);
-
 	/**
-	 * @param array $data
+	 * 带分页用户列表
 	 *
-	 * @return Object User
+	 * @param $paginate
+	 *
+	 * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
 	 */
-	public function createUser(array $data);
+	public function allWithPaginate($paginate);
 
 	/**
+	 * 返回指定用户
+	 *
+	 * @param $id
+	 *
+	 * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model|null|static|static[]
+	 */
+	public function get($id);
+
+	/**
+	 * 删除指定用户
+	 *
+	 * @param $id
+	 *
+	 * @return int
+	 */
+	public function delete($id);
+
+	/**
+	 * 更新用户
+	 *
 	 * @param array $data
 	 *
 	 * @return bool
+	 */
+	public function update(array $data);
+
+
+	/**
+	 * 创建用户（基于Eloquent基本添加）
+	 *
+	 * @param array $data
+	 *
+	 * @return $this|\Illuminate\Database\Eloquent\Model
+	 */
+	public function store(array $data);
+
+	/**
+	 * 创建用户
+	 *
+	 * @param array $data
+	 *
+	 * @return mixed
 	 */
 	public function storageUser(array $data);
 }

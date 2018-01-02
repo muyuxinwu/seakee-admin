@@ -67,6 +67,6 @@ class MenuPresenter
 			}
 		}
 
-		return $this->menu->menuTree($sidebarMenu);
+		return $this->menu->tree($sidebarMenu);
 	}
 }

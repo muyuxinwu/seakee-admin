@@ -3,7 +3,7 @@
  * File: MenuRepository.php
  * Author: Seakee <seakee23@163.com>
  * Date: 2017/5/16 11:00
- * Description:
+ * Description:菜单相关操作
  */
 
 namespace App\Repositories;
@@ -29,7 +29,7 @@ class MenuRepository implements MenuInterface
 	 *
 	 * @return array
 	 */
-	public function allMenus()
+	public function all()
 	{
 		return Cache::get('allMenus') ?: $this->putAllMenuCache();
 	}
@@ -41,7 +41,7 @@ class MenuRepository implements MenuInterface
 	 *
 	 * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model|null|static|static[]
 	 */
-	public function findMenu($id)
+	public function get($id)
 	{
 		return Menu::find($id);
 	}
@@ -53,19 +53,19 @@ class MenuRepository implements MenuInterface
 	 *
 	 * @return int
 	 */
-	public function deleteMenu($id)
+	public function delete($id)
 	{
 		return Menu::destroy($id);
 	}
 
 	/**
-	 * 创建菜单
+	 * 存储菜单
 	 *
 	 * @param array $data
 	 *
 	 * @return bool
 	 */
-	public function createMenu(array $data)
+	public function store(array $data)
 	{
 		$menu = new Menu();
 
@@ -88,7 +88,7 @@ class MenuRepository implements MenuInterface
 	 *
 	 * @return bool
 	 */
-	public function updateMenu(array $data)
+	public function update(array $data)
 	{
 		return Menu::where('id', $data['id'])->update($data);
 	}
@@ -100,7 +100,7 @@ class MenuRepository implements MenuInterface
 	 *
 	 * @return int
 	 */
-	public function menuCount(array $data)
+	public function count(array $data)
 	{
 		return Menu::where($data)->count();
 	}
@@ -113,7 +113,7 @@ class MenuRepository implements MenuInterface
 	 *
 	 * @return array|string
 	 */
-	public function menuTree($menu, $father_id = -1)
+	public function tree($menu, $father_id = -1)
 	{
 		return $this->setMenuTree($menu, $father_id);
 	}
@@ -168,7 +168,7 @@ class MenuRepository implements MenuInterface
 	 *
 	 * @return array
 	 */
-	public function currentUserMenu($currentUserPermission, $user)
+	public function currentUser($currentUserPermission, $user)
 	{
 		return Cache::tags([
 			'menu',
@@ -186,7 +186,7 @@ class MenuRepository implements MenuInterface
 	 */
 	private function putCurrentUserMenuCache($currentUserPermission, $user)
 	{
-		$allMenu = $this->allMenus();
+		$allMenu = $this->all();
 
 		if (!in_array('Super_Admin', $user['roles'])) {
 			foreach ($allMenu as $menu) {

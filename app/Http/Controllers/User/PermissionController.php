@@ -3,7 +3,7 @@
  * File: PermissionController.php
  * Author: Seakee <seakee23@163.com>
  * Date: 2017/5/8 15:04
- * Description:
+ * Description:权限相关
  */
 
 namespace App\Http\Controllers\User;
@@ -135,7 +135,7 @@ class PermissionController extends Controller
 	 */
 	public function index()
 	{
-		$data['permissions'] = $this->permission->allPermissionWithPaginate(10);
+		$data['permissions'] = $this->permission->allWithPaginate(10);
 		$data['routeList']   = $this->routeInfo->getRouteList();
 
 		return view('user.permissionIndex', $data);
@@ -148,7 +148,7 @@ class PermissionController extends Controller
 	 *
 	 * @return \Illuminate\Http\JsonResponse
 	 */
-	public function storage(Request $request)
+	public function store(Request $request)
 	{
 		$permissionData = $this->requestParams->params(self::permissionKeys, $request);
 		$validator      = $this->validator->firstError($permissionData, $this->createRules(), $this->validatorMessage());
@@ -166,13 +166,14 @@ class PermissionController extends Controller
 			]);
 		}
 
-		if (!$this->permission->createPermission($permissionData)) {
+		if (!$this->permission->store($permissionData)) {
 			return response()->json([
 				'status'  => 500,
 				'message' => '新增失败',
 			]);
 		}
 
+		//清除权限缓存
 		$this->cache->clearPermission();
 		$this->cache->clearAllUserPermission();
 
@@ -207,7 +208,7 @@ class PermissionController extends Controller
 			]);
 		}
 
-		$permission = $this->permission->findPermission($permissionData['id']);
+		$permission = $this->permission->get($permissionData['id']);
 
 		if (empty($permission)) {
 			return response()->json([
@@ -216,13 +217,14 @@ class PermissionController extends Controller
 			]);
 		}
 
-		if (!$this->permission->updatePermission($permissionData)) {
+		if (!$this->permission->update($permissionData)) {
 			return response()->json([
 				'status'  => 500,
 				'message' => '编辑失败',
 			]);
 		}
 
+		//清除权限缓存
 		$this->cache->clearPermission();
 		$this->cache->clearAllUserPermission();
 
@@ -250,7 +252,7 @@ class PermissionController extends Controller
 			]);
 		}
 
-		$permission = $this->permission->findPermission($id);
+		$permission = $this->permission->get($id);
 
 		if (empty($permission)) {
 			return response()->json([
@@ -284,22 +286,14 @@ class PermissionController extends Controller
 			]);
 		}
 
-		$permission = $this->permission->findPermission($id);
-
-		if (empty($permission)) {
-			return response()->json([
-				'status'  => 500,
-				'message' => '权限不存在',
-			]);
-		}
-
-		if (!$this->permission->deletePermission($id)) {
+		if (!$this->permission->delete($id)) {
 			return response()->json([
 				'status'  => 500,
 				'message' => '删除失败',
 			]);
 		}
 
+		//清除权限缓存
 		$this->cache->clearPermission();
 		$this->cache->clearAllUserPermission();
 
@@ -319,7 +313,7 @@ class PermissionController extends Controller
 	public function rolePermission(Request $request)
 	{
 		$roleID = $request->input('roleID');
-		$role   = $this->role->findRole($roleID);
+		$role   = $this->role->get($roleID);
 
 		if (empty($role)) {
 			return response()->json([
@@ -329,7 +323,7 @@ class PermissionController extends Controller
 		}
 
 		$rolePermission           = $role->perms()->get()->toArray();
-		$data['permissions']      = $this->permission->allPermission()->toArray();
+		$data['permissions']      = $this->permission->all()->toArray();
 		$data['rolePermissionID'] = array_column($rolePermission, 'id');
 		$data['role']             = $role->toArray();
 
@@ -348,7 +342,7 @@ class PermissionController extends Controller
 		$permissionID = $request->input('permissionID');
 		$roleID       = $request->input('roleID');
 
-		$role = $this->role->findRole($roleID);
+		$role = $this->role->get($roleID);
 
 		if (empty($role)) {
 			return response()->json([
@@ -385,7 +379,7 @@ class PermissionController extends Controller
 	public function batchCreate()
 	{
 		$allRouteName      = $this->routeInfo->getAllAdminRouteNameList();
-		$allPermissionName = $this->permission->allPermissionName();
+		$allPermissionName = $this->permission->allName();
 
 		$blankPermissions = [];
 		foreach ($allRouteName as $name) {
@@ -407,11 +401,12 @@ class PermissionController extends Controller
 			$permissionData['name']         = $permission;
 			$permissionData['display_name'] = $permission;
 			$permissionData['description']  = $permission;
-			if (!$this->permission->createPermission($permissionData)) {
+			if (!$this->permission->store($permissionData)) {
 				$failure += 1;
 			}
 		}
 
+		//清除权限缓存
 		$this->cache->clearPermission();
 		$this->cache->clearAllUserPermission();
 

@@ -3,7 +3,7 @@
  * File: AdminController.php
  * Author: Seakee <seakee23@163.com>
  * Date: 2017/5/6 15:09
- * Description:
+ * Description:后台管理相关
  */
 
 namespace App\Http\Controllers;

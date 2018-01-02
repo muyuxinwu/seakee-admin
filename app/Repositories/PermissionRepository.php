@@ -21,7 +21,7 @@ class PermissionRepository implements PermissionInterface
 	 *
 	 * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
 	 */
-	public function allPermissionWithPaginate($paginate)
+	public function allWithPaginate($paginate)
 	{
 		return Permission::orderBy('created_at', 'desc')->paginate($paginate);
 	}
@@ -33,7 +33,7 @@ class PermissionRepository implements PermissionInterface
 	 *
 	 * @return bool
 	 */
-	public function createPermission($data)
+	public function store($data)
 	{
 		$permission = new Permission();
 
@@ -51,31 +51,31 @@ class PermissionRepository implements PermissionInterface
 	 *
 	 * @return bool
 	 */
-	public function updatePermission($data)
+	public function update($data)
 	{
 		return Permission::where('id', $data['id'])->update($data);
 	}
 
 	/**
-	 * 删除权限
+	 * 删除指定ID权限
 	 *
 	 * @param $id
 	 *
 	 * @return int
 	 */
-	public function deletePermission($id)
+	public function delete($id)
 	{
 		return Permission::destroy($id);
 	}
 
 	/**
-	 * 根据权限ID查找权限
+	 * 获取指定ID的权限
 	 *
 	 * @param $id
 	 *
 	 * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model|null|static|static[]
 	 */
-	public function findPermission($id)
+	public function get($id)
 	{
 		return Permission::find($id);
 	}
@@ -85,7 +85,7 @@ class PermissionRepository implements PermissionInterface
 	 *
 	 * @return \Illuminate\Database\Eloquent\Collection|static[]
 	 */
-	public function allPermission()
+	public function all()
 	{
 		return Permission::all();
 	}
@@ -95,7 +95,7 @@ class PermissionRepository implements PermissionInterface
 	 *
 	 * @return array
 	 */
-	public function allPermissionName()
+	public function allName()
 	{
 		return Cache::get('allPermission') ?: $this->putAllPermissionCache();
 	}
@@ -107,7 +107,7 @@ class PermissionRepository implements PermissionInterface
 	 *
 	 * @return array
 	 */
-	public function currentUserPermission($user)
+	public function currentUser($user)
 	{
 		return Cache::tags(['permission', $user->id])->get('currentUserPermission') ?: $this->putCurrentUserPermissionCache($user);
 	}
@@ -119,7 +119,7 @@ class PermissionRepository implements PermissionInterface
 	 */
 	private function putAllPermissionCache()
 	{
-		$allPermission = array_column($this->allPermission()->toArray(), 'name', 'id');
+		$allPermission = array_column($this->all()->toArray(), 'name', 'id');
 		Cache::put('allPermission', $allPermission, config('cache.ttl'));
 
 		return $allPermission;
@@ -146,7 +146,7 @@ class PermissionRepository implements PermissionInterface
 				$currentUserPermission[$item->id] = $item->name;
 			}
 		} else {
-			$currentUserPermission = $this->allPermissionName();
+			$currentUserPermission = $this->allName();
 		}
 
 		Cache::tags([

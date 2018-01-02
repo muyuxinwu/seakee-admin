@@ -3,7 +3,7 @@
  * File: MenuController.php
  * Author: Seakee <seakee23@163.com>
  * Date: 2017/5/8 12:58
- * Description:
+ * Description:菜单相关
  */
 
 namespace App\Http\Controllers\Menu;
@@ -120,7 +120,7 @@ class MenuController extends Controller
 	public function admin()
 	{
 		$allMenu       = $this->menu->allWithoutCache();
-		$data['menus'] = $this->menu->menuTree($allMenu);
+		$data['menus'] = $this->menu->tree($allMenu);
 
 		return view('menu.admin', $data);
 	}
@@ -133,7 +133,7 @@ class MenuController extends Controller
 	public function createAdmin()
 	{
 		$allMenu        = $this->menu->allWithoutCache();
-		$data['menus']  = $this->menu->menuTree($allMenu);
+		$data['menus']  = $this->menu->tree($allMenu);
 		$data['routes'] = $this->routeInfo->allAdminRouteListByGet();
 
 		return view('menu.createAdmin', $data);
@@ -151,8 +151,8 @@ class MenuController extends Controller
 		$id = $request->input('id');
 
 		$allMenu       = $this->menu->allWithoutCache();
-		$data['menu']  = $this->menu->findMenu($id);
-		$data['menus'] = $this->menu->menuTree($allMenu);
+		$data['menu']  = $this->menu->get($id);
+		$data['menus'] = $this->menu->tree($allMenu);
 
 		if (empty($data['menu'])) {
 			return response()->json([
@@ -190,8 +190,8 @@ class MenuController extends Controller
 			]);
 		}
 
-		$menu         = $this->menu->findMenu($menuData['id']);
-		$menuChildren = $this->menu->menuCount(['father_id' => $menuData['id']]);
+		$menu         = $this->menu->get($menuData['id']);
+		$menuChildren = $this->menu->count(['father_id' => $menuData['id']]);
 
 		if ($menu->father_id != $menuData['father_id'] && $menuChildren != 0) {
 			return response()->json([
@@ -200,7 +200,7 @@ class MenuController extends Controller
 			]);
 		}
 
-		if (!$this->menu->updateMenu($menuData)) {
+		if (!$this->menu->update($menuData)) {
 			return response()->json([
 				'status'  => 500,
 				'message' => '编辑失败',
@@ -234,7 +234,7 @@ class MenuController extends Controller
 			return response()->json($validator);
 		}
 
-		if (!$this->menu->createMenu($params)) {
+		if (!$this->menu->store($params)) {
 			return response()->json([
 				'status'  => 500,
 				'message' => '创建失败',
@@ -262,7 +262,7 @@ class MenuController extends Controller
 	{
 		$id = $request->input('id');
 
-		$menuChildren = $this->menu->menuCount(['father_id' => $id]);
+		$menuChildren = $this->menu->count(['father_id' => $id]);
 
 		if ($menuChildren != 0) {
 			return response()->json([
@@ -271,7 +271,7 @@ class MenuController extends Controller
 			]);
 		}
 
-		if (!$this->menu->deleteMenu($id)) {
+		if (!$this->menu->delete($id)) {
 			return response()->json([
 				'status'  => 500,
 				'message' => '删除失败',
@@ -299,7 +299,7 @@ class MenuController extends Controller
 	{
 		$params = $this->requestParams->params(self::menuKeys, $request);
 
-		$menu = $this->menu->findMenu($params['id']);
+		$menu = $this->menu->get($params['id']);
 		if (empty($menu)) {
 			return response()->json([
 				'status'  => 500,
@@ -307,7 +307,7 @@ class MenuController extends Controller
 			]);
 		}
 
-		if (!$this->menu->updateMenu($params)) {
+		if (!$this->menu->update($params)) {
 			return response()->json([
 				'status'  => 500,
 				'message' => '操作失败',

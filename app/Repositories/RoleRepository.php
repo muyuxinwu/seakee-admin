@@ -23,7 +23,7 @@ class RoleRepository implements RoleInterface
 	 *
 	 * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
 	 */
-	public function allRoleWithPaginate($paginate)
+	public function allWithPaginate($paginate)
 	{
 		return Role::orderBy('created_at', 'desc')->paginate($paginate);
 	}
@@ -35,7 +35,7 @@ class RoleRepository implements RoleInterface
 	 *
 	 * @return mixed
 	 */
-	public function createRole($data)
+	public function store($data)
 	{
 		$role = new Role();
 
@@ -53,7 +53,7 @@ class RoleRepository implements RoleInterface
 	 *
 	 * @return bool
 	 */
-	public function updateRole($data)
+	public function update($data)
 	{
 		return Role::where('id', $data['id'])->update($data);
 	}
@@ -65,7 +65,7 @@ class RoleRepository implements RoleInterface
 	 *
 	 * @return mixed
 	 */
-	public function deleteRole($id)
+	public function delete($id)
 	{
 		$role = Role::whereId($id);
 
@@ -79,7 +79,7 @@ class RoleRepository implements RoleInterface
 	 *
 	 * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model|null|static|static[]
 	 */
-	public function findRole($id)
+	public function get($id)
 	{
 		return Role::find($id);
 	}
@@ -89,7 +89,7 @@ class RoleRepository implements RoleInterface
 	 *
 	 * @return \Illuminate\Database\Eloquent\Collection|static[]
 	 */
-	public function allRole()
+	public function all()
 	{
 		return Role::all();
 	}
@@ -101,7 +101,7 @@ class RoleRepository implements RoleInterface
 	 *
 	 * @return array
 	 */
-	public function currentUserRole($user)
+	public function currentUser($user)
 	{
 		return Cache::tags(['role', $user->id])->get('currentUserRole') ?: $this->putCurrentUserRoleCache($user);
 	}

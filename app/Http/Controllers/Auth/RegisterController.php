@@ -126,7 +126,7 @@ class RegisterController extends Controller
      */
     protected function create($request)
     {
-        $user = $this->user->createUser($request->all());
+        $user = $this->user->store($request->all());
 
         $ipAddress = $request->getClientIp();
         $this->ip->storageIP($user->id, $ipAddress, 1);

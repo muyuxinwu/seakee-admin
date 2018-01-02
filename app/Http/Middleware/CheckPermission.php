@@ -50,7 +50,7 @@ class CheckPermission
 			return Redirect::intended('/login');
 		}
 
-		$currentUserRole = $this->role->currentUserRole($user);
+		$currentUserRole = $this->role->currentUser($user);
 
 		view()->share('sidebarUser', $user);
 
@@ -59,8 +59,8 @@ class CheckPermission
 		//超级管理员直接放行
 		if (!in_array('Super_Admin', $currentUserRole)) {
 
-			$currentUserPermission = $this->permission->currentUserPermission($user);
-			$allPermission         = $this->permission->allPermissionName();
+			$currentUserPermission = $this->permission->currentUser($user);
+			$allPermission         = $this->permission->allName();
 
 			//如果查不到路由名对应的权限直接放行
 			if (!in_array($routeName, $allPermission)) {

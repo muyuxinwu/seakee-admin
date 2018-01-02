@@ -3,7 +3,7 @@
  * File: FileController.php
  * Author: Seakee <seakee23@163.com>
  * Date: 2017/11/20 21:22
- * Description:
+ * Description:文件相关操作
  */
 
 namespace App\Http\Controllers\Files;

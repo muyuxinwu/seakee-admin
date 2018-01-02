@@ -4,7 +4,7 @@
  * Author: Seakee <seakee23@163.com>
  * Homepage: https://seakee.top
  * Date: 2017/10/11 17:22
- * Description:
+ * Description:配置相关
  */
 
 namespace App\Http\Controllers\Configuration;

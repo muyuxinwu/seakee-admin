@@ -42,7 +42,7 @@ class CrumbsPresenter
 	 */
 	public function crumbsMenu()
 	{
-		$allMenu = $this->menu->allMenus();
+		$allMenu = $this->menu->all();
 
 		$currentRoutePrefix = $this->routePrefix(Route::currentRouteName());
 
