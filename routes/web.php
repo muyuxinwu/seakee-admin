@@ -32,7 +32,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['checkPermission']], functio
         Route::get('/createHome', 'MenuController@createHome')->name('menu.createHome');
         Route::post('/delete', 'MenuController@delete')->name('menu.delete');
         Route::post('/display', 'MenuController@display')->name('menu.display');
-        Route::post('/storage', 'MenuController@storage')->name('menu.storage');
+        Route::post('/store', 'MenuController@store')->name('menu.store');
         Route::post('/update', 'MenuController@update')->name('menu.update');
     });
 

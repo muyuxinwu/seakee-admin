@@ -156,7 +156,7 @@
             $form.find('#createMenu, #draftSave').prop('disabled', true);
             var formData = new FormData($form[0]);
             $.ajax({
-                url: '{{ route('menu.storage') }}',
+                url: '{{ route('menu.store') }}',
                 type: 'POST',
                 data: formData,
                 processData: false,  // 告诉jQuery不要去处理发送的数据

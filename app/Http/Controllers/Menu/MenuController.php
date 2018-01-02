@@ -193,18 +193,11 @@ class MenuController extends Controller
 		$menu         = $this->menu->findMenu($menuData['id']);
 		$menuChildren = $this->menu->menuCount(['father_id' => $menuData['id']]);
 
-		if (empty($menu)) {
+		if ($menu->father_id != $menuData['father_id'] && $menuChildren != 0) {
 			return response()->json([
 				'status'  => 500,
-				'message' => '菜单不存在',
+				'message' => '存在子菜单不能更改上级菜单',
 			]);
-		} else {
-			if ($menu->father_id != $menuData['father_id'] && $menuChildren != 0) {
-				return response()->json([
-					'status'  => 500,
-					'message' => '存在子菜单不能更改上级菜单',
-				]);
-			}
 		}
 
 		if (!$this->menu->updateMenu($menuData)) {
@@ -214,6 +207,7 @@ class MenuController extends Controller
 			]);
 		}
 
+		//清除菜单缓存
 		$this->cache->clearMenu();
 		$this->cache->clearAllUserMenu();
 
@@ -230,7 +224,7 @@ class MenuController extends Controller
 	 *
 	 * @return \Illuminate\Http\JsonResponse
 	 */
-	public function storage(Request $request)
+	public function store(Request $request)
 	{
 		$params = $this->requestParams->params(self::menuKeys, $request);
 
@@ -247,6 +241,7 @@ class MenuController extends Controller
 			]);
 		}
 
+		//清除菜单缓存
 		$this->cache->clearMenu();
 		$this->cache->clearAllUserMenu();
 
@@ -267,21 +262,13 @@ class MenuController extends Controller
 	{
 		$id = $request->input('id');
 
-		$menu         = $this->menu->findMenu($id);
 		$menuChildren = $this->menu->menuCount(['father_id' => $id]);
 
-		if (empty($menu)) {
+		if ($menuChildren != 0) {
 			return response()->json([
 				'status'  => 500,
-				'message' => '菜单不存在',
+				'message' => '存在子菜单不能删除',
 			]);
-		} else {
-			if ($menuChildren != 0) {
-				return response()->json([
-					'status'  => 500,
-					'message' => '存在子菜单不能删除',
-				]);
-			}
 		}
 
 		if (!$this->menu->deleteMenu($id)) {
@@ -291,6 +278,7 @@ class MenuController extends Controller
 			]);
 		}
 
+		//清除菜单缓存
 		$this->cache->clearMenu();
 		$this->cache->clearAllUserMenu();
 
@@ -326,6 +314,7 @@ class MenuController extends Controller
 			]);
 		}
 
+		//清除菜单缓存
 		$this->cache->clearMenu();
 		$this->cache->clearAllUserMenu();
 
