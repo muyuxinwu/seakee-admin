@@ -70,6 +70,7 @@ class FileController extends Controller
 		$rtnJson = [
 			'status'  => 200,
 			'message' => '上传成功',
+			'data'    => $info,
 		];
 
 		if (!$storage){
@@ -87,7 +88,7 @@ class FileController extends Controller
 	 *
 	 * @return \Illuminate\Http\JsonResponse
 	 */
-	public function getDisk()
+	public function getDiskList()
 	{
 		list($disk) = array_divide(config('filesystems.disks'));
 

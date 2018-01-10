@@ -184,7 +184,7 @@
         getDisk();
         function getDisk() {
             $.ajax({
-                url: '{{ route('file.getDisk') }}',
+                url: '{{ route('file.getDiskList') }}',
                 type: 'GET',
                 dataType: 'JSON',
                 success: function (res) {
@@ -248,26 +248,6 @@
                     $(".fa", this).removeClass("fa-square-o").addClass('fa-check-square-o');
                 }
                 $(this).data("clicks", !clicks);
-            });
-
-            //Handle starring for glyphicon and font awesome
-            $(".mailbox-star").click(function (e) {
-                e.preventDefault();
-                //detect type
-                var $this = $(this).find("a > i");
-                var glyph = $this.hasClass("glyphicon");
-                var fa = $this.hasClass("fa");
-
-                //Switch states
-                if (glyph) {
-                    $this.toggleClass("glyphicon-star");
-                    $this.toggleClass("glyphicon-star-empty");
-                }
-
-                if (fa) {
-                    $this.toggleClass("fa-star");
-                    $this.toggleClass("fa-star-o");
-                }
             });
         });
     </script>
