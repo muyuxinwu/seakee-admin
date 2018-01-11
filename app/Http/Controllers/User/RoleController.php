@@ -47,7 +47,7 @@ class RoleController extends Controller
 	/**
 	 * Role对应的数据库字段
 	 */
-	const roleKeys = [
+	const ROLE_KEYS = [
 		'id',
 		'name',
 		'display_name',
@@ -140,7 +140,7 @@ class RoleController extends Controller
 	 */
 	public function store(Request $request)
 	{
-		$roleData  = $this->requestParams->params(self::roleKeys, $request);
+		$roleData  = $this->requestParams->params(self::ROLE_KEYS, $request);
 		$validator = $this->validator->firstError($roleData, $this->createRules(), $this->validatorMessage());
 
 		if (!empty($validator)) {
@@ -172,7 +172,7 @@ class RoleController extends Controller
 	 */
 	public function update(Request $request)
 	{
-		$roleData  = $this->requestParams->params(self::roleKeys, $request);
+		$roleData  = $this->requestParams->params(self::ROLE_KEYS, $request);
 		$validator = $this->validator->firstError($roleData, $this->editRules($request->input('id')), $this->validatorMessage());
 
 		if (!empty($validator)) {

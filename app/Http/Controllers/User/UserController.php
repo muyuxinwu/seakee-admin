@@ -35,7 +35,7 @@ class UserController extends Controller
 	/**
 	 * User对应的数据库字段
 	 */
-	const userKeys = [
+	const USER_KEYS = [
 		'id',
 		'user_name',
 		'nick_name',
@@ -152,7 +152,7 @@ class UserController extends Controller
 	 */
 	public function store(Request $request)
 	{
-		$userData  = $this->requestParams->params(self::userKeys, $request);
+		$userData  = $this->requestParams->params(self::USER_KEYS, $request);
 		$validator = $this->validator->firstError($userData, $this->registrationRules(), $this->validatorMessage());
 
 		if (!empty($validator)) {
@@ -181,7 +181,7 @@ class UserController extends Controller
 	 */
 	public function status(Request $request)
 	{
-		$userData = $this->requestParams->params(self::userKeys, $request);
+		$userData = $this->requestParams->params(self::USER_KEYS, $request);
 
 		if (!$this->user->update($userData)) {
 			return response()->json([
@@ -220,7 +220,7 @@ class UserController extends Controller
 	 */
 	public function update(Request $request)
 	{
-		$userData  = $this->requestParams->params(self::userKeys, $request);
+		$userData  = $this->requestParams->params(self::USER_KEYS, $request);
 		$validator = $this->validator->firstError($userData, $this->editRules($request->input('id')), $this->validatorMessage());
 
 		if (!empty($validator)) {

@@ -23,7 +23,7 @@ class FileController extends Controller
 	/**
 	 * File对应的数据库字段
 	 */
-	const fileKeys = [
+	const FILE_KEYS = [
 		'name', 'type', 'path', 'disk', 'size', 'uploader','md5',
 	];
 

@@ -31,7 +31,7 @@ class ConfigController extends Controller
 	/**
 	 * 配置字段
 	 */
-	const configKeys = [
+	const CONFIG_KEYS = [
 		'app_name',
 		'app_keywords',
 		'app_description',
@@ -71,7 +71,7 @@ class ConfigController extends Controller
 	 */
 	public function update(Request $request, Configuration $configuration)
 	{
-		$configData = $this->requestParams->params(self::configKeys, $request);
+		$configData = $this->requestParams->params(self::CONFIG_KEYS, $request);
 
 		$config = array_key_to_dot($configData);
 

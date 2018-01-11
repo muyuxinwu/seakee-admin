@@ -46,7 +46,7 @@ class MenuController extends Controller
 	/**
 	 * menu对应的数据库字段
 	 */
-	const menuKeys = [
+	const MENU_KEYS = [
 		'id',
 		'icon',
 		'menu_name',
@@ -175,7 +175,7 @@ class MenuController extends Controller
 	 */
 	public function update(Request $request)
 	{
-		$menuData = $this->requestParams->params(self::menuKeys, $request);
+		$menuData = $this->requestParams->params(self::MENU_KEYS, $request);
 
 		$validator = $this->validator->firstError($menuData, $this->createRules(), $this->validatorMessage());
 
@@ -226,7 +226,7 @@ class MenuController extends Controller
 	 */
 	public function store(Request $request)
 	{
-		$params = $this->requestParams->params(self::menuKeys, $request);
+		$params = $this->requestParams->params(self::MENU_KEYS, $request);
 
 		$validator = $this->validator->firstError($params, $this->createRules(), $this->validatorMessage());
 
@@ -297,7 +297,7 @@ class MenuController extends Controller
 	 */
 	public function display(Request $request)
 	{
-		$params = $this->requestParams->params(self::menuKeys, $request);
+		$params = $this->requestParams->params(self::MENU_KEYS, $request);
 
 		$menu = $this->menu->get($params['id']);
 		if (empty($menu)) {

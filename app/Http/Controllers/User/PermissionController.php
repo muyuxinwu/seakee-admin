@@ -53,7 +53,7 @@ class PermissionController extends Controller
 	/**
 	 * Permission对应的数据库字段
 	 */
-	const permissionKeys = [
+	const PERMISSION_KEYS = [
 		'id',
 		'name',
 		'display_name',
@@ -150,7 +150,7 @@ class PermissionController extends Controller
 	 */
 	public function store(Request $request)
 	{
-		$permissionData = $this->requestParams->params(self::permissionKeys, $request);
+		$permissionData = $this->requestParams->params(self::PERMISSION_KEYS, $request);
 		$validator      = $this->validator->firstError($permissionData, $this->createRules(), $this->validatorMessage());
 		$isCustom       = $request->input('isCustom');
 		$allRouteName   = $this->routeInfo->getAllRouteNameList();
@@ -192,7 +192,7 @@ class PermissionController extends Controller
 	 */
 	public function update(Request $request)
 	{
-		$permissionData = $this->requestParams->params(self::permissionKeys, $request);
+		$permissionData = $this->requestParams->params(self::PERMISSION_KEYS, $request);
 		$validator      = $this->validator->firstError($permissionData, $this->editRules($permissionData['id']), $this->validatorMessage());
 		$isCustom       = $request->input('isCustom');
 		$allRouteName   = $this->routeInfo->getAllRouteNameList();
