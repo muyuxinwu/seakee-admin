@@ -37,12 +37,12 @@
                 </div>
                 <div class="box-body no-padding">
                     <ul class="nav nav-pills nav-stacked">
-                        <li class="active"><a href="#"><i class="fa fa-files-o"></i>所有</a></li>
-                        <li><a href="#"><i class="fa fa-file-image-o"></i> 图片</a></li>
-                        <li><a href="#"><i class="fa fa-file-audio-o"></i> 音乐</a></li>
-                        <li><a href="#"><i class="fa fa-file-word-o"></i> 文档</a></li>
-                        <li><a href="#"><i class="fa fa-file-video-o"></i> 视频</a></li>
-                        <li><a href="#"><i class="fa fa-file-o"></i> 其它</a></li>
+                        <li class="active"><a href="#" onclick="getFileList('all')"><i class="fa fa-files-o"></i>所有</a></li>
+                        <li><a href="#" onclick="getFileList('image')"><i class="fa fa-file-image-o"></i> 图片</a></li>
+                        <li><a href="#" onclick="getFileList('audio')"><i class="fa fa-file-audio-o"></i> 音乐</a></li>
+                        <li><a href="#" onclick="getFileList('video')"><i class="fa fa-file-word-o"></i> 文档</a></li>
+                        <li><a href="#" onclick="getFileList('document')"><i class="fa fa-file-video-o"></i> 视频</a></li>
+                        <li><a href="#" onclick="getFileList('other')"><i class="fa fa-file-o"></i> 其它</a></li>
                     </ul>
                 </div>
                 <!-- /.box-body -->
@@ -84,15 +84,18 @@
                     </div>
                     <div class="table-responsive mailbox-messages">
                         <table class="table table-hover table-striped">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>文件名</th>
+                                    <th>文件类型</th>
+                                    <th>文件大小</th>
+                                    <th>上传者</th>
+                                    <th>上传日期</th>
+                                </tr>
+                            </thead>
                             <tbody>
-                            <tr>
-                                <th>#</th>
-                                <th>文件名</th>
-                                <th>文件类型</th>
-                                <th>文件大小</th>
-                                <th>上传者</th>
-                                <th>上传日期</th>
-                            </tr>
+
                             </tbody>
                         </table>
                         <!-- /.table -->
@@ -200,6 +203,10 @@
                     }
                 }
             });
+        }
+
+        function getFileList(type) {
+
         }
 
         function uploadFile(){

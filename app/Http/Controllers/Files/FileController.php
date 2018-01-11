@@ -95,6 +95,8 @@ class FileController extends Controller
 
 	public function getList(Request $request)
 	{
+		$type = $request->get('type');
 
+		$where['type'] = array_keys(config('filesystems.mimeType.' . $type));
 	}
 }

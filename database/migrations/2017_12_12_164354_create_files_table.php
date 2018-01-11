@@ -22,6 +22,7 @@ class CreateFilesTable extends Migration
 	        $table->string('size', 20);
 	        $table->string('md5', 32);
 	        $table->integer('uploader');
+	        $table->tinyInteger('is_del')->default(0);
             $table->timestamps();
         });
     }

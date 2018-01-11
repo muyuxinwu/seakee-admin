@@ -79,6 +79,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['checkPermission']], functio
 	Route::group(['prefix' => 'file', 'namespace' => 'Files'], function (){
 		Route::get('/index', 'FileController@index')->name('file.index');
 		Route::get('/getDisk', 'FileController@getDiskList')->name('file.getDiskList');
+		Route::get('/getList', 'FileController@getList')->name('file.getList');
 		Route::post('/upload', 'FileController@upload')->name('file.upload');
 	});
 });
