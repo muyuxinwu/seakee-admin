@@ -27,12 +27,6 @@ class FileController extends Controller
 		'name', 'type', 'path', 'disk', 'size', 'uploader','md5',
 	];
 
-	/**
-	 * 服务器最大允许上传文件大小（单位:M）
-	 *
-	 * @var string
-	 */
-	protected $upMaxSize;
 
 	/**
 	 * FileController constructor.
